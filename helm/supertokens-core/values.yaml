@@ -1,5 +1,3 @@
-replicaCount: 1
-
 image:
   pullPolicy: IfNotPresent
   repository: supertokens/supertokens-postgresql
@@ -9,27 +7,27 @@ image:
       valueFrom:
         secretKeyRef:
           name: supertokens-core-env
-          key: username
+          key: dbUsername
     - name: POSTGRESQL_PASSWORD
       valueFrom:
         secretKeyRef:
           name: supertokens-core-env
-          key: password
+          key: dbPassword
     - name: POSTGRESQL_HOST
       valueFrom:
         secretKeyRef:
           name: supertokens-core-env
-          key: host
+          key: dbHost
     - name: POSTGRESQL_PORT
       valueFrom:
         secretKeyRef:
           name: supertokens-core-env
-          key: port
+          key: dbPort
     - name: POSTGRESQL_DATABASE_NAME
       valueFrom:
         secretKeyRef:
           name: supertokens-core-env
-          key: databaseName
+          key: dbName
     - name: API_KEYS
       valueFrom:
         secretKeyRef:
