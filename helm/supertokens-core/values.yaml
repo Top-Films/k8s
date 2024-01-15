@@ -1,0 +1,64 @@
+replicaCount: 1
+
+image:
+  pullPolicy: IfNotPresent
+  repository: supertokens/supertokens-postgresql
+  tag: '7.0'
+  env:
+    - name: POSTGRESQL_USER
+      valueFrom:
+        secretKeyRef:
+          name: supertokens-core-env
+          key: username
+    - name: POSTGRESQL_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: supertokens-core-env
+          key: password
+    - name: POSTGRESQL_HOST
+      valueFrom:
+        secretKeyRef:
+          name: supertokens-core-env
+          key: host
+    - name: POSTGRESQL_PORT
+      valueFrom:
+        secretKeyRef:
+          name: supertokens-core-env
+          key: port
+    - name: POSTGRESQL_DATABASE_NAME
+      valueFrom:
+        secretKeyRef:
+          name: supertokens-core-env
+          key: databaseName
+    - name: API_KEYS
+      valueFrom:
+        secretKeyRef:
+          name: supertokens-core-env
+          key: apiKey
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 3567
+
+ingress:
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt"
+  hosts:
+    - host: supertokens.topfilms.co
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: 
+   - secretName: supertokens-core-cert
+     hosts:
+       - supertokens.topfilms.co
+
+resources: 
+  limits:
+    cpu: 100m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 256Mi
