@@ -1,0 +1,19 @@
+global:
+  storageClass: "manual"
+  postgresql:
+    auth:
+      postgresPassword: ""
+      username: ""
+      password: ""
+      database: "topfilms"
+
+primary:
+  service:
+    type: NodePort
+    nodePorts:
+      postgresql: ""
+  nodeSelector:
+    postgres-port-forwarded: 'true'
+
+volumePermissions:
+  enabled: true
