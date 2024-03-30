@@ -1,0 +1,19 @@
+global:
+  storageClass: "jenkins-sc"
+
+service:
+  type: ClusterIP
+
+ingress:
+  enabled: true
+  pathType: Prefix
+  apiVersion: networking.k8s.io/v1
+  hostname: jenkins.topfilms.co
+  path: /
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt"
+  tls: true
+  ingressClassName: "nginx"
+
+volumePermissions:
+  enabled: true
