@@ -41,19 +41,17 @@ service:
 
 ingress:
   className: nginx
-  annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt"
   hosts:
-    - host: supertokens.topfilms.co
+    - host: supertokens.topfilms.io
       paths:
         - path: /
           pathType: Prefix
-  tls: 
-   - secretName: supertokens-core-cert
-     hosts:
-       - supertokens.topfilms.co
+  tls:
+    - secretName: supertokens.topfilms.io-tls
+      hosts:
+        - supertokens.topfilms.io
 
-resources: 
+resources:
   limits:
     cpu: 100m
     memory: 384Mi
