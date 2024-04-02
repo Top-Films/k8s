@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   namespace: kube-system
-  name: kube-dashboard-ingress
+  name: kube-dashboard
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: 'HTTPS'
     nginx.ingress.kubernetes.io/ssl-passthrough: 'true'
