@@ -59,14 +59,7 @@ sudo reboot
 sudo snap install microk8s --classic
 ```
 
-2. Enable ingress, kubernetes dashboard
-
-```bash
-m enable ingress
-m enable dashboard #
-```
-
-3. Expose the Kube API to external networks to connect from a different machine
+2. Expose the Kube API to external networks to connect from a different machine
 
 💡 Note that this is not the most secure way to get access to a cluster from a local machine. If possible, VPN into the network running K8s.
 
@@ -90,7 +83,7 @@ m config
 k version
 ```
 
-4. Add a worker node(s)
+3. Add node(s)
 
 ```bash
 # Run the following on the master node
