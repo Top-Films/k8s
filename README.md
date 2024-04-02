@@ -9,7 +9,7 @@
 ![Datadog](https://img.shields.io/badge/datadog-%23632CA6.svg?style=for-the-badge&logo=datadog&logoColor=white)
 
 ## Overview
-This repository holds all of Top Films' Kubernetes files, including manifests, helm charts, and Jenkins files for deployment. Instructions can be found below for specific items.
+This repository holds all of Top Films' Kubernetes files, including manifests and helm charts. Instructions can be found below for specific items.
 
 ## Prerequisites
 - A MicroK8s Cluster
