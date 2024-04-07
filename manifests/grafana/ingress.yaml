@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: observability
+  name: kube-prom-stack-grafana
+spec:
+  ingressClassName: 'nginx'
+  rules:
+    - host: grafana.topfilms.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kube-prom-stack-grafana
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - grafana.topfilms.io
+      secretName: grafana.topfilms.io-tls
