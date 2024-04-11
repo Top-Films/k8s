@@ -1,7 +1,8 @@
 image:
-  pullPolicy: IfNotPresent
   repository: supertokens/supertokens-postgresql
-  tag: '7.0'
+  tag: '9.0'
+  pullPolicy: Always
+  replicas: 1
   env:
     - name: POSTGRESQL_USER
       valueFrom:
@@ -33,6 +34,20 @@ image:
         secretKeyRef:
           name: supertokens-core-env
           key: apiKey
+  readinessProbe:
+    path: /hello
+    initialDelaySeconds: 60
+    periodSeconds: 30
+    timeoutSeconds: 30
+    failureThreshold: 5
+    successThreshold: 1
+  livenessProbe:
+    path: /hello
+    initialDelaySeconds: 60
+    periodSeconds: 30
+    timeoutSeconds: 30
+    failureThreshold: 5
+    successThreshold: 1
 
 service:
   type: ClusterIP
@@ -56,5 +71,5 @@ resources:
     cpu: 400m
     memory: 512Mi
   requests:
-    cpu: 400m
-    memory: 512Mi
+    cpu: 200m
+    memory: 256Mi
