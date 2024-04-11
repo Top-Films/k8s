@@ -78,5 +78,5 @@ resources:
     cpu: 750m
     memory: 512Mi
   requests:
-    cpu: 400m
+    cpu: 500m
     memory: 256Mi
