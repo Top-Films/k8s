@@ -67,9 +67,15 @@ ingress:
       hosts:
         - supertokens.topfilms.io
 
+hpa:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPU: 50
+
 resources:
   limits:
-    cpu: 400m
+    cpu: 600m
     memory: 512Mi
   requests:
     cpu: 200m
