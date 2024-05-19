@@ -1,6 +1,6 @@
 image:
   repository: supertokens/supertokens-postgresql
-  tag: '9.0'
+  tag: '9.0.2'
   pullPolicy: Always
   replicas: 1
   revisionHistoryLimit: 2
