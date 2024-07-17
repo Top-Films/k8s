@@ -1,22 +1,21 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: postgres-pv
-  labels:
-    type: local
+  name: jenkins
+  namespace: jenkins
 spec:
-  storageClassName: postgres-sc
-  capacity:
-    storage: 8Gi
+  storageClassName: jenkins
   accessModes:
     - ReadWriteOnce
+  capacity:
+    storage: 32Gi
+  persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: '/bitnami/postgresql'
-
+    path: /data/jenkins/
 ---
-kind: StorageClass
 apiVersion: storage.k8s.io/v1
+kind: StorageClass
 metadata:
-  name: postgres-sc
+  name: jenkins
 provisioner: kubernetes.io/no-provisioner
 volumeBindingMode: WaitForFirstConsumer

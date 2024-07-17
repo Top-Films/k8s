@@ -1,0 +1,124 @@
+controller:
+  componentName: "jenkins-controller"
+  image:
+    registry: "docker.io"
+    repository: "jenkins/jenkins"
+    tagLabel: jdk17
+    pullPolicy: "Always"
+
+  admin:
+    username: ""
+    password: ""
+
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "512Mi"
+    limits:
+      cpu: "1000m"
+      memory: "1024Mi"
+
+  usePodSecurityContext: true
+  runAsUser: 1000
+  fsGroup: 1000
+
+  containerSecurityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+
+  serviceType: ClusterIP
+  
+  servicePort: 8080
+  targetPort: 8080
+
+  healthProbes: true
+  probes:
+    startupProbe:
+      failureThreshold: 12
+      httpGet:
+        path: '{{ default "" .Values.controller.jenkinsUriPrefix }}/login'
+        port: http
+      periodSeconds: 10
+      timeoutSeconds: 5
+    livenessProbe:
+      failureThreshold: 5
+      httpGet:
+        path: '{{ default "" .Values.controller.jenkinsUriPrefix }}/login'
+        port: http
+      periodSeconds: 10
+      timeoutSeconds: 5
+    readinessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: '{{ default "" .Values.controller.jenkinsUriPrefix }}/login'
+        port: http
+      periodSeconds: 10
+      timeoutSeconds: 5
+  
+  installPlugins:
+    - kubernetes:4253.v7700d91739e5
+    - workflow-aggregator:600.vb_57cdd26fdd7
+    - git:5.2.2
+    - configuration-as-code:1810.v9b_c30a_249a_4c
+    - oic-auth:4.297.vcddb_d8a_e4694
+  installLatestPlugins: true
+  installLatestSpecifiedPlugins: false
+  additionalPlugins: []
+
+  existingSecret:
+  additionalExistingSecrets: []
+  additionalSecrets: []
+  secretClaims: []
+
+  JCasC:
+    securityRealm: |
+      oic:
+        clientId: ""
+        clientSecret: ""
+        wellKnownOpenIDConfigurationUrl: "https://auth.topfilms.io/realms/dev/.well-known/openid-configuration"
+        tokenServerUrl: "https://auth.topfilms.io/realms/dev/protocol/openid-connect/token"
+        authorizationServerUrl: "https://auth.topfilms.io/realms/dev/protocol/openid-connect/auth"
+        scopes: "openid email profile preferred_username"
+        disableSslVerification: false
+        endSessionEndpoint: "https://auth.topfilms.io/realms/dev/protocol/openid-connect/logout"
+        escapeHatchEnabled: false
+        logoutFromOpenidProvider: true
+        userNameField: "preferred_username"
+        emailFieldName: "email"
+        groupsFieldName: "groups"
+    
+    authorizationStrategy: |
+      roleBased:
+        roles:
+          global:
+            - name: "admin"
+              description: "Jenkins administrators"
+              permissions:
+                - "Overall/Administer"
+              entries:
+                - group: "jenkins"
+                
+  ingress:
+    enabled: true
+    apiVersion: "networking.k8s.io/v1"
+    labels: {}
+    annotations: {}
+    ingressClassName: nginx
+    path: /
+    hostName: jenkins.topfilms.io
+    tls: 
+    - secretName: jenkins.topfilms.io-tls
+      hosts:
+        - jenkins.topfilms.io
+
+persistence:
+  enabled: true
+  storageClass: jenkins
+  accessMode: "ReadWriteOnce"
+  size: "32Gi"
+
+serviceAccount:
+  create: false
+  name: jenkins

@@ -1,0 +1,9 @@
+hostname: rancher.topfilms.io
+
+ingress:
+  ingressClassName: nginx
+  tls:
+    source: secret
+    secretName: rancher.topfilms.io-tls
+
+replicas: 1
