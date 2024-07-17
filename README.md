@@ -4,7 +4,7 @@
 </p>
 
 ![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)
-![Rancher](https://img.shields.io/badge/Rancher-0075A8?style=flat&logo=rancher)
+![Rancher](https://img.shields.io/badge/Rancher-0075A8?style=for-the-badg&logo=rancher)
 ![Postgres](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
 
 ## Overview
