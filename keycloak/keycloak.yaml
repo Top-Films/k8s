@@ -29,13 +29,28 @@ spec:
       labels:
         app: keycloak
     spec:
+      initContainers: 
+        - name: topfilms-keywind
+          image: maxmorhardt/topfilms-keywind:1.0.0
+          imagePullPolicy: Always
+          command:
+            - /bin/sh
+            - -c
+          args:
+            - cp -r /topfilms-keywind/* /opt/keycloak/themes/topfilms-keywind
+          volumeMounts:
+            - mountPath: /opt/keycloak/themes/topfilms-keywind
+              name: theme
+
       containers:
         - name: keycloak
           image: quay.io/keycloak/keycloak:23.0.7
           volumeMounts:
-            - mountPath: "/var/keycloak"
+            - mountPath: /var/keycloak
               name: keycloak-cert
               readOnly: true
+            - mountPath: /opt/keycloak/themes/topfilms-keywind
+              name: theme
           args: 
             - "start"
             - "--db=postgres"
@@ -45,6 +60,9 @@ spec:
             - "--https-certificate-file=/var/keycloak/cert.pem"
             - "--https-certificate-key-file=/var/keycloak/key.pem"
             - "--hostname=auth.topfilms.io"
+            - "--spi-theme-static-max-age=-1"
+            - "--spi-theme-cache-themes=false"
+            - "--spi-theme-cache-templates=false"
           env:
             - name: KC_PROXY
               value: edge
@@ -85,6 +103,8 @@ spec:
         - name: keycloak-cert
           secret:
             secretName: keycloak-credentials
+        - name: theme
+          emptyDir: {}
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress

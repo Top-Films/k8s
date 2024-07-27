@@ -5,7 +5,7 @@
 
 ![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)
 ![Rancher](https://img.shields.io/badge/Rancher-0075A8?style=for-the-badge&logo=rancher)
-![Keycloak](https://img.shields.io/badge/Keycloak-25.1-blue?style=for-the-badge&logo=keycloak)
+![Keycloak](https://img.shields.io/badge/Keycloak-23.0.7-blue?style=for-the-badge&logo=keycloak)
 ![Postgres](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
 
 ## Overview
