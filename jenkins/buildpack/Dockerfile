@@ -6,6 +6,9 @@ USER root
 RUN apt-get update
 RUN apt-get upgrade -y
 
+# install unzip
+RUN apt-get unzip -y
+
 # install docker
 RUN apt-get install ca-certificates curl -y
 RUN install -m 0755 -d /etc/apt/keyrings
