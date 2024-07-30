@@ -31,7 +31,7 @@ spec:
     spec:
       initContainers: 
         - name: topfilms-keywind
-          image: maxmorhardt/topfilms-keywind:1.0.0
+          image: maxmorhardt/topfilms-keywind:latest
           imagePullPolicy: Always
           command:
             - /bin/sh
@@ -63,34 +63,6 @@ spec:
             - "--spi-theme-static-max-age=-1"
             - "--spi-theme-cache-themes=false"
             - "--spi-theme-cache-templates=false"
-          env:
-            - name: KC_PROXY
-              value: edge
-            - name: KEYCLOAK_ADMIN
-              valueFrom:
-                secretKeyRef:
-                  name: keycloak-credentials
-                  key: admin-username
-            - name: KEYCLOAK_ADMIN_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: keycloak-credentials
-                  key: admin-password
-            - name: DB_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: keycloak-credentials
-                  key: db-username
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: keycloak-credentials
-                  key: db-password
-            - name: DB_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: keycloak-credentials
-                  key: db-host
           ports:
             - name: https
               containerPort: 8443

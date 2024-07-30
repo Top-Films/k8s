@@ -1,12 +1,12 @@
 pipeline {
 	agent {
 		kubernetes {
-			defaultContainer 'docker'
+			defaultContainer 'dind'
 			yaml '''
 kind: Pod
 spec:
   containers:
-  - name: docker
+  - name: dind
     image: docker:27-dind
     imagePullPolicy: Always
     securityContext:
