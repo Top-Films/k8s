@@ -20,6 +20,7 @@ RUN echo \
 	tee /etc/apt/sources.list.d/docker.list > /dev/null
 RUN apt-get update
 RUN apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+RUN systemctl start docker
 
 # install kubectl
 RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/arm64/kubectl"
@@ -34,13 +35,15 @@ RUN rm get_helm.sh
 # install java
 RUN apt-get install openjdk-21-jdk -y
 
+ENV JAVA_HOME="/usr/lib/jvm/java-21-openjdk-amd64"
+
 # install maven
 RUN curl -fsSL https://dlcdn.apache.org/maven/maven-3/3.9.8/binaries/apache-maven-3.9.8-bin.tar.gz -o apache-maven-3.9.8-bin.tar.gz
 RUN tar -xvf apache-maven-3.9.8-bin.tar.gz
 RUN mv apache-maven-3.9.8 /opt/
 RUN rm apache-maven-3.9.8-bin.tar.gz
 
-ENV M2_HOME='/opt/apache-maven-3.6.3'
+ENV M2_HOME="/opt/apache-maven-3.9.8"
 ENV PATH="$M2_HOME/bin:$PATH"
 
 # install node
