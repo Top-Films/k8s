@@ -57,7 +57,7 @@ image:
 
 initContainers: 
   - name: topfilms-keywind
-    image: maxmorhardt/topfilms-keywind:latest
+    image: maxmorhardt/topfilms-keywind:1.0.15
     imagePullPolicy: Always
     command:
       - /bin/sh
@@ -99,8 +99,8 @@ ingress:
 
 resources:
   limits:
-    cpu: 750m
-    memory: 512Mi
+    cpu: 1000m
+    memory: 768Mi
   requests:
     cpu: 500m
-    memory: 256Mi
+    memory: 512Mi
