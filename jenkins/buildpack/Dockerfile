@@ -7,7 +7,7 @@ RUN apt-get update
 RUN apt-get upgrade -y
 
 # install unzip
-RUN apt-get unzip -y
+RUN apt-get install unzip -y
 
 # install docker
 RUN apt-get install ca-certificates curl -y
