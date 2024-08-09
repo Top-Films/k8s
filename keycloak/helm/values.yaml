@@ -57,7 +57,7 @@ image:
 
 initContainers: 
   - name: topfilms-keywind
-    image: maxmorhardt/topfilms-keywind:1.0.15
+    image: maxmorhardt/topfilms-keywind:1.0.0
     imagePullPolicy: Always
     command:
       - /bin/sh
