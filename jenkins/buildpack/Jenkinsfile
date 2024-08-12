@@ -36,7 +36,7 @@ spec:
 							name: "${params.BRANCH}"
 						]],
 						userRemoteConfigs: [[
-							credentialsId: '827446b2-c8ac-4420-bcda-87696bb62634',
+							credentialsId: 'github',
 							url: "${env.K8S_GITHUB_URL}"
 						]]
 					)
@@ -49,7 +49,7 @@ spec:
 		stage('Docker Push Artifact') {
 			steps {
 				script {
-					withCredentials([usernamePassword(credentialsId: '9bbf8bb7-1489-4260-a7a0-afce14eea51b', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+					withCredentials([usernamePassword(credentialsId: 'docker', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
 						sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
 						sh 'docker buildx build --platform linux/arm64/v8 . -t $DOCKER_USERNAME/$APP_NAME:$APP_VERSION -t $DOCKER_USERNAME/$APP_NAME:latest -f jenkins/buildpack/Dockerfile'
 						sh 'docker push $DOCKER_USERNAME/$APP_NAME -a'
