@@ -8,6 +8,8 @@
 ![Keycloak](https://img.shields.io/badge/Keycloak-23.0.7-blue?style=for-the-badge&logo=keycloak)
 ![Postgres](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
 
+![Static Badge](https://img.shields.io/badge/license-Apache%202.0%20with%20Commons%20Clause-green)
+
 ## Overview
 This repository holds all of Top Films' Kubernetes files, including manifests and helm charts. Instructions can be found below for specific items.
 
