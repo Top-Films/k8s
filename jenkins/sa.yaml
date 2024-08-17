@@ -43,6 +43,7 @@ rules:
   - ingresses
   - storageclasses
   - clusterrolebindings
+  - clusterroles
   verbs:
   - create
   - get
