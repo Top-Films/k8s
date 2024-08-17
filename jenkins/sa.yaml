@@ -42,6 +42,7 @@ rules:
   - secrets
   - ingresses
   - storageclasses
+  - clusterrolebindings
   verbs:
   - create
   - get
