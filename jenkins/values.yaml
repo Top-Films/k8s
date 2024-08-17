@@ -7,8 +7,8 @@ controller:
     pullPolicy: "Always"
 
   admin:
-    username: ""
-    password: ""
+    username: "<JENKINS_ADMIN_USERNAME>"
+    password: "<JENKINS_ADMIN_PASSWORD>"
 
   resources:
     requests:
@@ -32,7 +32,6 @@ controller:
   
   servicePort: 8080
   targetPort: 8080
-  nodePort:
 
   healthProbes: true
   probes:
@@ -79,8 +78,8 @@ controller:
   JCasC:
     securityRealm: |-
       oic:
-        clientId: ""
-        clientSecret: ""
+        clientId: "<JENKINS_CLIENT_ID>"
+        clientSecret: "<JENKINS_CLIENT_SECRET>"
         wellKnownOpenIDConfigurationUrl: "https://auth.topfilms.io/realms/dev/.well-known/openid-configuration"
         tokenServerUrl: "https://auth.topfilms.io/realms/dev/protocol/openid-connect/token"
         authorizationServerUrl: "https://auth.topfilms.io/realms/dev/protocol/openid-connect/auth"
