@@ -45,6 +45,7 @@ rules:
   - clusterrolebindings
   - clusterroles
   - serviceaccounts
+  - roles
   verbs:
   - create
   - get
