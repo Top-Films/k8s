@@ -93,7 +93,7 @@ spec:
 							kubectl apply -f storage.yaml
 							kubectl apply -f sa.yaml
 
-							helm repo add $APP_NAME https://charts.jenkins.io
+							helm repo add jenkinsci https://charts.jenkins.io
 							helm repo update
 							helm upgrade $APP_NAME jenkinsci/jenkins -f values.yaml --install --atomic --debug --history-max=3 --namespace $APP_NAME
 						"""
