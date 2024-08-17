@@ -60,6 +60,8 @@ spec:
 							sed -i 's/<JENKINS_CLIENT_ID>/$JENKINS_CLIENT_ID/g' values.yaml
 							sed -i 's/<JENKINS_CLIENT_SECRET>/$JENKINS_CLIENT_SECRET/g' values.yaml
 						'''
+
+						sh 'cat $APP_NAME/values.yaml'
 					}
 				}
 			}
@@ -85,7 +87,7 @@ spec:
 						sh """
 							cd $APP_NAME
 
-							kubectl create secret tls jenkins.topfilms.io-tls --cert=cert.pem --key=key.pem -n $APP_NAME
+							kubectl create secret tls jenkins.topfilms.io-tls --cert=cert.pem --key=key.pem -n $APP_NAME || true
 
 							kubectl apply -f storage.yaml
 							kubectl apply -f sa.yaml
