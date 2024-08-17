@@ -87,7 +87,8 @@ spec:
 						sh """
 							cd $APP_NAME
 
-							kubectl create secret tls jenkins.topfilms.io-tls --cert=cert.pem --key=key.pem -n $APP_NAME || true
+							kubectl delete secret tls jenkins.topfilms.io-tls --cert=cert.pem --key=key.pem -n $APP_NAME || true
+							kubectl create secret tls jenkins.topfilms.io-tls --cert=cert.pem --key=key.pem -n $APP_NAME
 
 							kubectl apply -f storage.yaml
 							kubectl apply -f sa.yaml
