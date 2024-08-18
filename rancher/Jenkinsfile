@@ -16,7 +16,7 @@ spec:
 	}
 
 	parameters {
-		string(name: 'BRANCH', defaultValue: params.BRANCH ?: 'main', description: 'Branch to checkout in k8s repo')
+		string(name: 'BRANCH', defaultValue: params.BRANCH ?: 'main', description: 'Branch to checkout in k8s repo', trim: true)
 	}
 
 	environment { 
@@ -63,6 +63,8 @@ spec:
 						'''
 
 						sh """
+							cd $APP_NAME
+							
 							helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
 							helm repo update
 
