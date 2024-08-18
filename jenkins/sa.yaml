@@ -47,6 +47,7 @@ rules:
   - serviceaccounts
   - roles
   - rolebindings
+  - priorityclasses
   verbs:
   - create
   - get
