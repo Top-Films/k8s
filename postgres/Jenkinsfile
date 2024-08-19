@@ -85,7 +85,10 @@ spec:
 							
 							helm uninstall $APP_NAME -n $POSTGRES_NAME || true
 
-							kubectl delete pvc $POSTGRES_NAME || true
+							postgres_pvc=$(kubectl get pvc -n $POSTGRES_NAME | awk '{print $1}' | grep -e "$POSTGRES_NAME")
+							echo $postgres_pvc
+
+							kubectl delete pvc $postgres_pvc || true
 							kubectl delete pv $POSTGRES_NAME || true
 
 							kubectl apply -f storage.yaml
