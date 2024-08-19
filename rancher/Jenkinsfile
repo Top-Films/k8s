@@ -58,8 +58,12 @@ spec:
 							cp $CA_CERT ./cert.pem
 							cp $CA_CERT_PRIVATE_KEY ./key.pem
 
-							kubectl delete secret rancher.topfilms.io-tls -n cattle-system || true
+							set +e
+
+							kubectl delete secret rancher.topfilms.io-tls -n cattle-system
 							kubectl create secret tls rancher.topfilms.io-tls --cert=cert.pem --key=key.pem -n cattle-system
+
+							set -e
 						'''
 
 						sh """

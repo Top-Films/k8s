@@ -85,11 +85,15 @@ spec:
 
 						sh """
 							cd $POSTGRES_NAME
-							
-							helm uninstall $APP_NAME -n $POSTGRES_NAME || true
 
-							kubectl delete pvc $POSTGRES_PVC -n $POSTGRES_NAME || true
-							kubectl delete pv $POSTGRES_NAME || true
+							set +e
+
+							helm uninstall $APP_NAME -n $POSTGRES_NAME
+
+							kubectl delete pvc $POSTGRES_PVC -n $POSTGRES_NAME
+							kubectl delete pv $POSTGRES_NAME
+
+							set -e
 
 							kubectl apply -f storage.yaml
 
