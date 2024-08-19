@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Note: PV path (/data/jenkins) must belong to 1000:1000 on node
+
 export JENKINS_ADMIN_USERNAME=""
 export JENKINS_ADMIN_PASSWORD=""
 export JENKINS_CLIENT_ID=""

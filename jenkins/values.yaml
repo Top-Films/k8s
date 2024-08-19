@@ -34,7 +34,7 @@ controller:
   targetPort: 8080
 
   nodeSelector:
-    kubernetes.io/hostname: max-master
+    kubernetes.io/hostname: max-worker-2
 
   healthProbes: true
   probes:
