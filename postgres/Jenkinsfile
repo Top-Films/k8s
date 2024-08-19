@@ -80,7 +80,7 @@ spec:
 					withCredentials([file(credentialsId: 'kube-config', variable: 'KUBE_CONFIG')]) {
 						sh 'mkdir -p $WORKSPACE/.kube && cp $KUBE_CONFIG $WORKSPACE/.kube/config'
 
-						POSTGRES_PVC = sh(script: 'kubectl get pvc -n $POSTGRES_NAME | awk {print $1} | grep -e $POSTGRES_NAME', returnStdout: true)
+						POSTGRES_PVC = sh(script: 'kubectl get pvc -n $POSTGRES_NAME | awk {print \$1} | grep -e $POSTGRES_NAME', returnStdout: true)
 						sh "echo postgres pvc: $POSTGRES_PVC"
 
 						sh """
