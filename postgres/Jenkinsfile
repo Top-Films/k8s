@@ -82,9 +82,9 @@ spec:
 							mkdir -p $WORKSPACE/.kube && cp $KUBE_CONFIG $WORKSPACE/.kube/config
 						'''
 
-						sh 'set +e'
+						sh ""
 
-						POSTGRES_PVC = sh(script: "kubectl get pvc --namespace $POSTGRES_NAME | awk '{print \$1}' | grep -e $POSTGRES_NAME", returnStdout: true).trim()
+						POSTGRES_PVC = sh(script: "set +e && kubectl get pvc --namespace $POSTGRES_NAME | awk '{print \$1}' | grep -e $POSTGRES_NAME", returnStdout: true).trim()
 						echo "Postgres PVC: $POSTGRES_PVC"
 
 						sh """
