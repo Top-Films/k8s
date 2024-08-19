@@ -51,6 +51,7 @@ spec:
 					withCredentials([
 						string(credentialsId: 'postgres-admin-password-b64', variable: 'POSTGRES_ADMIN_PASSWORD_B64'),
 						string(credentialsId: 'postgres-user-password-b64', variable: 'POSTGRES_USER_PASSWORD_B64'),
+						file(credentialsId: 'kube-config', variable: 'KUBE_CONFIG')
 					]) {
 						sh 'mkdir -p $WORKSPACE/.kube && cp $KUBE_CONFIG $WORKSPACE/.kube/config'
 
