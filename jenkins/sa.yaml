@@ -48,6 +48,7 @@ rules:
   - roles
   - rolebindings
   - priorityclasses
+  - networkpolicies
   verbs:
   - create
   - get
