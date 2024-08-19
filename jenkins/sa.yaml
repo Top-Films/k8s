@@ -49,6 +49,7 @@ rules:
   - rolebindings
   - priorityclasses
   - networkpolicies
+  - poddisruptionbudgets
   verbs:
   - create
   - get
