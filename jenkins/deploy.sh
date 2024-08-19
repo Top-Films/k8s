@@ -24,24 +24,22 @@ cat values.yaml
 cp $CA_CERT_PATH .
 cp $CA_CERT_PRIVATE_KEY_PATH .
 
-kubectl create namespace jenkins
-
-kubectl delete secret jenkins.topfilms.io-tls -n jenkins
-kubectl create secret tls jenkins.topfilms.io-tls --cert=cert.pem --key=key.pem -n jenkins
+kubectl delete secret jenkins.topfilms.io-tls --namespace jenkins
+kubectl create secret tls jenkins.topfilms.io-tls --cert=cert.pem --key=key.pem --namespace jenkins
 
 rm cert.pem
 rm key.pem
 
-helm uninstall jenkins -n jenkins
+helm uninstall jenkins --namespace jenkins
 
 kubectl delete pv jenkins
 
-kubectl apply -f storage.yaml -n jenkins
-kubectl apply -f sa.yaml -n jenkins
+kubectl apply --file storage.yaml --namespace jenkins
+kubectl apply --file sa.yaml --namespace jenkins
 
 helm repo add jenkinsci https://charts.jenkins.io
 helm repo update
 
-helm upgrade jenkins jenkinsci/jenkins -f values.yaml --install --atomic --debug --history-max=3 --namespace jenkins
+helm upgrade jenkins jenkinsci/jenkins --file values.yaml --install --atomic --debug --history-max=3 --namespace jenkins
 
 git restore values.yaml

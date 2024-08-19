@@ -67,7 +67,7 @@ spec:
 						sh """
 							cd $POSTGRES_NAME
 
-							kubectl apply -f secret.yaml -n $POSTGRES_NAME
+							kubectl apply --file secret.yaml --namespace $POSTGRES_NAME
 						"""
 					}
 				}
@@ -80,24 +80,24 @@ spec:
 					withCredentials([file(credentialsId: 'kube-config', variable: 'KUBE_CONFIG')]) {
 						sh 'mkdir -p $WORKSPACE/.kube && cp $KUBE_CONFIG $WORKSPACE/.kube/config'
 
-						POSTGRES_PVC = sh(script: "kubectl get pvc -n $POSTGRES_NAME | awk '{print \$1}' | grep -e $POSTGRES_NAME", returnStdout: true)
-						sh "echo postgres pvc: $POSTGRES_PVC"
+						POSTGRES_PVC = sh(script: "kubectl get pvc --namespace $POSTGRES_NAME | awk '{print \$1}' | grep -e $POSTGRES_NAME", returnStdout: true).trim()
+						echo "Postgres PVC: $POSTGRES_PVC"
 
 						sh """
 							cd $POSTGRES_NAME
 
 							set +e
 
-							helm uninstall $APP_NAME -n $POSTGRES_NAME
+							helm uninstall $APP_NAME --namespace $POSTGRES_NAME
 
-							kubectl delete pvc $POSTGRES_PVC -n $POSTGRES_NAME
+							kubectl delete pvc $POSTGRES_PVC --namespace $POSTGRES_NAME
 							kubectl delete pv $POSTGRES_NAME
 
 							set -e
 
-							kubectl apply -f storage.yaml
+							kubectl apply --file storage.yaml
 
-							helm upgrade $APP_NAME oci://registry-1.docker.io/bitnamicharts/postgresql -f values.yaml --install --atomic --debug --history-max=3 --namespace $POSTGRES_NAME
+							helm upgrade $APP_NAME oci://registry-1.docker.io/bitnamicharts/postgresql --file values.yaml --install --atomic --debug --history-max=3 --namespace $POSTGRES_NAME
 						"""
 					}
 				}

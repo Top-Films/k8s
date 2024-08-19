@@ -60,8 +60,8 @@ spec:
 
 							set +e
 
-							kubectl delete secret rancher.topfilms.io-tls -n cattle-system
-							kubectl create secret tls rancher.topfilms.io-tls --cert=cert.pem --key=key.pem -n cattle-system
+							kubectl delete secret rancher.topfilms.io-tls --namespace cattle-system
+							kubectl create secret tls rancher.topfilms.io-tls --cert=cert.pem --key=key.pem --namespace cattle-system
 
 							set -e
 						'''
@@ -72,7 +72,7 @@ spec:
 							helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
 							helm repo update
 
-							helm upgrade $APP_NAME rancher-latest/$APP_NAME -f values.yaml --install --atomic --debug --history-max=3 --namespace cattle-system
+							helm upgrade $APP_NAME rancher-latest/$APP_NAME --file values.yaml --install --atomic --debug --history-max=3 --namespace cattle-system
 						"""
 					}
 				}
