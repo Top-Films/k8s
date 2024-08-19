@@ -1,0 +1,96 @@
+pipeline {
+	agent {
+		kubernetes {
+			defaultContainer 'buildpack'
+			yaml '''
+kind: Pod
+spec:
+  containers:
+  - name: buildpack
+    image: maxmorhardt/topfilms-jenkins-buildpack:latest
+    imagePullPolicy: Always
+    securityContext:
+      privileged: true
+'''
+		}
+	}
+
+	parameters {
+		string(name: 'BRANCH', defaultValue: params.BRANCH ?: 'main', description: 'Branch to checkout in k8s repo', trim: true)
+	}
+
+	environment {
+		APP_NAME = 'db'
+		POSTGRES_NAME = 'postgres'
+		GITHUB_URL = 'https://github.com/Top-Films/k8s'
+	}
+
+	stages {
+
+		stage('Git Clone') {
+			steps {
+				script {
+					checkout scmGit(
+						branches: [[
+							name: "${params.BRANCH}"
+						]],
+						userRemoteConfigs: [[
+							credentialsId: 'github',
+							url: "${env.GITHUB_URL}"
+						]]
+					)
+
+					sh 'ls -lah'
+				}
+			}
+		}
+
+		stage('Prepare Postgres Deployment') {
+			steps {
+				script {
+					withCredentials([
+						string(credentialsId: 'postgres-admin-password-b64', variable: 'POSTGRES_ADMIN_PASSWORD_B64'),
+						string(credentialsId: 'postgres-user-password-b64', variable: 'POSTGRES_USER_PASSWORD_B64'),
+					]) {
+						sh 'mkdir -p $WORKSPACE/.kube && cp $KUBE_CONFIG $WORKSPACE/.kube/config'
+
+						sh '''
+							cd $POSTGRES_NAME
+							
+							sed -i "s/<POSTGRES_ADMIN_PASSWORD>/$POSTGRES_ADMIN_PASSWORD_B64/g" secret.yaml
+							sed -i "s/<POSTGRES_USER_PASSWORD>/$POSTGRES_USER_PASSWORD_B64/g" secret.yaml
+
+							cat secret.yaml
+						'''
+
+						sh """
+							cd $POSTGRES_NAME
+
+							kubectl apply -f secret.yaml -n $POSTGRES_NAME
+						"""
+					}
+				}
+			}
+		}
+
+		stage('Deploy Postgres') {
+			steps {
+				script {
+					withCredentials([file(credentialsId: 'kube-config', variable: 'KUBE_CONFIG')]) {
+						sh 'mkdir -p $WORKSPACE/.kube && cp $KUBE_CONFIG $WORKSPACE/.kube/config'
+
+						sh """
+							cd $POSTGRES_NAME
+							
+							kubectl delete pv $POSTGRES_NAME
+							kubectl apply -f storage.yaml
+
+							helm upgrade $APP_NAME oci://registry-1.docker.io/bitnamicharts/postgresql -f values.yaml --install --atomic --debug --history-max=3 --namespace $POSTGRES_NAME
+						"""
+					}
+				}
+			}
+		}
+
+	}
+}
