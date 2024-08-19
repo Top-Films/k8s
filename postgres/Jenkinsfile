@@ -78,19 +78,20 @@ spec:
 			steps {
 				script {
 					withCredentials([file(credentialsId: 'kube-config', variable: 'KUBE_CONFIG')]) {
-						sh '''
-							mkdir -p $WORKSPACE/.kube && cp $KUBE_CONFIG $WORKSPACE/.kube/config
-						'''
-
-						sh ""
-
-						POSTGRES_PVC = sh(script: "set +e && kubectl get pvc --namespace $POSTGRES_NAME | awk '{print \$1}' | grep -e $POSTGRES_NAME", returnStdout: true).trim()
-						echo "Postgres PVC: $POSTGRES_PVC"
-
+						POSTGRES_PVC = ""
+						try {
+							POSTGRES_PVC = sh(script: "kubectl get pvc --namespace $POSTGRES_NAME | awk '{print \$1}' | grep -e $POSTGRES_NAME", returnStdout: true).trim()
+							echo "Postgres PVC: $POSTGRES_PVC"
+						} catch (_) {
+							echo 'Postgres PVC not found'
+						}
+						
 						sh """
 							cd $POSTGRES_NAME
 
 							helm uninstall $APP_NAME --namespace $POSTGRES_NAME
+
+							set +e
 
 							kubectl delete pvc $POSTGRES_PVC --namespace $POSTGRES_NAME
 							kubectl delete pv $POSTGRES_NAME

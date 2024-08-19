@@ -23,7 +23,7 @@ spec:
 	environment { 
 		APP_NAME = 'topfilms-jenkins-buildpack'
 		APP_VERSION = "${env.VERSION}.${env.BUILD_NUMBER}"
-		K8S_GITHUB_URL = 'https://github.com/Top-Films/k8s'
+		GITHUB_URL = 'https://github.com/Top-Films/k8s'
 	}
 
 	stages {
@@ -37,7 +37,7 @@ spec:
 						]],
 						userRemoteConfigs: [[
 							credentialsId: 'github',
-							url: "$K8S_GITHUB_URL"
+							url: "$GITHUB_URL"
 						]]
 					)
 
