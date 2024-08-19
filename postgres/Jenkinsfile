@@ -89,9 +89,9 @@ spec:
 						sh """
 							cd $POSTGRES_NAME
 
-							helm uninstall $APP_NAME --namespace $POSTGRES_NAME
-
 							set +e
+
+							helm uninstall $APP_NAME --namespace $POSTGRES_NAME
 
 							kubectl delete pvc $POSTGRES_PVC --namespace $POSTGRES_NAME
 							kubectl delete pv $POSTGRES_NAME
