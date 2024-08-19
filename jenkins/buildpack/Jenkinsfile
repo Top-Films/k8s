@@ -22,7 +22,7 @@ spec:
 
 	environment { 
 		APP_NAME = 'topfilms-jenkins-buildpack'
-		APP_VERSION = "${params.VERSION}.${env.BUILD_NUMBER}"
+		APP_VERSION = "${env.VERSION}.${env.BUILD_NUMBER}"
 		K8S_GITHUB_URL = 'https://github.com/Top-Films/k8s'
 	}
 
@@ -33,11 +33,11 @@ spec:
 				script {
 					checkout scmGit(
 						branches: [[
-							name: "${params.BRANCH}"
+							name: "$BRANCH"
 						]],
 						userRemoteConfigs: [[
 							credentialsId: 'github',
-							url: "${env.K8S_GITHUB_URL}"
+							url: "$K8S_GITHUB_URL"
 						]]
 					)
 

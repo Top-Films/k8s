@@ -32,11 +32,11 @@ spec:
 				script {
 					checkout scmGit(
 						branches: [[
-							name: "${params.BRANCH}"
+							name: "$BRANCH"
 						]],
 						userRemoteConfigs: [[
 							credentialsId: 'github',
-							url: "${env.GITHUB_URL}"
+							url: "$GITHUB_URL"
 						]]
 					)
 
@@ -67,7 +67,7 @@ spec:
 						sh """
 							cd $POSTGRES_NAME
 
-							kubectl apply --file secret.yaml --namespace $POSTGRES_NAME
+							kubectl apply --filename secret.yaml --namespace $POSTGRES_NAME
 						"""
 					}
 				}
@@ -95,9 +95,9 @@ spec:
 
 							set -e
 
-							kubectl apply --file storage.yaml
+							kubectl apply --filename storage.yaml
 
-							helm upgrade $APP_NAME oci://registry-1.docker.io/bitnamicharts/postgresql --file values.yaml --install --atomic --debug --history-max=3 --namespace $POSTGRES_NAME
+							helm upgrade $APP_NAME oci://registry-1.docker.io/bitnamicharts/postgresql --values values.yaml --install --atomic --debug --history-max=3 --namespace $POSTGRES_NAME
 						"""
 					}
 				}

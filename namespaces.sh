@@ -1,3 +1,5 @@
+#!/bin/bash
+
 kubectl create namespace topfilms
 kubectl create namespace cattle-system
 kubectl create namespace keycloak

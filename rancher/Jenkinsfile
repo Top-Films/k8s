@@ -31,11 +31,11 @@ spec:
 				script {
 					checkout scmGit(
 						branches: [[
-							name: "${params.BRANCH}"
+							name: "$BRANCH"
 						]],
 						userRemoteConfigs: [[
 							credentialsId: 'github',
-							url: "${env.GITHUB_URL}"
+							url: "$GITHUB_URL"
 						]]
 					)
 
@@ -72,7 +72,7 @@ spec:
 							helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
 							helm repo update
 
-							helm upgrade $APP_NAME rancher-latest/$APP_NAME --file values.yaml --install --atomic --debug --history-max=3 --namespace cattle-system
+							helm upgrade $APP_NAME rancher-latest/$APP_NAME --values values.yaml --install --atomic --debug --history-max=3 --namespace cattle-system
 						"""
 					}
 				}
