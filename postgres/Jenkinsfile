@@ -85,7 +85,9 @@ spec:
 							
 							helm uninstall $APP_NAME -n $POSTGRES_NAME || true
 
+							kubectl delete pvc $POSTGRES_NAME || true
 							kubectl delete pv $POSTGRES_NAME || true
+
 							kubectl apply -f storage.yaml
 
 							helm upgrade $APP_NAME oci://registry-1.docker.io/bitnamicharts/postgresql -f values.yaml --install --atomic --debug --history-max=3 --namespace $POSTGRES_NAME
