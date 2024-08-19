@@ -33,6 +33,9 @@ controller:
   servicePort: 8080
   targetPort: 8080
 
+  nodeSelector:
+    kubernetes.io/hostname: max-master
+
   healthProbes: true
   probes:
     startupProbe:
