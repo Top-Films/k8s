@@ -88,7 +88,7 @@ spec:
 							
 							helm uninstall $APP_NAME -n $POSTGRES_NAME || true
 
-							kubectl delete pvc $POSTGRES_PVC || true
+							kubectl delete pvc $POSTGRES_PVC -n $POSTGRES_NAME || true
 							kubectl delete pv $POSTGRES_NAME || true
 
 							kubectl apply -f storage.yaml
