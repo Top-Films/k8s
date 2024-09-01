@@ -75,6 +75,9 @@ volumes:
   - name: theme
     emptyDir: {}
 
+nodeSelector:
+    kubernetes.io/hostname: max-worker-2
+    
 service:
   type: ClusterIP
   port: 8443
