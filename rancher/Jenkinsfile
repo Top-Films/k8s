@@ -17,6 +17,7 @@ spec:
 
 	parameters {
 		string(name: 'BRANCH', defaultValue: params.BRANCH ?: 'main', description: 'Branch to checkout in k8s repo', trim: true)
+		booleanParam(name: 'DEPLOY_CA_CERT', defaultValue: false, description: 'Deploy ca cert as secret to k8s')
 	}
 
 	environment { 
@@ -43,8 +44,13 @@ spec:
 				}
 			}
 		}
-
-		stage('Deploy Rancher') {
+		
+		stage('Deploy CA Cert') {
+			when {
+				expression { 
+					DEPLOY_CA_CERT == "true"
+				}
+			}
 			steps {
 				script {
 					withCredentials([
@@ -67,6 +73,16 @@ spec:
 
 							set -e
 						'''
+					}
+				}
+			}
+		}
+
+		stage('Deploy Rancher') {
+			steps {
+				script {
+					withCredentials([file(credentialsId: 'kube-config', variable: 'KUBE_CONFIG')]) {
+						sh 'mkdir -p $WORKSPACE/.kube && cp $KUBE_CONFIG $WORKSPACE/.kube/config'
 
 						sh """
 							cd $APP_NAME
