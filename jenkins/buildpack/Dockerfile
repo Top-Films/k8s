@@ -43,7 +43,8 @@ RUN rm nodesource_setup.sh
 RUN apt-get install python3
 
 # install chrome
-RUN curl -fsSL https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -o chrome.deb
-RUN dpkg -i chrome.deb
+RUN apt-get install -y wget
+RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+RUN apt-get install -y ./google-chrome-stable_current_amd64.deb
 
 CMD ["sleep", "infinity"]

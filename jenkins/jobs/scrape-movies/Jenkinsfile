@@ -1,0 +1,68 @@
+pipeline {
+	agent {
+		kubernetes {
+			defaultContainer 'dind'
+			yaml '''
+kind: Pod
+spec:
+  containers:
+  - name: dind
+    image: docker:27-dind
+    imagePullPolicy: Always
+    securityContext:
+      privileged: true
+'''
+		}
+	}
+
+	parameters {
+		string(name: 'BRANCH', defaultValue: params.BRANCH ?: 'main', description: 'Branch to checkout', trim: true)
+	}
+
+	environment { 
+		GITHUB_URL = 'https://github.com/Top-Films/k8s'
+	}
+
+	stages {
+
+		stage('Git Clone') {
+			steps {
+				script {
+					checkout scmGit(
+						branches: [[
+							name: "$BRANCH"
+						]],
+						userRemoteConfigs: [[
+							credentialsId: 'github',
+							url: "$GITHUB_URL"
+						]]
+					)
+
+					sh 'ls -lah'
+				}
+			}
+		}
+
+		stage('Scrape Movies') {
+			steps {
+				script {
+					withCredentials([
+						usernamePassword(credentialsId: 'postgres-topfilms', usernameVariable: 'DB_USERNAME', passwordVariable: 'DB_PASSWORD')
+						string(credentialsId: 'postgres-host', variable: 'DB_HOST'),
+						string(credentialsId: 'postgres-port', variable: 'DB_PORT'),
+						string(credentialsId: 'postgres-topfilms-name', variable: 'DB_NAME')
+					]) {
+						sh """
+							cd jenkins/jobs/scrape-movies
+
+							pip install -r requirements.txt
+
+							python scrape-movies.py
+						"""
+					}
+				}
+			}
+		}
+
+	}
+}

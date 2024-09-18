@@ -1,10 +1,11 @@
 from selenium import webdriver  
 from selenium.webdriver.common.by import By 
 from selenium.webdriver.chrome.options import Options
-
+import psycopg2
+import os
 
 class ScrapeMovies:
-	def __init__(self):
+	def __init__(self, db_name, db_host, db_username, db_password, db_port):
 		self.base_url = 'https://www.allmovie.com/genre'
 		self.query = 'alltime-desc'
 		self.num_movies_per_page = 20
@@ -37,6 +38,12 @@ class ScrapeMovies:
 			('war-ag126', 'War'),
 			('western-ag127', 'Western')
 		]
+
+		self.conn = psycopg2.connect(database="db_name",
+									 host="db_host",
+									 user="db_user",
+									 password="db_pass",
+									 port="db_port")
 
 	def scrapePage(self, driver, url):
 		try:
@@ -71,7 +78,11 @@ class ScrapeMovies:
 		year = year_elem.text
 		print(f"Year: {year}")
 
-		print('----------------------------------------')
+	def saveMovie(self, title, director, year):
+		print('Saving movie...')
+
+		self.conn.cursor().execute(f"INSERT INTO ")
+
 
 	def main(self):
 		url = f"{self.base_url}/{self.genres[0]}/{self.query}"
@@ -84,4 +95,10 @@ class ScrapeMovies:
 		
 		
 if __name__ == "__main__":
-	ScrapeMovies().main()
+	db_name = os.environ.get('DB_NAME')
+	db_host = os.environ.get('DB_HOST')
+	db_username = os.environ.get('DB_USERNAME')
+	db_password = os.environ.get('DB_PASSWORD')
+	db_port = os.environ.get('DB_PORT')
+
+	ScrapeMovies(db_name, db_host, db_username, db_password, db_port).main()
