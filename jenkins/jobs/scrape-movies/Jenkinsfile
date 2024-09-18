@@ -47,7 +47,7 @@ spec:
 			steps {
 				script {
 					withCredentials([
-						usernamePassword(credentialsId: 'postgres-topfilms', usernameVariable: 'DB_USERNAME', passwordVariable: 'DB_PASSWORD')
+						usernamePassword(credentialsId: 'postgres-topfilms', usernameVariable: 'DB_USERNAME', passwordVariable: 'DB_PASSWORD'),
 						string(credentialsId: 'postgres-host', variable: 'DB_HOST'),
 						string(credentialsId: 'postgres-port', variable: 'DB_PORT'),
 						string(credentialsId: 'postgres-topfilms-name', variable: 'DB_NAME')
