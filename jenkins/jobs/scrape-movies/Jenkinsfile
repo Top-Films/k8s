@@ -6,8 +6,8 @@ pipeline {
 kind: Pod
 spec:
   containers:
-  - name: selenium
-    image: selenium/standalone-chrome
+  - name: dind
+    image: selenium/standalone-chrome:128.0
     imagePullPolicy: Always
     securityContext:
       privileged: true
