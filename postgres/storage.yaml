@@ -7,7 +7,7 @@ metadata:
 spec:
   storageClassName: postgres
   capacity:
-    storage: 48Gi
+    storage: 80Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
