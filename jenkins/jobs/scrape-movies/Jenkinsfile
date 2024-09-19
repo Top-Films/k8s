@@ -1,20 +1,11 @@
 pipeline {
 	agent {
 		kubernetes {
-			defaultContainer 'selenium'
+			defaultContainer 'buildpack'
 			yaml '''
 kind: Pod
 spec:
   containers:
-  - name: selenium
-    image: selenium/standalone-chromium:128.0
-    imagePullPolicy: Always
-    args:
-    - sleep
-    - infinity
-    securityContext:
-      privileged: true
-
   - name: buildpack
     image: maxmorhardt/topfilms-jenkins-buildpack:latest
     imagePullPolicy: Always
@@ -36,20 +27,18 @@ spec:
 
 		stage('Git Clone') {
 			steps {
-				container('buildpack') {
-					script {
-						checkout scmGit(
-							branches: [[
-								name: "$BRANCH"
-							]],
-							userRemoteConfigs: [[
-								credentialsId: 'github',
-								url: "$GITHUB_URL"
-							]]
-						)
+				script {
+					checkout scmGit(
+						branches: [[
+							name: "$BRANCH"
+						]],
+						userRemoteConfigs: [[
+							credentialsId: 'github',
+							url: "$GITHUB_URL"
+						]]
+					)
 
-						sh 'ls -lah'
-					}
+					sh 'ls -lah'
 				}
 			}
 		}

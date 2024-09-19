@@ -39,4 +39,12 @@ RUN sh nodesource_setup.sh
 RUN apt-get install -y nodejs
 RUN rm nodesource_setup.sh
 
+# install python
+RUN apt-get install python3
+
+# install chrome
+RUN curl -LO https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+RUN apt-get install -y ./google-chrome-stable_current_amd64.deb
+RUN rm google-chrome-stable_current_amd64.deb 
+
 CMD ["sleep", "infinity"]
