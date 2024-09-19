@@ -9,7 +9,7 @@ spec:
   - name: selenium
     image: selenium/standalone-chromium:128.0
     imagePullPolicy: Always
-	command: 
+	args: 
 	- sleep
 	- infinity
     securityContext:
