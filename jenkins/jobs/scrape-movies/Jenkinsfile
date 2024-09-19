@@ -7,7 +7,7 @@ kind: Pod
 spec:
   containers:
   - name: selenium
-    image: selenium/standalone-chrome:latest
+    image: selenium/standalone-chrome
     imagePullPolicy: Always
     securityContext:
       privileged: true
