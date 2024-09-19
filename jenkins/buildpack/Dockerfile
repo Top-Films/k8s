@@ -40,9 +40,9 @@ RUN apt-get install -y nodejs
 RUN rm nodesource_setup.sh
 
 # install python
-RUN apt-get install python3
+RUN apt-get install python3 -y
 
 # install chrome
-RUN apt-get install chromium-browser
+RUN apt-get install chromium-browser -y
 
 CMD ["sleep", "infinity"]
