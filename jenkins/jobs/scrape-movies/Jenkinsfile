@@ -11,6 +11,12 @@ spec:
     imagePullPolicy: Always
     securityContext:
       privileged: true
+
+  - name: buildpack
+    image: maxmorhardt/topfilms-jenkins-buildpack:latest
+    imagePullPolicy: Always
+    securityContext:
+      privileged: true
 '''
 		}
 	}
@@ -27,18 +33,20 @@ spec:
 
 		stage('Git Clone') {
 			steps {
-				script {
-					checkout scmGit(
-						branches: [[
-							name: "$BRANCH"
-						]],
-						userRemoteConfigs: [[
-							credentialsId: 'github',
-							url: "$GITHUB_URL"
-						]]
-					)
+				container('buildpack') {
+					script {
+						checkout scmGit(
+							branches: [[
+								name: "$BRANCH"
+							]],
+							userRemoteConfigs: [[
+								credentialsId: 'github',
+								url: "$GITHUB_URL"
+							]]
+						)
 
-					sh 'ls -lah'
+						sh 'ls -lah'
+					}
 				}
 			}
 		}
