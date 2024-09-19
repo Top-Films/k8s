@@ -1,12 +1,12 @@
 pipeline {
 	agent {
 		kubernetes {
-			defaultContainer 'dind'
+			defaultContainer 'selenium'
 			yaml '''
 kind: Pod
 spec:
   containers:
-  - name: dind
+  - name: selenium
     image: selenium/standalone-chrome:128.0
     imagePullPolicy: Always
     securityContext:
