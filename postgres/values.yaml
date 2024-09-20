@@ -16,9 +16,5 @@ primary:
       postgresql: 30543
   nodeSelector:
     kubernetes.io/hostname: max-worker
-
-volumePermissions:
-  enabled: true
-
-persistence:
-  size: 1024Gi
+  persistence:
+    size: 1024Gi
