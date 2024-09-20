@@ -19,3 +19,6 @@ primary:
 
 volumePermissions:
   enabled: true
+
+ persistence:
+    size: 1024Gi
