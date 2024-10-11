@@ -1,6 +1,6 @@
 image:
   repository: quay.io/keycloak/keycloak
-  tag: '24.0.4'
+  tag: '25.0.3'
   pullPolicy: Always
   replicas: 1
   revisionHistoryLimit: 2
