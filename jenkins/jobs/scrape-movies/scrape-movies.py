@@ -137,4 +137,4 @@ if __name__ == "__main__":
 	print(f"init_genres={init_genres}")
 	print(f"user={user}\n")
 
-	ScrapeMovies(db_name, db_host, db_username, db_password, db_port, init_genres, user).main()
+	# ScrapeMovies(db_name, db_host, db_username, db_password, db_port, init_genres, user).main()
