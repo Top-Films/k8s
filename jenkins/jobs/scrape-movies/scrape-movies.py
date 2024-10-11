@@ -57,7 +57,7 @@ class ScrapeMovies:
 		for genre in self.genres:
 			name = genre[1]
 			id = genre[2]
-			timestamp = datetime.datetime()
+			timestamp = datetime.datetime.now()
 
 			print(f"Creating record:")
 			print(f"id={id}")
