@@ -6,10 +6,12 @@ import os
 import datetime
 
 class ScrapeMovies:
-	def __init__(self, db_name, db_host, db_username, db_password, db_port, init_genres):
+	def __init__(self, db_name, db_host, db_username, db_password, db_port, init_genres, user):
 		self.base_url = 'https://www.allmovie.com/genre'
 		self.query = 'alltime-desc'
 		self.num_movies_per_page = 20
+		self.init_genres = init_genres
+		self.user = user
 		self.genres = [
 			['action-adventure-ag100', 'Action Adventure', '97128c0e-c0e9-4c0c-93bd-fdb5f7bf2c3c'],
 			['animation-ag102', 'Animation', '2d44a66c-29d6-43c8-9f30-371c93073ec9'],
@@ -40,6 +42,7 @@ class ScrapeMovies:
 			['western-ag127', 'Western', '918f037f-c91b-4fce-aadd-16b2b10008a5']
 		]
 
+
 		self.conn = psycopg2.connect(database=db_name,
 									 host=db_host,
 									 user=db_username,
@@ -48,19 +51,20 @@ class ScrapeMovies:
 
 	def initGenres(self):
 		print('Initializing data in genres table')
-
 		for genre in self.genres:
 			name = genre[1]
 			id = genre[2]
-
-			created_by = 'maxmorhardt'
-			updated_by = 'maxmorhardt'
-			
 			timestamp = datetime.datetime()
-			created_at = timestamp
-			updated_at = timestamp
 
-			self.conn.cursor().execute('INSERT INTO %s (day, elapsed_time, net_time, length, average_speed, geometry) VALUES (%s, %s, %s, %s, %s, %s)', (escaped_name, day, time_length, time_length_net, length_km, avg_speed, myLine_ppy))
+			print(F"Creating record:")
+			print(f"id={id}")
+			print(f"created_by={self.user}")
+			print(f"updated_by={self.user}")
+			print(f"created_at={timestamp}")
+			print(f"updated_at={timestamp}")
+			print(f"name={name}\n")
+
+			self.conn.cursor().execute('INSERT INTO %s (id, created_by, updated_by, created_at, updated_at, name) VALUES (%s, %s, %s, %s, %s, %s)', (id, self.user, self.user, timestamp, timestamp, name))
 
 	def scrapePage(self, driver, url):
 		try:
@@ -122,8 +126,8 @@ if __name__ == "__main__":
 	db_password = os.environ.get('DB_PASSWORD')
 	db_port = os.environ.get('DB_PORT')
 
-	init_genres = os.environ.get('INIT_GENRES')
-	build_user = os.environ.get('BUILD_TRIGGER_BY')
+	init_genres = os.environ.get('INIT_GENRES_TABLE')
+	user = os.environ.get('BUILD_TRIGGER_BY')
 
 	print('Picked up environment variables:')
 	print(f"db_name={db_name}")
@@ -131,6 +135,6 @@ if __name__ == "__main__":
 	print(f"db_username={db_username}")
 	print(f"db_password={db_password}")
 	print(f"init_genres={init_genres}")
-	print(f"build_user={build_user}")
+	print(f"user={user}\n")
 
-	# ScrapeMovies(db_name, db_host, db_username, db_password, db_port, init_genres).main()
+	ScrapeMovies(db_name, db_host, db_username, db_password, db_port, init_genres, user).main()

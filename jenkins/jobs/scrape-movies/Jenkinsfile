@@ -17,6 +17,7 @@ spec:
 
 	parameters {
 		string(name: 'BRANCH', defaultValue: params.BRANCH ?: 'main', description: 'Branch to checkout', trim: true)
+		booleanParam(name: 'INIT_GENRES_TABLE', defaultValue: false, description: 'Initialize genres table with data')
 	}
 
 	environment { 
@@ -55,6 +56,8 @@ spec:
 						sh """
 							cd jenkins/jobs/scrape-movies
 
+							python -m venv venv
+							source venv/bin/activate
 							pip install -r requirements.txt
 
 							python scrape-movies.py
