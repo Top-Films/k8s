@@ -6,7 +6,7 @@ import os
 import datetime
 
 class ScrapeMovies:
-	def __init__(self, db_name, db_host, db_username, db_password, db_port, init_genres, user):
+	def __init__(self, db_name, db_host, db_username, db_password, db_port, init_genres_table, user):
 		self.conn = psycopg2.connect(database=db_name,
 									 host=db_host,
 									 user=db_username,
@@ -15,7 +15,7 @@ class ScrapeMovies:
 		self.genre_table = 'MOVIE_GENRE'
 		self.movie_table = 'MOVIE'
 		
-		self.init_genres = init_genres
+		self.init_genres_table = init_genres_table
 		self.user = user
 
 		self.base_url = 'https://www.allmovie.com/genre'
@@ -110,7 +110,7 @@ class ScrapeMovies:
 
 
 	def main(self):
-		if (self.base_urlinit_genres is not None):
+		if (self.init_genres_table is not None):
 			self.__init_genres_table()
 		
 		# for genre in self.genres
