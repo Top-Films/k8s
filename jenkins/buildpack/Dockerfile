@@ -47,4 +47,7 @@ RUN apt-get install python3-venv -y
 # install chrome
 RUN apt-get install chromium-browser -y
 
+# install package for pg
+RUN apt-get install libpq-dev
+
 CMD ["sleep", "infinity"]
