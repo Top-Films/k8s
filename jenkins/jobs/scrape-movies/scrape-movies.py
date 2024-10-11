@@ -66,7 +66,7 @@ class ScrapeMovies:
 			print(f"updated_at={timestamp}")
 			print(f"name={name}\n")
 
-			self.conn.cursor().execute('INSERT INTO MOVIE_GENRE (id, created_by, updated_by, created_at, updated_at, name) VALUES (%s, %s, %s, %s, %s, %s)', (self.genre_table, id, self.user, self.user, timestamp, timestamp, name))
+			self.conn.cursor().execute('INSERT INTO MOVIE_GENRE (id, created_by, updated_by, created_at, updated_at, name) VALUES (%s, %s, %s, %s, %s, %s)', (id, self.user, self.user, timestamp, timestamp, name))
 
 	def __scrape_page(self, driver, url):
 		try:
