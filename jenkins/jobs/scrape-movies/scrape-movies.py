@@ -7,11 +7,21 @@ import datetime
 
 class ScrapeMovies:
 	def __init__(self, db_name, db_host, db_username, db_password, db_port, init_genres, user):
+		self.conn = psycopg2.connect(database=db_name,
+									 host=db_host,
+									 user=db_username,
+									 password=db_password,
+									 port=db_port)
+		self.genre_table = 'MOVIE_GENRE'
+		self.movie_table = 'MOVIE'
+		
+		self.init_genres = init_genres
+		self.user = user
+
 		self.base_url = 'https://www.allmovie.com/genre'
 		self.query = 'alltime-desc'
 		self.num_movies_per_page = 20
-		self.init_genres = init_genres
-		self.user = user
+		
 		self.genres = [
 			['action-adventure-ag100', 'Action Adventure', '97128c0e-c0e9-4c0c-93bd-fdb5f7bf2c3c'],
 			['animation-ag102', 'Animation', '2d44a66c-29d6-43c8-9f30-371c93073ec9'],
@@ -42,21 +52,15 @@ class ScrapeMovies:
 			['western-ag127', 'Western', '918f037f-c91b-4fce-aadd-16b2b10008a5']
 		]
 
-
-		self.conn = psycopg2.connect(database=db_name,
-									 host=db_host,
-									 user=db_username,
-									 password=db_password,
-									 port=db_port)
-
-	def initGenres(self):
-		print('Initializing data in genres table')
+	def __init_genres_table(self):
+		print(f"Initializing data in table {self.genre_table}")
 		for genre in self.genres:
 			name = genre[1]
 			id = genre[2]
 			timestamp = datetime.datetime()
 
-			print(F"Creating record:")
+			print(f"Creating record:")
+			print(f"id={id}")
 			print(f"id={id}")
 			print(f"created_by={self.user}")
 			print(f"updated_by={self.user}")
@@ -64,9 +68,9 @@ class ScrapeMovies:
 			print(f"updated_at={timestamp}")
 			print(f"name={name}\n")
 
-			self.conn.cursor().execute('INSERT INTO %s (id, created_by, updated_by, created_at, updated_at, name) VALUES (%s, %s, %s, %s, %s, %s)', (id, self.user, self.user, timestamp, timestamp, name))
+			self.conn.cursor().execute('INSERT INTO %s (id, created_by, updated_by, created_at, updated_at, name) VALUES (%s, %s, %s, %s, %s, %s)', (self.genre_table, id, self.user, self.user, timestamp, timestamp, name))
 
-	def scrapePage(self, driver, url):
+	def __scrape_page(self, driver, url):
 		try:
 			driver.get(url)
 		except Exception as e:
@@ -81,7 +85,7 @@ class ScrapeMovies:
 				print(e)
 
 
-	def scrapeMovie(self, driver, i):
+	def __scrape_movie(self, driver, i):
 		print(f"Movie number: {i}")
 		movie_wrapper_elem = driver.find_element(By.CLASS_NAME, f"num-{i}") 
 
@@ -99,7 +103,7 @@ class ScrapeMovies:
 		year = year_elem.text
 		print(f"Year: {year}")
 
-	def saveMovie(self, title, director, year):
+	def __save_movie(self, title, director, year):
 		print('Saving movie...')
 
 		self.conn.cursor().execute(f"INSERT INTO ")
@@ -107,7 +111,7 @@ class ScrapeMovies:
 
 	def main(self):
 		if (self.base_urlinit_genres is not None):
-			self.initGenres()
+			self.__init_genres_table()
 		
 		# for genre in self.genres
 		# url = f"{self.base_url}/{self.genres[0]}/{self.query}"
@@ -137,4 +141,4 @@ if __name__ == "__main__":
 	print(f"init_genres={init_genres}")
 	print(f"user={user}\n")
 
-	# ScrapeMovies(db_name, db_host, db_username, db_password, db_port, init_genres, user).main()
+	ScrapeMovies(db_name, db_host, db_username, db_password, db_port, init_genres, user).main()
