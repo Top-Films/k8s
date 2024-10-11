@@ -3,47 +3,64 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 import psycopg2
 import os
+import datetime
 
 class ScrapeMovies:
-	def __init__(self, db_name, db_host, db_username, db_password, db_port):
+	def __init__(self, db_name, db_host, db_username, db_password, db_port, init_genres):
 		self.base_url = 'https://www.allmovie.com/genre'
 		self.query = 'alltime-desc'
 		self.num_movies_per_page = 20
 		self.genres = [
-			('action-adventure-ag100', 'Action Adventure'),
-			('animation-ag102', 'Animation'),
-			('anime-ag103', 'Anime'),
-			('avant-garde-experimental-ag104', 'Avant Garde Experimental'),
-			('biography-ag105', 'Biography'),
-			('childrens-ag106', 'Childrens'),
-			('comedy-ag107', 'Comedy'),
-			('comedy-drama-ag108', 'Comedy Drama'),
-			('crime-ag109', 'Crime'),
-			('documentary-ag110', 'Documentary'),
-			('drama-ag111', 'Drama'),
-			('epic-ag112', 'Epic'),
-			('family-ag113', 'Family'),
-			('fantasy-ag114', 'Fantasy'),
-			('history-ag115', 'History'),
-			('horror-ag116', 'Horror'),
-			('mature-ag101', 'Mature'),
-			('music-ag117', 'Music'),
-			('mystery-suspense-ag118', 'Mystery Suspense'),
-			('romance-ag120', 'Romance'),
-			('science-fiction-ag121', 'Science Fiction'),
-			('silent-film-ag122', 'Silent Film'),
-			('sports-ag123', 'Sports'),
-			('spy-film-ag124', 'Spy Film'),
-			('thriller-ag125', 'Thriller'),
-			('war-ag126', 'War'),
-			('western-ag127', 'Western')
+			['action-adventure-ag100', 'Action Adventure', '97128c0e-c0e9-4c0c-93bd-fdb5f7bf2c3c'],
+			['animation-ag102', 'Animation', '2d44a66c-29d6-43c8-9f30-371c93073ec9'],
+			['anime-ag103', 'Anime', '1fb085b3-12f9-4062-94be-34f0348a52f3'],
+			['avant-garde-experimental-ag104', 'Avant Garde Experimental', '72ea1bbe-32cc-4d82-9385-f16907e6df13'],
+			['biography-ag105', 'Biography', 'c4b91c13-ff2f-4cdb-80aa-77a01e43d1a7'],
+			['childrens-ag106', 'Childrens', '494bbaf6-d2f2-4fe4-980c-b90ea398a98e'],
+			['comedy-ag107', 'Comedy', '33a72196-1d57-4ba8-8538-6d25c2119925'],
+			['comedy-drama-ag108', 'Comedy Drama', '41e2c73a-8396-42d3-8eb0-effb32a77ae3'],
+			['crime-ag109', 'Crime', 'f57899bb-bae9-451c-abd5-bba97acb58a3'],
+			['documentary-ag110', 'Documentary', '3ac7a1e6-2443-49d6-8160-0e90e1486fd3'],
+			['drama-ag111', 'Drama', '6afedc3a-ad16-4dd9-946b-d8d5c73ec9af'],
+			['epic-ag112', 'Epic', '9de7758e-9974-4dc3-af12-9b8c7f480eda'],
+			['family-ag113', 'Family', '057ab3da-d8b8-45e5-9a1e-c0ce9ace997d'],
+			['fantasy-ag114', 'Fantasy', '5a6c0b79-9aa4-4f21-88b8-784cda95be4f'],
+			['history-ag115', 'History', '11620510-48d0-4157-b2fd-c1878f9989a9'],
+			['horror-ag116', 'Horror', 'd9de27d3-a56a-412e-9085-1a9f26908dfe'],
+			['mature-ag101', 'Mature', '30145432-b725-420a-a537-3697a7e9ddb8'],
+			['music-ag117', 'Music', '16f0667f-68dd-4ac6-bd7a-8d7591365334'],
+			['mystery-suspense-ag118', 'Mystery Suspense', 'b807b590-77f1-49aa-8dd0-81863748d89c'],
+			['romance-ag120', 'Romance', '0335c01e-b63e-4977-a05a-e7f4c09ff827'],
+			['science-fiction-ag121', 'Science Fiction', '47920959-4cda-43d7-90d4-a64fcc1e50bb'],
+			['silent-film-ag122', 'Silent Film', 'a060ef47-5389-412b-b670-846703affcbf'],
+			['sports-ag123', 'Sports', '378fa0a7-a49e-4408-a309-57f841536661'],
+			['spy-film-ag124', 'Spy Film', 'f7fb53d6-b5d5-4c80-9fa7-6f538de9904e'],
+			['thriller-ag125', 'Thriller', 'c2e3f791-c5e1-4be8-a8f7-4e5f58d59ccd'],
+			['war-ag126', 'War', 'a12da96c-068a-4388-ab4a-57dd7132d0a3'],
+			['western-ag127', 'Western', '918f037f-c91b-4fce-aadd-16b2b10008a5']
 		]
 
-		self.conn = psycopg2.connect(database="db_name",
-									 host="db_host",
-									 user="db_user",
-									 password="db_pass",
-									 port="db_port")
+		self.conn = psycopg2.connect(database=db_name,
+									 host=db_host,
+									 user=db_username,
+									 password=db_password,
+									 port=db_port)
+
+	def initGenres(self):
+		print('Initializing data in genres table')
+
+		for genre in self.genres:
+			name = genre[1]
+			id = genre[2]
+
+			created_by = 'maxmorhardt'
+			updated_by = 'maxmorhardt'
+			
+			timestamp = datetime.datetime()
+			created_at = timestamp
+			updated_at = timestamp
+
+			self.conn.cursor().execute('INSERT INTO %s (day, elapsed_time, net_time, length, average_speed, geometry) VALUES (%s, %s, %s, %s, %s, %s)', (escaped_name, day, time_length, time_length_net, length_km, avg_speed, myLine_ppy))
 
 	def scrapePage(self, driver, url):
 		try:
@@ -85,13 +102,17 @@ class ScrapeMovies:
 
 
 	def main(self):
-		url = f"{self.base_url}/{self.genres[0]}/{self.query}"
+		if (self.base_urlinit_genres is not None):
+			self.initGenres()
+		
+		# for genre in self.genres
+		# url = f"{self.base_url}/{self.genres[0]}/{self.query}"
 
-		options = Options()
-		options.add_argument('--headless=new')
+		# options = Options()
+		# options.add_argument('--headless=new')
 
-		with webdriver.Chrome(options=options) as driver: 
-			self.scrapePage(driver=driver, url=url)
+		# with webdriver.Chrome(options=options) as driver: 
+		# 	self.scrapePage(driver=driver, url=url)
 		
 		
 if __name__ == "__main__":
@@ -101,4 +122,15 @@ if __name__ == "__main__":
 	db_password = os.environ.get('DB_PASSWORD')
 	db_port = os.environ.get('DB_PORT')
 
-	ScrapeMovies(db_name, db_host, db_username, db_password, db_port).main()
+	init_genres = os.environ.get('INIT_GENRES')
+	build_user = os.environ.get('BUILD_TRIGGER_BY')
+
+	print('Picked up environment variables:')
+	print(f"db_name={db_name}")
+	print(f"db_host={db_host}")
+	print(f"db_username={db_username}")
+	print(f"db_password={db_password}")
+	print(f"init_genres={init_genres}")
+	print(f"build_user={build_user}")
+
+	# ScrapeMovies(db_name, db_host, db_username, db_password, db_port, init_genres).main()
