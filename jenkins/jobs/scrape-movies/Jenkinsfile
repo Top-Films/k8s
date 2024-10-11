@@ -22,6 +22,7 @@ spec:
 
 	environment { 
 		GITHUB_URL = 'https://github.com/Top-Films/k8s'
+		BUILD_USER = currentBuild.getBuildCauses()[0].userId
 	}
 
 	stages {

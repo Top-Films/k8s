@@ -110,7 +110,7 @@ class ScrapeMovies:
 
 
 	def main(self):
-		if (self.init_genres_table is not None):
+		if (self.init_genres_table == 'true'):
 			self.__init_genres_table()
 		
 		# for genre in self.genres
@@ -131,7 +131,7 @@ if __name__ == "__main__":
 	db_port = os.environ.get('DB_PORT')
 
 	init_genres = os.environ.get('INIT_GENRES_TABLE')
-	user = os.environ.get('BUILD_TRIGGER_BY')
+	user = os.environ.get('BUILD_USER')
 
 	print('Picked up environment variables:')
 	print(f"db_name={db_name}")
