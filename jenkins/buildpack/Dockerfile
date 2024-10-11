@@ -42,6 +42,7 @@ RUN rm nodesource_setup.sh
 # install python
 RUN apt-get install python3 -y
 RUN apt-get install python3-pip -y
+RUN apt-get install python3-venv
 
 # install chrome
 RUN apt-get install chromium-browser -y
