@@ -12,8 +12,6 @@ class ScrapeMovies:
 									 user=db_username,
 									 password=db_password,
 									 port=db_port)
-		self.genre_table = 'MOVIE_GENRE'
-		self.movie_table = 'MOVIE'
 		
 		self.init_genres_table = init_genres_table
 		self.user = user
@@ -53,7 +51,7 @@ class ScrapeMovies:
 		]
 
 	def __init_genres_table(self):
-		print(f"Initializing data in table {self.genre_table}")
+		print(f"Initializing data in MOVIE_GENRE table")
 		for genre in self.genres:
 			name = genre[1]
 			id = genre[2]
@@ -68,7 +66,7 @@ class ScrapeMovies:
 			print(f"updated_at={timestamp}")
 			print(f"name={name}\n")
 
-			self.conn.cursor().execute('INSERT INTO %s (id, created_by, updated_by, created_at, updated_at, name) VALUES (%s, %s, %s, %s, %s, %s)', (self.genre_table, id, self.user, self.user, timestamp, timestamp, name))
+			self.conn.cursor().execute('INSERT INTO MOVIE_GENRE (id, created_by, updated_by, created_at, updated_at, name) VALUES (%s, %s, %s, %s, %s, %s)', (self.genre_table, id, self.user, self.user, timestamp, timestamp, name))
 
 	def __scrape_page(self, driver, url):
 		try:
