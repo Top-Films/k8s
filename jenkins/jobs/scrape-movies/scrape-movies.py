@@ -4,7 +4,6 @@ from selenium.webdriver.chrome.options import Options
 import psycopg2
 import os
 import datetime
-import requests
 
 class ScrapeMovies:
 	def __init__(self, db_name, db_host, db_username, db_password, db_port, init_genres_table, user):
@@ -16,7 +15,7 @@ class ScrapeMovies:
 		
 		self.init_genres_table = init_genres_table
 		self.user = user
-		self.userId = None
+		self.userId = '4308b779-f616-4ada-9ac8-4ddb27bcd749' # srv-jenkins id
 
 		self.base_url = 'https://www.allmovie.com/genre'
 		self.query = 'alltime-desc'
@@ -51,9 +50,6 @@ class ScrapeMovies:
 			['war-ag126', 'War', 'a12da96c-068a-4388-ab4a-57dd7132d0a3'],
 			['western-ag127', 'Western', '918f037f-c91b-4fce-aadd-16b2b10008a5']
 		]
-
-	def __get_user_id(self):
-		requests.post()
 
 
 	def __init_genres_table(self):
