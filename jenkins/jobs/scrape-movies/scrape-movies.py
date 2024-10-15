@@ -6,7 +6,7 @@ import os
 import datetime
 
 class ScrapeMovies:
-	def __init__(self, db_name, db_host, db_username, db_password, db_port, init_genres_table, user):
+	def __init__(self, db_name, db_host, db_username, db_password, db_port, init_genres_table):
 		self.conn = psycopg2.connect(database=db_name,
 									 host=db_host,
 									 user=db_username,
@@ -14,7 +14,6 @@ class ScrapeMovies:
 									 port=db_port)
 		
 		self.init_genres_table = init_genres_table
-		self.user = user
 		self.userId = '4308b779-f616-4ada-9ac8-4ddb27bcd749' # srv-jenkins id
 
 		self.base_url = 'https://www.allmovie.com/genre'
@@ -60,15 +59,13 @@ class ScrapeMovies:
 			timestamp = datetime.datetime.now()
 
 			print(f"Creating record:")
-			print(f"id={id}")
-			print(f"id={id}")
-			print(f"created_by={self.user}")
-			print(f"updated_by={self.user}")
+			print(f"created_by={id}")
+			print(f"updated_by={id}")
 			print(f"created_at={timestamp}")
 			print(f"updated_at={timestamp}")
 			print(f"name={name}\n")
 
-			self.conn.cursor().execute('INSERT INTO MOVIE_GENRE (id, created_by, updated_by, created_at, updated_at, name) VALUES (%s, %s, %s, %s, %s, %s)', (id, self.user, self.user, timestamp, timestamp, name))
+			self.conn.cursor().execute('INSERT INTO MOVIE_GENRE (id, created_by, updated_by, created_at, updated_at, name) VALUES (%s, %s, %s, %s, %s, %s)', (id, self.userId, self.userId, timestamp, timestamp, name))
 
 	def __scrape_page(self, driver, url):
 		try:
@@ -131,7 +128,6 @@ if __name__ == "__main__":
 	db_port = os.environ.get('DB_PORT')
 
 	init_genres = os.environ.get('INIT_GENRES_TABLE')
-	user = os.environ.get('BUILD_USER')
 
 	print('Picked up environment variables:')
 	print(f"db_name={db_name}")
@@ -139,6 +135,5 @@ if __name__ == "__main__":
 	print(f"db_username={db_username}")
 	print(f"db_password={db_password}")
 	print(f"init_genres={init_genres}")
-	print(f"user={user}\n")
 
-	ScrapeMovies(db_name, db_host, db_username, db_password, db_port, init_genres, user).main()
+	ScrapeMovies(db_name, db_host, db_username, db_password, db_port, init_genres).main()

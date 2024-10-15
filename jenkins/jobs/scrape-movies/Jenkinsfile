@@ -53,10 +53,7 @@ spec:
 						string(credentialsId: 'postgres-port', variable: 'DB_PORT'),
 						string(credentialsId: 'postgres-topfilms-db', variable: 'DB_NAME')
 					]) {
-						BUILD_USER = currentBuild.getBuildCauses()[0].userId
-
 						sh """
-							export BUILD_USER=${BUILD_USER}
 							cd jenkins/jobs/scrape-movies
 
 							python3 -m venv venv
