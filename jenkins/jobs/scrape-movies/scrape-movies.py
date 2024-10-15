@@ -67,17 +67,32 @@ class ScrapeMovies:
 			print(f"name={name}\n")
 
 			self.conn.cursor().execute('INSERT INTO MOVIE_GENRE (id, created_by, updated_by, created_at, updated_at, name) VALUES (%s, %s, %s, %s, %s, %s)', (id, self.jenkinsUserId, self.jenkinsUserId, timestamp, timestamp, name))
+			self.conn.commit()
 
-	def __scrape_page(self, driver, url):
+	def __scrape(self):
+		options = Options()
+		options.add_argument('--headless=new')
+	
+		# for genre in self.genres:
+		genre_url_path = self.genres[0][0]
+
+		url = f"{self.base_url}/{genre_url_path}/{self.query}"
+
+		with webdriver.Chrome(options) as driver: 
+			self.__scrape_page(driver, url, 1, self.genres[0])
+
+	def __scrape_page(self, driver, url, page_num, genre):
+		print(f"Saving movies on page {page_num} for genre {genre}")
+		num_offset = 1
 		try:
 			driver.get(url)
 		except Exception as e:
 			print(f"Could not get url: ${url}")
 			print(e)
 			
-		for i in range(1, self.num_movies_per_page + 1):
+		for i in range(num_offset, self.num_movies_per_page + num_offset):
 			try:
-				self.scrapeMovie(driver=driver, i=i)
+				self.__scrape_movie(driver, i)
 			except Exception as e:
 				print(f"Could not get movie number {i} for url {url}")
 				print(e)
@@ -90,16 +105,15 @@ class ScrapeMovies:
 		title_wrapper_elem = movie_wrapper_elem.find_element(By.CLASS_NAME, 'title')
 		title_elem = title_wrapper_elem.find_element(By.TAG_NAME, 'a')
 		title = title_elem.text
-		print(f"Title: {title}")
 
 		directors_wrapper_elem = movie_wrapper_elem.find_element(By.CLASS_NAME, 'directors')
 		directors_elem = directors_wrapper_elem.find_element(By.TAG_NAME, 'a')
 		director = directors_elem.text
-		print(f"Director: {director}")
 
 		year_elem = movie_wrapper_elem.find_element(By.CLASS_NAME, 'movie-year')
 		year = year_elem.text
-		print(f"Year: {year}")
+
+		self.__save_movie(title, director, year)
 
 	def __save_movie(self, title, director, year):
 		print('Saving movie...')
@@ -111,15 +125,7 @@ class ScrapeMovies:
 		if (self.init_genres_table == 'true'):
 			self.__init_genres_table()
 		
-		# for genre in self.genres
-		# url = f"{self.base_url}/{self.genres[0]}/{self.query}"
-
-		# options = Options()
-		# options.add_argument('--headless=new')
-
-		# with webdriver.Chrome(options=options) as driver: 
-		# 	self.scrapePage(driver=driver, url=url)
-		
+		self.__scrape()
 		
 if __name__ == "__main__":
 	db_name = os.environ.get('DB_NAME')
@@ -127,7 +133,6 @@ if __name__ == "__main__":
 	db_username = os.environ.get('DB_USERNAME')
 	db_password = os.environ.get('DB_PASSWORD')
 	db_port = os.environ.get('DB_PORT')
-
 	init_genres = os.environ.get('INIT_GENRES_TABLE')
 
 	print('Picked up environment variables:')
@@ -135,6 +140,6 @@ if __name__ == "__main__":
 	print(f"db_host={db_host}")
 	print(f"db_username={db_username}")
 	print(f"db_password={db_password}")
-	print(f"init_genres={init_genres}")
+	print(f"init_genres={init_genres}\n")
 
 	ScrapeMovies(db_name, db_host, db_username, db_password, db_port, init_genres).main()
