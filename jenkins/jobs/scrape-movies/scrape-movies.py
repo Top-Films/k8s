@@ -78,7 +78,7 @@ class ScrapeMovies:
 
 		url = f"{self.base_url}/{genre_url_path}/{self.query}"
 
-		with webdriver.Chrome(options) as driver: 
+		with webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', options=options) as driver: 
 			self.__scrape_page(driver, url, 1, self.genres[0])
 
 	def __scrape_page(self, driver, url, page_num, genre):
