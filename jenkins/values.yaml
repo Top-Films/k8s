@@ -84,7 +84,7 @@ controller:
         serverConfiguration:
           wellKnown:
             wellKnownOpenIDConfigurationUrl: "https://auth.topfilms.io/realms/dev/.well-known/openid-configuration"
-            scopesOverride: "openid email profile preferred_username"
+            scopesOverride: "email profile"
         clientId: "<JENKINS_CLIENT_ID>"
         clientSecret: "<JENKINS_CLIENT_SECRET>"
         disableSslVerification: false
