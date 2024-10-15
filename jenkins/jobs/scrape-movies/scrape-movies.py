@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By 
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 import psycopg2
 import os
 import datetime
@@ -73,15 +74,15 @@ class ScrapeMovies:
 	def __scrape(self):
 		options = Options()
 		options.add_argument('--headless=new')
-		
-		path = '/usr/lib/chromium-browser/chromedriver'
-	
-		# for genre in self.genres:
+
+		service = Service(ChromeDriverManager().install())
+
 		genre_url_path = self.genres[0][0]
+		driver = webdriver.Chrome()
 
 		url = f"{self.base_url}/{genre_url_path}/{self.query}"
 
-		with webdriver.Chrome(options=options, service=Service(path)) as driver: 
+		with webdriver.Chrome(options=options, service=service) as driver: 
 			self.__scrape_page(driver, url, 1, self.genres[0])
 
 	def __scrape_page(self, driver, url, page_num, genre):
