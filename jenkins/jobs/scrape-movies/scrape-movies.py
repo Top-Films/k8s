@@ -14,7 +14,7 @@ class ScrapeMovies:
 									 port=db_port)
 		
 		self.init_genres_table = init_genres_table
-		self.userId = '4308b779-f616-4ada-9ac8-4ddb27bcd749' # srv-jenkins id
+		self.jenkinsUserId = '4308b779-f616-4ada-9ac8-4ddb27bcd749' # srv-jenkins id
 
 		self.base_url = 'https://www.allmovie.com/genre'
 		self.query = 'alltime-desc'
@@ -59,13 +59,14 @@ class ScrapeMovies:
 			timestamp = datetime.datetime.now()
 
 			print(f"Creating record:")
-			print(f"created_by={id}")
-			print(f"updated_by={id}")
+			print(f"created_by={self.jenkinsUserId}")
+			print(f"updated_by={self.jenkinsUserId}")
 			print(f"created_at={timestamp}")
 			print(f"updated_at={timestamp}")
+			print(f"id={id}")
 			print(f"name={name}\n")
 
-			self.conn.cursor().execute('INSERT INTO MOVIE_GENRE (id, created_by, updated_by, created_at, updated_at, name) VALUES (%s, %s, %s, %s, %s, %s)', (id, self.userId, self.userId, timestamp, timestamp, name))
+			self.conn.cursor().execute('INSERT INTO MOVIE_GENRE (id, created_by, updated_by, created_at, updated_at, name) VALUES (%s, %s, %s, %s, %s, %s)', (id, self.jenkinsUserId, self.jenkinsUserId, timestamp, timestamp, name))
 
 	def __scrape_page(self, driver, url):
 		try:
