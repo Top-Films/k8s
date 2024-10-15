@@ -84,12 +84,7 @@ controller:
         serverConfiguration:
           wellKnown:
             wellKnownOpenIDConfigurationUrl: "https://auth.topfilms.io/realms/dev/.well-known/openid-configuration"
-          manual:
-            authorizationServerUrl: "https://auth.topfilms.io/realms/dev/protocol/openid-connect/auth"
-            endSessionEndpoint: "https://auth.topfilms.io/realms/dev/protocol/openid-connect/logout"
-            issuer: "https://auth.topfilms.io/realms/dev"
-            tokenServerUrl: "https://auth.topfilms.io/realms/dev/protocol/openid-connect/token"
-            scopes: "openid email profile preferred_username"
+            scopesOverride: "openid email profile preferred_username"
         clientId: "<JENKINS_CLIENT_ID>"
         clientSecret: "<JENKINS_CLIENT_SECRET>"
         disableSslVerification: false
