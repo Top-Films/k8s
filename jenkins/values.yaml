@@ -79,22 +79,25 @@ controller:
   secretClaims: []
 
   JCasC:
-    securityRealm: |-
+    securityRealm: |
       oic:
-        clientId: "<JENKINS_CLIENT_ID>"
-        clientSecret: "<JENKINS_CLIENT_SECRET>"
-        wellKnownOpenIDConfigurationUrl: "https://auth.topfilms.io/realms/dev/.well-known/openid-configuration"
-        tokenServerUrl: "https://auth.topfilms.io/realms/dev/protocol/openid-connect/token"
-        authorizationServerUrl: "https://auth.topfilms.io/realms/dev/protocol/openid-connect/auth"
-        scopes: "openid email profile preferred_username"
+        serverConfiguration:
+          wellKnown:
+            wellKnownOpenIDConfigurationUrl: https://auth.topfilms.io/realms/dev/.well-known/openid-configuration
+          manual:
+            authorizationServerUrl: https://auth.topfilms.io/realms/dev/protocol/openid-connect/auth
+            endSessionEndpoint: https://auth.topfilms.io/realms/dev/protocol/openid-connect/logout
+            issuer: https://auth.topfilms.io/realms/dev
+            tokenServerUrl: https://auth.topfilms.io/realms/dev/protocol/openid-connect/token
+            scopes: openid email profile preferred_username
+        clientId: <JENKINS_CLIENT_ID>
+        clientSecret: <JENKINS_CLIENT_SECRET>
         disableSslVerification: false
-        endSessionEndpoint: "https://auth.topfilms.io/realms/dev/protocol/openid-connect/logout"
-        escapeHatchEnabled: false
         logoutFromOpenidProvider: true
-        userNameField: "preferred_username"
-        emailFieldName: "email"
-        groupsFieldName: "groups"
-
+        userNameField: preferred_username
+        emailFieldName: email
+        groupsFieldName: groups
+        escapeHatchEnabled: false
     authorizationStrategy: |
       roleBased:
         roles:
@@ -105,6 +108,7 @@ controller:
                 - "Overall/Administer"
               entries:
                 - group: "/jenkins"
+
   ingress:
     enabled: true
     apiVersion: "networking.k8s.io/v1"
