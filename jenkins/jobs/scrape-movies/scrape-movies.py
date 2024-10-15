@@ -72,13 +72,15 @@ class ScrapeMovies:
 	def __scrape(self):
 		options = Options()
 		options.add_argument('--headless=new')
+		
+		path = '/usr/lib/chromium-browser/chromedriver'
 	
 		# for genre in self.genres:
 		genre_url_path = self.genres[0][0]
 
 		url = f"{self.base_url}/{genre_url_path}/{self.query}"
 
-		with webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', options=options) as driver: 
+		with webdriver.Chrome(options=options, executable_path=path) as driver: 
 			self.__scrape_page(driver, url, 1, self.genres[0])
 
 	def __scrape_page(self, driver, url, page_num, genre):
