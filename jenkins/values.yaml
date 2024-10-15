@@ -63,7 +63,7 @@ controller:
   installPlugins:
     - kubernetes:4292.v11898cf8fa_66
     - workflow-aggregator:600.vb_57cdd26fdd7
-    - git:5.6.0
+    - git:5.5.0
     - docker-workflow:580.vc0c340686b_54
     - configuration-as-code:1850.va_a_8c31d3158b_
     - oic-auth:4.411.v990b_9d36e74e
