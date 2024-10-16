@@ -71,6 +71,7 @@ class ScrapeMovies:
 	def __scrape(self):
 		options = webdriver.ChromeOptions()
 		options.add_argument('--headless=new')
+		options.add_argument("--no-sandbox")
 
 		service = webdriver.ChromeService(executable_path='/usr/lib/chromium-browser/chromedriver')
 
@@ -80,7 +81,13 @@ class ScrapeMovies:
 		with webdriver.Chrome(options=options, service=service) as driver: 
 			self.__scrape_page(driver, url, 1, self.genres[0])
 
-	def __scrape_page(self, driver, url, page_num, genre):
+			# for genre in self.genres:
+			# 	genre_complete = False
+			# 	page_num = 1
+			# 	while genre_complete == False:
+					
+
+	def __scrape_page(self, driver, url, page_num, genre) -> bool:
 		print(f"Saving movies on page {page_num} for genre {genre}")
 		num_offset = 1
 		try:
@@ -88,13 +95,17 @@ class ScrapeMovies:
 		except Exception as e:
 			print(f"Could not get url: ${url}")
 			print(e)
-			
+			return True
+		
 		for i in range(num_offset, self.num_movies_per_page + num_offset):
 			try:
 				self.__scrape_movie(driver, i)
 			except Exception as e:
 				print(f"Could not get movie number {i} for url {url}")
 				print(e)
+				return True
+		
+		return False
 
 
 	def __scrape_movie(self, driver, i):
@@ -142,3 +153,4 @@ if __name__ == "__main__":
 	print(f"init_genres={init_genres}\n")
 
 	ScrapeMovies(db_name, db_host, db_username, db_password, db_port, init_genres).main()
+	
