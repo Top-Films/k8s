@@ -43,6 +43,8 @@ RUN rm nodesource_setup.sh
 RUN apt-get install python3 python3-pip python3-venv -y
 
 # install chromium + driver
+RUN add-apt-repository ppa:xtradeb/apps -y
+RUN apt update
 RUN apt-get install chromium chromium-driver -y
 
 # install package for pg
