@@ -4,6 +4,7 @@ import psycopg2
 import os
 import datetime
 import uuid
+import time
 
 class ScrapeMovies:
 	def __init__(self, db_name, db_host, db_username, db_password, db_port, init_genres_table):
@@ -78,12 +79,18 @@ class ScrapeMovies:
 		service = webdriver.ChromeService(executable_path=r"/usr/bin/chromedriver")
 
 		with webdriver.Chrome(options=options, service=service) as driver:
-			genre_url_path = self.genres[0][0]
-			page_num = 1
-			url = f"{self.base_url}/{genre_url_path}/{self.query}/{page_num}"
-			self.__scrape_page(driver, url, 1, self.genres[0])
+			for genre in self.genres:
+				page_num = 1
+				continue_genre = True
+				while continue_genre:
+					genre_url_path = genre[0]
+					url = f"{self.base_url}/{genre_url_path}/{self.query}/{page_num}"
+					continue_genre = self.__scrape_page(driver, url, 1, self.genres[0])
+					page_num = page_num + 1
 					
 	def __scrape_page(self, driver, url, page_num, genre) -> bool:
+		start_time = int(round(time.time() * 1000))
+
 		genre_name = genre[1]
 		genre_id = genre[2]
 
@@ -97,8 +104,9 @@ class ScrapeMovies:
 				print(e)
 				return False
 		
-		print()
-		return True
+		end_time = int(round(time.time() * 1000))
+		print(f"time taken for page {page_num} and genre {genre_name}: {start_time - end_time}ms")
+		return False
 
 	def __scrape_movie(self, driver, movie_num, genre_id):
 		movie_wrapper_elem = driver.find_element(By.CLASS_NAME, f"num-{movie_num}") 
