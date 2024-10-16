@@ -97,7 +97,14 @@ class ScrapeMovies:
 
 		print(f"{genre_name} ({page_num}): {url}")
 
-		driver.get(url)
+		try:
+			driver.get(url)
+			driver.implicitly_wait(2)
+		except Exception as e:
+			print(e)
+			return False
+
+
 		for movie_num in range(self.page_offset, self.num_movies_per_page + self.page_offset):
 			try:
 				self.__scrape_movie(driver, movie_num, genre_id)
