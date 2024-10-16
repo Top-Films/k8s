@@ -11,7 +11,7 @@ RUN apt-get install ca-certificates curl unzip software-properties-common -y
 
 # install chromium + driver
 RUN add-apt-repository ppa:xtradeb/apps -y
-RUN apt update
+RUN apt-get update
 RUN apt-get install chromium chromium-driver -y
 
 # install kubectl
