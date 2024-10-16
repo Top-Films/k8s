@@ -43,8 +43,7 @@ RUN rm nodesource_setup.sh
 RUN apt-get install python3 python3-pip python3-venv -y
 
 # install chromium + driver
-RUN apt-get update -qqy && apt-get -qqy install chromium 
-RUN apt-get update -qqy && apt-get -qqy install chromium-driver && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
+RUN apt-get install chromium chromium-driver -y
 
 # install package for pg
 RUN apt-get install libpq-dev -y
