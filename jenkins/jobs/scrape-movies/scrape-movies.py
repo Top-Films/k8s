@@ -101,49 +101,41 @@ class ScrapeMovies:
 	def __scrape_page(self, url, page_num, genre_name, genre_id) -> bool:
 		start_time = float(round(time.time(), 4))
 
-		driver = self.__init_driver()
-		
+		log.info(f"--------------------{genre_name} ({page_num}): {url}--------------------\n")
+
 		attempt_count = 1
 		max_retries = 3
 
-		completed_driver_get = False
-		while completed_driver_get == False and attempt_count <= max_retries:
-			log.info(f"Attempt {attempt_count}/{max_retries} to get url: {url}")
+		completed_scrape = False
+		while completed_scrape == False and attempt_count <= max_retries:
+			log.info(f"Attempt {attempt_count}/{max_retries}")
 			try:
+				driver = self.__init_driver()
 				driver.get(url)
 				driver.implicitly_wait(0.3) # 3 seconds
 
-				completed_driver_get = True
+				for movie_num in range(self.page_offset, self.num_movies_per_page + self.page_offset):
+					self.__scrape_movie(driver, movie_num, genre_id)
 
-				log.info(f"Successfully got url: {url}\n")
+				completed_scrape = True
+
+				driver.quit()
+
+				end_time = float(round(time.time(), 4))
+				log.info(f"Successfully scraped {genre_name} ({page_num}): {end_time - start_time}s\n")
+
+				return False
 			except Exception as e:
 				attempt_count = attempt_count + 1
 
-				driver.close()
+				driver.quit()
 				driver = self.__init_driver()
 
-				log.error(f"Error getting url: {url}")
-				log.error(f"{e}\n")
+				log.error(f"Error on attempt {attempt_count}: {url}")
+				log.error(e)
 
 			
-		if (completed_driver_get == False):
-			log.error(f"Maximum attempts reached: url={url} | genre={genre_name} | page_num={page_num}")
-			return False
-
-		log.info(f"{genre_name} ({page_num}): {url}")
-		for movie_num in range(self.page_offset, self.num_movies_per_page + self.page_offset):
-			try:
-				self.__scrape_movie(driver, movie_num, genre_id)
-			except Exception as e:
-				log.error(f"Error getting url: {url}")
-				log.error(f"{e}\n")
-				return False
-		
-		driver.close()
-
-		end_time = float(round(time.time(), 4))
-		log.info(f"{genre_name} ({page_num}) Time: {end_time - start_time}s\n")
-
+		log.error(f"Maximum attempts reached: url={url} | genre={genre_name} | page_num={page_num}\n")
 		return False
 
 	def __scrape_movie(self, driver, movie_num, genre_id):
