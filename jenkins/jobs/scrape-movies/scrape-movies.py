@@ -73,7 +73,9 @@ class ScrapeMovies:
 			log.info(f"name={name}\n")
 
 			self.conn.cursor().execute('INSERT INTO MOVIE_GENRE (id, created_by, updated_by, created_at, updated_at, name) VALUES (%s, %s, %s, %s, %s, %s)', (id, self.jenkinsUserId, self.jenkinsUserId, timestamp, timestamp, name))
-			self.conn.commit()
+		
+		self.conn.commit()
+		log.info(f"Successfully initialized data in genres table")
 
 	def __init_driver(self):
 		options = webdriver.ChromeOptions()
@@ -99,42 +101,42 @@ class ScrapeMovies:
 				page_num = page_num + 1
 					
 	def __scrape_page(self, url, page_num, genre_name, genre_id) -> bool:
-		start_time = float(round(time.time(), 4))
+		start_time = float(round(time.time(), 2))
 
-		log.info(f"--------------------{genre_name} ({page_num}): {url}--------------------\n")
+		log.info(f"-------------------- {genre_name}: {page_num} --------------------")
 
 		attempt_count = 1
-		max_retries = 3
+		max_retries = 5
 
 		completed_scrape = False
 		while completed_scrape == False and attempt_count <= max_retries:
-			log.info(f"Attempt {attempt_count}/{max_retries}")
+			log.info(f"Attempt {attempt_count}/{max_retries}: {url}")
 			try:
 				driver = self.__init_driver()
 				driver.get(url)
-				driver.implicitly_wait(0.3) # 3 seconds
 
 				for movie_num in range(self.page_offset, self.num_movies_per_page + self.page_offset):
 					self.__scrape_movie(driver, movie_num, genre_id)
 
-				completed_scrape = True
-
 				driver.quit()
 
-				end_time = float(round(time.time(), 4))
+				# self.conn.commit()
+
+				completed_scrape = False
+
+				end_time = float(round(time.time(), 2))
 				log.info(f"Successfully scraped {genre_name} ({page_num}): {end_time - start_time}s\n")
 
 				return False
 			except Exception as e:
+				log.error(f"Error on attempt {attempt_count}: {url}")
+				log.error(e)
+
 				attempt_count = attempt_count + 1
 
 				driver.quit()
 				driver = self.__init_driver()
 
-				log.error(f"Error on attempt {attempt_count}: {url}")
-				log.error(e)
-
-			
 		log.error(f"Maximum attempts reached: url={url} | genre={genre_name} | page_num={page_num}\n")
 		return False
 
@@ -155,9 +157,8 @@ class ScrapeMovies:
 		timestamp = datetime.datetime.now()
 		id = str(uuid.uuid4())
 
-		log.info(f"{movie_num}: title={title} | director={director} | year={year} | ({timestamp}) | ({id})")
+		log.info(f"{movie_num}: title={title} | director={director} | year={year} | time={timestamp} | id={id}")
 		self.conn.cursor().execute('INSERT INTO MOVIE (id, created_by, updated_by, created_at, updated_at, name, director, movie_genre_id, year) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)', (id, self.jenkinsUserId, self.jenkinsUserId, timestamp, timestamp, title, director, genre_id, year))
-		# self.conn.commit()
 
 	def main(self):
 		if (self.init_genres_table == 'true'):
