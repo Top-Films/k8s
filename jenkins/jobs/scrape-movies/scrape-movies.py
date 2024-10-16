@@ -5,6 +5,10 @@ import os
 import datetime
 import uuid
 import time
+import logging
+
+log = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 class ScrapeMovies:
 	def __init__(self, db_name, db_host, db_username, db_password, db_port, init_genres_table):
@@ -54,19 +58,19 @@ class ScrapeMovies:
 
 
 	def __init_genres_table(self):
-		print(f"Initializing data in MOVIE_GENRE table")
+		log.info(f"Initializing data in MOVIE_GENRE table")
 		for genre in self.genres:
 			name = genre[1]
 			id = genre[2]
 			timestamp = datetime.datetime.now()
 
-			print(f"Creating record:")
-			print(f"created_by={self.jenkinsUserId}")
-			print(f"updated_by={self.jenkinsUserId}")
-			print(f"created_at={timestamp}")
-			print(f"updated_at={timestamp}")
-			print(f"id={id}")
-			print(f"name={name}\n")
+			log.info(f"Creating record:")
+			log.info(f"created_by={self.jenkinsUserId}")
+			log.info(f"updated_by={self.jenkinsUserId}")
+			log.info(f"created_at={timestamp}")
+			log.info(f"updated_at={timestamp}")
+			log.info(f"id={id}")
+			log.info(f"name={name}\n")
 
 			self.conn.cursor().execute('INSERT INTO MOVIE_GENRE (id, created_by, updated_by, created_at, updated_at, name) VALUES (%s, %s, %s, %s, %s, %s)', (id, self.jenkinsUserId, self.jenkinsUserId, timestamp, timestamp, name))
 			self.conn.commit()
@@ -95,13 +99,13 @@ class ScrapeMovies:
 	def __scrape_page(self, driver, url, page_num, genre_name, genre_id) -> bool:
 		start_time = int(round(time.time() * 1000))
 
-		print(f"{genre_name} ({page_num}): {url}")
+		log.info(f"{genre_name} ({page_num}): {url}")
 
 		try:
 			driver.get(url)
 			driver.implicitly_wait(2)
 		except Exception as e:
-			print(e)
+			log.error(e)
 			return False
 
 
@@ -109,11 +113,11 @@ class ScrapeMovies:
 			try:
 				self.__scrape_movie(driver, movie_num, genre_id)
 			except Exception as e:
-				print(e)
+				log.error(e)
 				return False
 		
 		end_time = int(round(time.time() * 1000))
-		print(f"time taken for page {page_num} and genre {genre_name}: {start_time - end_time}ms")
+		log.info(f"time taken for page {page_num} and genre {genre_name}: {start_time - end_time}ms")
 		return False
 
 	def __scrape_movie(self, driver, movie_num, genre_id):
@@ -132,7 +136,7 @@ class ScrapeMovies:
 
 		timestamp = datetime.datetime.now()
 		id = str(uuid.uuid4())
-		print(f"{movie_num}: title={title} | director={director} | year={year} ({timestamp})")
+		log.info(f"{movie_num}: title={title} | director={director} | year={year} ({timestamp})")
 		self.conn.cursor().execute('INSERT INTO MOVIE (id, created_by, updated_by, created_at, updated_at, name, director, movie_genre_id, year) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)', (id, self.jenkinsUserId, self.jenkinsUserId, timestamp, timestamp, title, director, genre_id, year))
 		# self.conn.commit()
 
@@ -150,12 +154,12 @@ if __name__ == "__main__":
 	db_port = os.environ.get('DB_PORT')
 	init_genres = os.environ.get('INIT_GENRES_TABLE')
 
-	print('Picked up environment variables:')
-	print(f"db_name={db_name}")
-	print(f"db_host={db_host}")
-	print(f"db_username={db_username}")
-	print(f"db_password={db_password}")
-	print(f"init_genres={init_genres}\n")
+	log.info('Picked up environment variables:')
+	log.info(f"db_name={db_name}")
+	log.info(f"db_host={db_host}")
+	log.info(f"db_username={db_username}")
+	log.info(f"db_password={db_password}")
+	log.info(f"init_genres={init_genres}\n")
 
 	ScrapeMovies(db_name, db_host, db_username, db_password, db_port, init_genres).main()
 	
