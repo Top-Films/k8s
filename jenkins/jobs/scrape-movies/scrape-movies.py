@@ -1,7 +1,5 @@
 from selenium import webdriver  
 from selenium.webdriver.common.by import By 
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 import psycopg2
 import os
@@ -72,14 +70,12 @@ class ScrapeMovies:
 			self.conn.commit()
 
 	def __scrape(self):
-		options = Options()
+		options = webdriver.ChromeOptions()
 		options.add_argument('--headless=new')
 
-		service = Service(ChromeDriverManager().install())
+		service = webdriver.ChromeService(executable_path=ChromeDriverManager().install())
 
 		genre_url_path = self.genres[0][0]
-		driver = webdriver.Chrome(ChromeDriverManager().install())
-
 		url = f"{self.base_url}/{genre_url_path}/{self.query}"
 
 		with webdriver.Chrome(options=options, service=service) as driver: 
@@ -122,7 +118,7 @@ class ScrapeMovies:
 	def __save_movie(self, title, director, year):
 		print('Saving movie...')
 
-		self.conn.cursor().execute(f"INSERT INTO ")
+		# self.conn.cursor().execute(f"INSERT INTO ")
 
 
 	def main(self):
