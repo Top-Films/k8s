@@ -6,16 +6,13 @@ USER root
 RUN apt-get update
 RUN apt-get upgrade -y
 
+# install certs curl unzip and software common
+RUN apt-get install ca-certificates curl unzip software-properties-common -y
+
 # install chromium + driver
-RUN apt-get install snapd -y
-RUN service snapd start
-RUN systemctl start snapd.service
-
-RUN snap install chromium
-RUN apt-get install chromium-driver -y
-
-# install certs curl and unzip
-RUN apt-get install ca-certificates curl unzip -y
+RUN add-apt-repository ppa:xtradeb/apps -y
+RUN apt update
+RUN apt-get install chromium chromium-driver -y
 
 # install kubectl
 RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/arm64/kubectl"
