@@ -15,7 +15,7 @@ class ScrapeMovies:
 		self.init_genres_table = init_genres_table
 		self.jenkinsUserId = '4308b779-f616-4ada-9ac8-4ddb27bcd749' # srv-jenkins id
 
-		self.base_url = 'https://www.allmovie.com/genre'
+		self.base_url = r'https://www.allmovie.com/genre'
 		self.query = 'alltime-desc'
 		self.num_movies_per_page = 20
 		
@@ -89,11 +89,12 @@ class ScrapeMovies:
 
 	def __scrape_page(self, driver, url, page_num, genre) -> bool:
 		print(f"Saving movies on page {page_num} for genre {genre}")
+		print(f"URL={url}")
 		num_offset = 1
 		try:
 			driver.get(url)
 		except Exception as e:
-			print(f"Could not get url: ${url}")
+			print(f"Could not get url: {url}")
 			print(e)
 			return True
 		
