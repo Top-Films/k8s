@@ -54,9 +54,9 @@ spec:
 						string(credentialsId: 'postgres-topfilms-db', variable: 'DB_NAME')
 					]) {
 						sh """
-							chromium-browser --version
+							chromium --version
 							chromedriver --version
-							
+
 							cd jenkins/jobs/scrape-movies
 
 							python3 -m venv .venv
