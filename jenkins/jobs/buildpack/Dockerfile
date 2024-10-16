@@ -2,13 +2,13 @@ FROM ubuntu:24.04
 
 USER root
 
-# install chrome and driver
-RUN apt-get install chromium-browser chromium-chromedriver -y
-RUN snap install chromium
-
 # update packages
 RUN apt-get update
 RUN apt-get upgrade -y
+
+# install chrome and driver
+RUN apt-get install chromium-browser chromium-chromedriver -y
+RUN snap install chromium
 
 # install certs curl and unzip
 RUN apt-get install ca-certificates curl unzip -y
