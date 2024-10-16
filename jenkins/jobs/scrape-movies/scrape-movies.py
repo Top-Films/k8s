@@ -80,19 +80,20 @@ class ScrapeMovies:
 
 		with webdriver.Chrome(options=options, service=service) as driver:
 			for genre in self.genres:
+				genre_url_path = genre[0]
+				genre_name = genre[1]
+				genre_id = genre[0]
+
 				page_num = 1
+
 				continue_genre = True
 				while continue_genre:
-					genre_url_path = genre[0]
 					url = f"{self.base_url}/{genre_url_path}/{self.query}/{page_num}"
-					continue_genre = self.__scrape_page(driver, url, 1, self.genres[0])
+					continue_genre = self.__scrape_page(driver, url, page_num, genre_name, genre_id)
 					page_num = page_num + 1
 					
-	def __scrape_page(self, driver, url, page_num, genre) -> bool:
+	def __scrape_page(self, driver, url, page_num, genre_name, genre_id) -> bool:
 		start_time = int(round(time.time() * 1000))
-
-		genre_name = genre[1]
-		genre_id = genre[2]
 
 		print(f"{genre_name} ({page_num}): {url}")
 
@@ -122,9 +123,10 @@ class ScrapeMovies:
 		year_elem = movie_wrapper_elem.find_element(By.CLASS_NAME, 'movie-year')
 		year = year_elem.text
 
-		print(f"{movie_num}: title={title} director={director} year={year}")
 		timestamp = datetime.datetime.now()
-		self.conn.cursor().execute('INSERT INTO MOVIE (id, created_by, updated_by, created_at, updated_at, name, director, movie_genre_id, year) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)', (str(uuid.uuid4()), self.jenkinsUserId, self.jenkinsUserId, timestamp, timestamp, title, director, genre_id, year))
+		id = str(uuid.uuid4())
+		print(f"{movie_num}: title={title} | director={director} | year={year} ({timestamp})")
+		self.conn.cursor().execute('INSERT INTO MOVIE (id, created_by, updated_by, created_at, updated_at, name, director, movie_genre_id, year) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)', (id, self.jenkinsUserId, self.jenkinsUserId, timestamp, timestamp, title, director, genre_id, year))
 		# self.conn.commit()
 
 	def main(self):
