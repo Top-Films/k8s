@@ -6,6 +6,11 @@ USER root
 RUN apt-get update
 RUN apt-get upgrade -y
 
+# install chromium + driver
+RUN add-apt-repository ppa:xtradeb/apps -y
+RUN apt update
+RUN apt-get install chromium chromium-driver -y
+
 # install certs curl and unzip
 RUN apt-get install ca-certificates curl unzip -y
 
@@ -41,11 +46,6 @@ RUN rm nodesource_setup.sh
 
 # install python
 RUN apt-get install python3 python3-pip python3-venv -y
-
-# install chromium + driver
-RUN add-apt-repository ppa:xtradeb/apps -y
-RUN apt update
-RUN apt-get install chromium chromium-driver -y
 
 # install package for pg
 RUN apt-get install libpq-dev -y
