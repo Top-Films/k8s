@@ -8,6 +8,9 @@ RUN apt-get upgrade -y
 
 # install chromium + driver
 RUN apt-get install snapd -y
+RUN service snapd start
+RUN systemctl start snapd.service
+
 RUN snap install chromium
 RUN apt-get install chromium-driver -y
 
