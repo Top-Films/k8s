@@ -54,14 +54,14 @@ spec:
 						string(credentialsId: 'postgres-topfilms-db', variable: 'DB_NAME')
 					]) {
 						sh """
-							chromium --version
-							chromedriver --version
-
 							cd jenkins/jobs/scrape-movies
 
 							python3 -m venv .venv
 							. .venv/bin/activate
 							pip3 install -r requirements.txt
+
+							chromium --version
+							chromedriver --version
 
 							python3 scrape-movies.py
 						"""
