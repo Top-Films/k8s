@@ -45,9 +45,6 @@ RUN apt-get install python3 python3-pip python3-venv -y
 # install chromium + driver
 RUN apt-get update -qqy && apt-get -qqy install chromium 
 RUN apt-get update -qqy && apt-get -qqy install chromium-driver && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
-RUN echo "chrome" > /opt/selenium/browser_name
-RUN chromium --version | awk '{print $2}' > /opt/selenium/browser_version
-RUN echo "\"goog:chromeOptions\": {\"binary\": \"/usr/bin/chromium\"}" > /opt/selenium/browser_binary_location
 
 # install package for pg
 RUN apt-get install libpq-dev -y
