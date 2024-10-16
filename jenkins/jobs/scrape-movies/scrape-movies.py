@@ -58,7 +58,7 @@ class ScrapeMovies:
 
 
 	def __init_genres_table(self):
-		log.info(f"Initializing data in MOVIE_GENRE table")
+		log.info(f"Initializing data in MOVIE_GENRE table\n")
 		for genre in self.genres:
 			name = genre[1]
 			id = genre[2]
@@ -82,28 +82,28 @@ class ScrapeMovies:
 
 		service = webdriver.ChromeService(executable_path=r"/usr/bin/chromedriver")
 
-		with webdriver.Chrome(options=options, service=service) as driver:
-			for genre in self.genres:
-				genre_url_path = genre[0]
-				genre_name = genre[1]
-				genre_id = genre[2]
+		for genre in self.genres:
+			genre_url_path = genre[0]
+			genre_name = genre[1]
+			genre_id = genre[2]
 
-				page_num = 1
+			page_num = 1
 
-				continue_genre = True
-				while continue_genre:
-					url = f"{self.base_url}/{genre_url_path}/{self.query}/{page_num}"
-					continue_genre = self.__scrape_page(driver, url, page_num, genre_name, genre_id)
-					page_num = page_num + 1
+			continue_genre = True
+			while continue_genre:
+				driver = webdriver.Chrome(options=options, service=service)
+				url = f"{self.base_url}/{genre_url_path}/{self.query}/{page_num}"
+				continue_genre = self.__scrape_page(driver, url, page_num, genre_name, genre_id)
+				page_num = page_num + 1
 					
 	def __scrape_page(self, driver, url, page_num, genre_name, genre_id) -> bool:
-		start_time = int(round(time.time() * 1000))
+		start_time = int(round(time.time(), 2))
 
-		log.info(f"{genre_name} ({page_num}): {url}")
+		log.info(f"{genre_name} ({page_num}): {url}\n")
 
 		try:
 			driver.get(url)
-			driver.implicitly_wait(2)
+			driver.implicitly_wait(1)
 		except Exception as e:
 			log.error(e)
 			return False
@@ -116,8 +116,9 @@ class ScrapeMovies:
 				log.error(e)
 				return False
 		
-		end_time = int(round(time.time() * 1000))
-		log.info(f"time taken for page {page_num} and genre {genre_name}: {start_time - end_time}ms")
+		end_time = int(round(time.time(), 2))
+		log.info(f"\ntime taken for page {page_num} and genre {genre_name}: {end_time - start_time}s\n")
+		driver.close()
 		return False
 
 	def __scrape_movie(self, driver, movie_num, genre_id):
