@@ -41,8 +41,9 @@ RUN rm nodesource_setup.sh
 
 # install python
 RUN apt-get install python3 python3-pip python3-venv -y
-# install chrome
-RUN apt-get install chromium-browser -y
+
+# install chrome and driver
+RUN apt-get install chromium-browser chromium-chromedriver -y
 
 # install package for pg
 RUN apt-get install libpq-dev -y

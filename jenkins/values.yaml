@@ -69,6 +69,7 @@ controller:
     - oic-auth:4.411.v990b_9d36e74e
     - role-strategy:743.v142ea_b_d5f1d3
     - pipeline-stage-view:2.34
+    - ssh-agent:376.v8933585c69d3
   installLatestPlugins: true
   installLatestSpecifiedPlugins: false
   additionalPlugins: []

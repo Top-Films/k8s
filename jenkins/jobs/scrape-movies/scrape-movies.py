@@ -73,7 +73,7 @@ class ScrapeMovies:
 		options = webdriver.ChromeOptions()
 		options.add_argument('--headless=new')
 
-		service = webdriver.ChromeService(executable_path=ChromeDriverManager().install())
+		service = webdriver.ChromeService(executable_path='/usr/lib/chromium-browser/chromedriver')
 
 		genre_url_path = self.genres[0][0]
 		url = f"{self.base_url}/{genre_url_path}/{self.query}"
