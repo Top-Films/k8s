@@ -1,5 +1,6 @@
 from selenium import webdriver  
-from selenium.webdriver.common.by import By 
+from selenium.webdriver.common.by import By
+from threading import Thread
 import psycopg2
 import os
 import datetime
@@ -84,24 +85,33 @@ class ScrapeMovies:
 
 		service = webdriver.ChromeService(executable_path=r"/usr/bin/chromedriver")
 
-		return webdriver.Chrome(options=options, service=service)
+		driver = webdriver.Chrome(options=options, service=service)
+		driver.set_page_load_timeout(20)
+
+		return driver
 
 	def __scrape(self):
 		for genre in self.genres:
-			genre_url_path = genre[0]
-			genre_name = genre[1]
-			genre_id = genre[2]
+			thread = Thread(target = self.__scrape_genre, args = (genre))
+			thread.start()
+			thread.join()
+			
+	def __scrape_genre(self, genre):
+		genre_url_path = genre[0]
+		genre_name = genre[1]
+		genre_id = genre[2]
 
-			page_num = 1
+		page_num = 1
 
-			continue_genre = True
-			while continue_genre:
-				url = f"{self.base_url}/{genre_url_path}/{self.query}/{page_num}"
-				continue_genre = self.__scrape_page(url, page_num, genre_name, genre_id)
-				page_num = page_num + 1
+		continue_genre = True
+		while continue_genre:
+			url = f"{self.base_url}/{genre_url_path}/{self.query}/{page_num}"
+			continue_genre = self.__scrape_page(url, page_num, genre_name, genre_id)
+			page_num = page_num + 1
+
 					
 	def __scrape_page(self, url, page_num, genre_name, genre_id) -> bool:
-		start_time = float(round(time.time(), 2))
+		start_time = time.time()
 
 		log.info(f"-------------------- {genre_name}: {page_num} --------------------")
 
@@ -122,10 +132,11 @@ class ScrapeMovies:
 
 				# self.conn.commit()
 
+				# completed_scrape = True
 				completed_scrape = False
 
-				end_time = float(round(time.time(), 2))
-				log.info(f"Successfully scraped {genre_name} ({page_num}): {end_time - start_time}s\n")
+				end_time = time.time()
+				log.info(f"Successfully scraped {genre_name} ({page_num}): {round(end_time-start_time, 2)}s\n")
 
 				return False
 			except Exception as e:
