@@ -7,9 +7,9 @@ RUN apt-get update
 RUN apt-get upgrade -y
 
 # install chromium + driver
-RUN add-apt-repository ppa:xtradeb/apps -y
-RUN apt update
-RUN apt-get install chromium chromium-driver -y
+RUN apt install snapd
+RUN snap install chromium
+RUN apt-get install chromium-driver -y
 
 # install certs curl and unzip
 RUN apt-get install ca-certificates curl unzip -y
