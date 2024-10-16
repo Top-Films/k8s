@@ -75,13 +75,16 @@ class ScrapeMovies:
 			self.conn.cursor().execute('INSERT INTO MOVIE_GENRE (id, created_by, updated_by, created_at, updated_at, name) VALUES (%s, %s, %s, %s, %s, %s)', (id, self.jenkinsUserId, self.jenkinsUserId, timestamp, timestamp, name))
 			self.conn.commit()
 
-	def __scrape(self):
+	def __init_driver(self):
 		options = webdriver.ChromeOptions()
 		options.add_argument('--headless=new')
 		options.add_argument("--no-sandbox")
 
 		service = webdriver.ChromeService(executable_path=r"/usr/bin/chromedriver")
 
+		return webdriver.Chrome(options=options, service=service)
+
+	def __scrape(self):
 		for genre in self.genres:
 			genre_url_path = genre[0]
 			genre_name = genre[1]
@@ -91,34 +94,56 @@ class ScrapeMovies:
 
 			continue_genre = True
 			while continue_genre:
-				driver = webdriver.Chrome(options=options, service=service)
 				url = f"{self.base_url}/{genre_url_path}/{self.query}/{page_num}"
-				continue_genre = self.__scrape_page(driver, url, page_num, genre_name, genre_id)
+				continue_genre = self.__scrape_page(url, page_num, genre_name, genre_id)
 				page_num = page_num + 1
 					
-	def __scrape_page(self, driver, url, page_num, genre_name, genre_id) -> bool:
-		start_time = int(round(time.time(), 2))
+	def __scrape_page(self, url, page_num, genre_name, genre_id) -> bool:
+		start_time = float(round(time.time(), 4))
 
-		log.info(f"{genre_name} ({page_num}): {url}\n")
+		driver = self.__init_driver()
+		
+		attempt_count = 1
+		max_retries = 3
 
-		try:
-			driver.get(url)
-			driver.implicitly_wait(1)
-		except Exception as e:
-			log.error(e)
+		completed_driver_get = False
+		while completed_driver_get == False and attempt_count <= max_retries:
+			log.info(f"Attempt {attempt_count}/{max_retries} to get url: {url}")
+			try:
+				driver.get(url)
+				driver.implicitly_wait(0.3) # 3 seconds
+
+				completed_driver_get = True
+
+				log.info(f"Successfully got url: {url}\n")
+			except Exception as e:
+				attempt_count = attempt_count + 1
+
+				driver.close()
+				driver = self.__init_driver()
+
+				log.error(f"Error getting url: {url}")
+				log.error(f"{e}\n")
+
+			
+		if (completed_driver_get == False):
+			log.error(f"Maximum attempts reached: url={url} | genre={genre_name} | page_num={page_num}")
 			return False
 
-
+		log.info(f"{genre_name} ({page_num}): {url}")
 		for movie_num in range(self.page_offset, self.num_movies_per_page + self.page_offset):
 			try:
 				self.__scrape_movie(driver, movie_num, genre_id)
 			except Exception as e:
-				log.error(e)
+				log.error(f"Error getting url: {url}")
+				log.error(f"{e}\n")
 				return False
 		
-		end_time = int(round(time.time(), 2))
-		log.info(f"\ntime taken for page {page_num} and genre {genre_name}: {end_time - start_time}s\n")
 		driver.close()
+
+		end_time = float(round(time.time(), 4))
+		log.info(f"{genre_name} ({page_num}) Time: {end_time - start_time}s\n")
+
 		return False
 
 	def __scrape_movie(self, driver, movie_num, genre_id):
@@ -137,7 +162,8 @@ class ScrapeMovies:
 
 		timestamp = datetime.datetime.now()
 		id = str(uuid.uuid4())
-		log.info(f"{movie_num}: title={title} | director={director} | year={year} ({timestamp})")
+
+		log.info(f"{movie_num}: title={title} | director={director} | year={year} | ({timestamp}) | ({id})")
 		self.conn.cursor().execute('INSERT INTO MOVIE (id, created_by, updated_by, created_at, updated_at, name, director, movie_genre_id, year) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)', (id, self.jenkinsUserId, self.jenkinsUserId, timestamp, timestamp, title, director, genre_id, year))
 		# self.conn.commit()
 
