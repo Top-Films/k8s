@@ -78,7 +78,7 @@ class ScrapeMovies:
 		service = Service(ChromeDriverManager().install())
 
 		genre_url_path = self.genres[0][0]
-		driver = webdriver.Chrome()
+		driver = webdriver.Chrome(ChromeDriverManager().install())
 
 		url = f"{self.base_url}/{genre_url_path}/{self.query}"
 
