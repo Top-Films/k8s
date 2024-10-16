@@ -6,10 +6,6 @@ USER root
 RUN apt-get update
 RUN apt-get upgrade -y
 
-# install chrome and driver
-RUN apt-get install chromium-browser chromium-chromedriver -y
-RUN snap install chromium
-
 # install certs curl and unzip
 RUN apt-get install ca-certificates curl unzip -y
 
@@ -45,6 +41,24 @@ RUN rm nodesource_setup.sh
 
 # install python
 RUN apt-get install python3 python3-pip python3-venv -y
+
+# install chromium + driver
+RUN echo "deb http://deb.debian.org/debian/ sid main" >> /etc/apt/sources.list \
+  && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 0E98404D386FA1D9 6ED0E7B82643E131 \
+  && apt-get update -qqy \
+  && apt-get -qqy install chromium \
+  && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
+
+COPY wrap_chromium_binary /opt/bin/wrap_chromium_binary
+RUN /opt/bin/wrap_chromium_binary
+
+RUN apt-get update -qqy \
+  && apt-get -qqy install chromium-driver \
+  && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
+
+RUN echo "chrome" > /opt/selenium/browser_name
+RUN chromium --version | awk '{print $2}' > /opt/selenium/browser_version
+RUN echo "\"goog:chromeOptions\": {\"binary\": \"/usr/bin/chromium\"}" > /opt/selenium/browser_binary_location
 
 # install package for pg
 RUN apt-get install libpq-dev -y
