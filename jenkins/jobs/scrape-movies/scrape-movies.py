@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 import psycopg2
 import os
 import datetime
+import uuid
 
 class ScrapeMovies:
 	def __init__(self, db_name, db_host, db_username, db_password, db_port, init_genres_table):
@@ -75,22 +76,15 @@ class ScrapeMovies:
 
 		service = webdriver.ChromeService(executable_path=r"/usr/bin/chromedriver")
 
-		genre_url_path = self.genres[0][0]
-		url = f"{self.base_url}/{genre_url_path}/{self.query}"
-
-		with webdriver.Chrome(options=options, service=service) as driver: 
+		with webdriver.Chrome(options=options, service=service) as driver:
+			genre_url_path = self.genres[0][0]
+			page_num = 1
+			url = f"{self.base_url}/{genre_url_path}/{self.query}/{page_num}"
 			self.__scrape_page(driver, url, 1, self.genres[0])
-
-			# for genre in self.genres:
-			# 	genre_complete = False
-			# 	page_num = 1
-			# 	while genre_complete == False:
 					
-
 	def __scrape_page(self, driver, url, page_num, genre) -> bool:
-		print(f"Saving movies on page {page_num} for genre {genre}")
-		print(f"URL={url}")
-		num_offset = 1
+		print(f"{genre[1]}-{page_num}: {url}")
+		offset = 1
 		try:
 			driver.get(url)
 		except Exception as e:
@@ -98,20 +92,19 @@ class ScrapeMovies:
 			print(e)
 			return True
 		
-		for i in range(num_offset, self.num_movies_per_page + num_offset):
+		for movie_num in range(offset, self.num_movies_per_page + offset):
 			try:
-				self.__scrape_movie(driver, i)
+				self.__scrape_movie(driver, movie_num)
 			except Exception as e:
-				print(f"Could not get movie number {i} for url {url}")
+				print(f"Could not get movie number {movie_num} for url {url}")
 				print(e)
 				return True
 		
+		print()
 		return False
 
-
-	def __scrape_movie(self, driver, i):
-		print(f"Movie number: {i}")
-		movie_wrapper_elem = driver.find_element(By.CLASS_NAME, f"num-{i}") 
+	def __scrape_movie(self, driver, movie_num, genre_id):
+		movie_wrapper_elem = driver.find_element(By.CLASS_NAME, f"num-{movie_num}") 
 
 		title_wrapper_elem = movie_wrapper_elem.find_element(By.CLASS_NAME, 'title')
 		title_elem = title_wrapper_elem.find_element(By.TAG_NAME, 'a')
@@ -124,13 +117,10 @@ class ScrapeMovies:
 		year_elem = movie_wrapper_elem.find_element(By.CLASS_NAME, 'movie-year')
 		year = year_elem.text
 
-		self.__save_movie(title, director, year)
-
-	def __save_movie(self, title, director, year):
-		print('Saving movie...')
-
-		# self.conn.cursor().execute(f"INSERT INTO ")
-
+		print(f"{movie_num}: title={title} director={director} year={year}")
+		timestamp = datetime.datetime.now()
+		self.conn.cursor().execute('INSERT INTO MOVIE (id, created_by, updated_by, created_at, updated_at, name, director, movie_genre_id, year) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)', (str(uuid.uuid4()), self.jenkinsUserId, self.jenkinsUserId, timestamp, timestamp, title, director, genre_id, year))
+		# self.conn.commit()
 
 	def main(self):
 		if (self.init_genres_table == 'true'):
