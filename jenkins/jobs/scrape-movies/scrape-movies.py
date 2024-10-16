@@ -19,6 +19,7 @@ class ScrapeMovies:
 		self.base_url = r'https://www.allmovie.com/genre'
 		self.query = 'alltime-desc'
 		self.num_movies_per_page = 20
+		self.page_offset = 1
 		
 		self.genres = [
 			['action-adventure-ag100', 'Action Adventure', '97128c0e-c0e9-4c0c-93bd-fdb5f7bf2c3c'],
@@ -83,25 +84,21 @@ class ScrapeMovies:
 			self.__scrape_page(driver, url, 1, self.genres[0])
 					
 	def __scrape_page(self, driver, url, page_num, genre) -> bool:
-		print(f"{genre[1]}-{page_num}: {url}")
-		offset = 1
-		try:
-			driver.get(url)
-		except Exception as e:
-			print(f"Could not get url: {url}")
-			print(e)
-			return True
-		
-		for movie_num in range(offset, self.num_movies_per_page + offset):
+		genre_name = genre[1]
+		genre_id = genre[2]
+
+		print(f"{genre_name} ({page_num}): {url}")
+
+		driver.get(url)
+		for movie_num in range(self.page_offset, self.num_movies_per_page + self.page_offset):
 			try:
-				self.__scrape_movie(driver, movie_num)
+				self.__scrape_movie(driver, movie_num, genre_id)
 			except Exception as e:
-				print(f"Could not get movie number {movie_num} for url {url}")
 				print(e)
-				return True
+				return False
 		
 		print()
-		return False
+		return True
 
 	def __scrape_movie(self, driver, movie_num, genre_id):
 		movie_wrapper_elem = driver.find_element(By.CLASS_NAME, f"num-{movie_num}") 
