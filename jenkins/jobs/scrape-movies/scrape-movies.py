@@ -82,7 +82,7 @@ class ScrapeMovies:
 			for genre in self.genres:
 				genre_url_path = genre[0]
 				genre_name = genre[1]
-				genre_id = genre[0]
+				genre_id = genre[2]
 
 				page_num = 1
 
