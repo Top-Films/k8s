@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: buildpack
+  labels:
+    app: buildpack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: buildpack
+  template:
+    metadata:
+      labels:
+        app: buildpack
+    spec:
+      containers:
+      - name: buildpack
+        image: maxmorhardt/topfilms-jenkins-buildpack:latest
+        ports:
+        - containerPort: 8080
+

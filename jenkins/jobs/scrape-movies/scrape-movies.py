@@ -73,10 +73,12 @@ class ScrapeMovies:
 		options.add_argument('--headless=new')
 		options.add_argument("--no-sandbox")
 
+		service = webdriver.ChromeService(executable_path='/usr/lib/chromedriver')
+
 		genre_url_path = self.genres[0][0]
 		url = f"{self.base_url}/{genre_url_path}/{self.query}"
 
-		with webdriver.Chrome(options=options) as driver: 
+		with webdriver.Chrome(options=options, service=service) as driver: 
 			self.__scrape_page(driver, url, 1, self.genres[0])
 
 			# for genre in self.genres:
