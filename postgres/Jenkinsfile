@@ -23,6 +23,7 @@ spec:
 		APP_NAME = 'db'
 		POSTGRES_NAME = 'postgres'
 		GITHUB_URL = 'https://github.com/Top-Films/k8s'
+		POSTGRES_VERSION = "16.0.3"
 	}
 
 	stages {
@@ -100,7 +101,7 @@ spec:
 
 							kubectl apply --filename storage.yaml
 
-							helm upgrade $APP_NAME oci://registry-1.docker.io/bitnamicharts/postgresql:16.0.3 --values values.yaml --install --atomic --debug --history-max=3 --namespace $POSTGRES_NAME
+							helm upgrade $APP_NAME oci://registry-1.docker.io/bitnamicharts/postgresql --version $POSTGRES_VERSION --values values.yaml --install --atomic --debug --history-max=3 --namespace $POSTGRES_NAME
 						"""
 					}
 				}
