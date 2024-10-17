@@ -26,11 +26,10 @@ class ScrapeMovies:
 		# constants
 		self.jenkinsUserId = '4308b779-f616-4ada-9ac8-4ddb27bcd749' # srv-jenkins id
 		self.base_url = r'https://www.allmovie.com/genre'
-		self.query = 'alltime-desc'
 		self.num_movies_per_page = 20
 		self.page_offset = 1
-		self.max_retries = 10
-		self.timeout_sec = 30
+		self.max_retries = 15
+		self.timeout_sec = 45
 		self.genres = [
 			['action-adventure-ag100', 'Action Adventure', '97128c0e-c0e9-4c0c-93bd-fdb5f7bf2c3c'],
 			['animation-ag102', 'Animation', '2d44a66c-29d6-43c8-9f30-371c93073ec9'],
@@ -105,7 +104,7 @@ class ScrapeMovies:
 		continue_genre = True
 		page_num = 1
 		while continue_genre:
-			url = f"{self.base_url}/{genre_url_path}/{self.query}/{page_num}"
+			url = f"{self.base_url}/{genre_url_path}/{page_num}"
 			continue_genre = self.__scrape_page(url, page_num, genre_name, genre_id)
 			page_num = page_num + 1
 
@@ -177,14 +176,23 @@ class ScrapeMovies:
 		title_elem = title_wrapper_elem.find_element(By.TAG_NAME, 'a')
 		title = title_elem.text
 
-		# parse title
-		directors_wrapper_elem = movie_wrapper_elem.find_element(By.CLASS_NAME, 'directors')
-		directors_elem = directors_wrapper_elem.find_element(By.TAG_NAME, 'a')
-		director = directors_elem.text
+		# parse director
+		director = None
+		try:
+			directors_wrapper_elem = movie_wrapper_elem.find_element(By.CLASS_NAME, 'directors')
+			directors_elem = directors_wrapper_elem.find_element(By.TAG_NAME, 'a')
+			director = directors_elem.text
+		except NoSuchElementException:
+			log.warning(f"No director for movie: {title}")
 
 		# parse year
-		year_elem = movie_wrapper_elem.find_element(By.CLASS_NAME, 'movie-year')
-		year = year_elem.text
+		year = None
+		try:
+			year_elem = movie_wrapper_elem.find_element(By.CLASS_NAME, 'movie-year')
+			year = year_elem.text
+		except NoSuchElementException:
+			log.warning(f"No year for movie: {title}")
+
 
 		# ensure movie does not already exist
 		cursor = self.conn.cursor()
