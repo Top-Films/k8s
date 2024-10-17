@@ -1,0 +1,78 @@
+pipeline {
+	agent {
+		kubernetes {
+			defaultContainer 'buildpack'
+			yaml '''
+kind: Pod
+spec:
+  containers:
+  - name: buildpack
+    image: maxmorhardt/topfilms-jenkins-buildpack:latest
+    imagePullPolicy: Always
+    securityContext:
+      privileged: true
+    resources:
+      limits:
+        memory: "512Mi"
+        cpu: 1
+'''
+		}
+	}
+
+	parameters {
+		string(name: 'BRANCH', defaultValue: params.BRANCH ?: 'main', description: 'Branch to checkout', trim: true)
+		string(name: 'GENRE_NAME', defaultValue: 'Action Adventure', description: 'Name of genre to scrape', trim: true)
+	}
+
+	environment { 
+		GITHUB_URL = 'https://github.com/Top-Films/k8s'
+	}
+
+	stages {
+
+		stage('Git Clone') {
+			steps {
+				script {
+					checkout scmGit(
+						branches: [[
+							name: "$BRANCH"
+						]],
+						userRemoteConfigs: [[
+							credentialsId: 'github',
+							url: "$GITHUB_URL"
+						]]
+					)
+
+					sh 'ls -lah'
+				}
+			}
+		}
+
+		stage('Scrape Movies') {
+			steps {
+				script {
+					withCredentials([
+						usernamePassword(credentialsId: 'postgres-topfilms', usernameVariable: 'DB_USERNAME', passwordVariable: 'DB_PASSWORD'),
+						string(credentialsId: 'postgres-host', variable: 'DB_HOST'),
+						string(credentialsId: 'postgres-port', variable: 'DB_PORT'),
+						string(credentialsId: 'postgres-topfilms-db', variable: 'DB_NAME')
+					]) {
+						sh """
+							cd jenkins/jobs/scrape-movies
+
+							python3 -m venv .venv
+							. .venv/bin/activate
+							pip3 install -r requirements.txt
+
+							chromium --version
+							chromedriver --version
+
+							python3 main.py
+						"""
+					}
+				}
+			}
+		}
+
+	}
+}

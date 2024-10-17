@@ -12,12 +12,9 @@ spec:
     securityContext:
       privileged: true
     resources:
-      requests:
-        memory: "512Mi"
-        cpu: 1
       limits:
-        memory: "1024Mi"
-        cpu: 2
+        memory: "128Mi"
+        cpu: "100m"
 '''
 		}
 	}
@@ -51,7 +48,10 @@ spec:
 			}
 		}
 
-		stage('Scrape Movies') {
+		stage('Initialize Genres Table') {
+			when {
+				INIT_GENRES_TABLE = true
+			}
 			steps {
 				script {
 					withCredentials([
@@ -63,19 +63,40 @@ spec:
 						sh """
 							cd jenkins/jobs/scrape-movies
 
+							ls -lah
+
 							python3 -m venv .venv
 							. .venv/bin/activate
 							pip3 install -r requirements.txt
 
-							chromium --version
-							chromedriver --version
-
-							python3 main.py
+							python3 init_genres_table.py
 						"""
 					}
 				}
 			}
 		}
 
+		stage('Scrape Movies') {
+            parallel {
+				stage('Scrape Action Adventure') {
+					steps {
+						build job: 'topfilms/scrape/scrape-genres', parameters: [
+							string(name: 'BRANCH', value: "$BRANCH"),
+							string(name: 'GENRE_NAME', value: "Action Adventure")
+                		]
+					}
+       		 	}
+
+				// stage('Scrape Action Adventure') {
+				// 	steps {
+				// 		build job: 'topfilms/scrape/scrape-genres', parameters: [
+				// 			string(name: 'BRANCH', value: "$BRANCH"),
+				// 			string(name: 'GENRE_NAME', value: "Action Adventure")
+                // 		]
+				// 	}
+       		 	// }
+			}
+		}
+		
 	}
 }

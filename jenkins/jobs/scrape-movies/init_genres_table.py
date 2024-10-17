@@ -1,4 +1,6 @@
-from scrape.scrape_genre import ScrapeGenre
+import psycopg2
+import logging
+import datetime
 import psycopg2
 import logging
 import os
@@ -67,24 +69,20 @@ def init_genres_table(db_name, db_host, db_username, db_password, db_port):
 	cursor.close()
 	conn.close()
 	log.info(f"Successfully initialized data in MOVIE_GENRE table\n")
-		
+
+
 if __name__ == "__main__":
 	db_name = os.environ.get('DB_NAME')
 	db_host = os.environ.get('DB_HOST')
 	db_username = os.environ.get('DB_USERNAME')
 	db_password = os.environ.get('DB_PASSWORD')
 	db_port = os.environ.get('DB_PORT')
-	init_genres_table_flag = os.environ.get('INIT_GENRES_TABLE')
 
 	log.info('Picked up environment variables:')
 	log.info(f"db_name={db_name}")
 	log.info(f"db_host={db_host}")
 	log.info(f"db_username={db_username}")
 	log.info(f"db_password={db_password}")
-	log.info(f"init_genres_table_flag={init_genres_table_flag}\n")
 
-	if (init_genres_table_flag == 'true'):
-		init_genres_table(db_name, db_host, db_username, db_password, db_port)
+	init_genres_table(db_name, db_host, db_username, db_password, db_port)
 
-	for genre in genres:
-		ScrapeGenre(db_name, db_host, db_username, db_password, db_port, jenkinsUserId, genre).run()
