@@ -24,13 +24,12 @@ class ScrapeMovies:
 
 		# constants
 		self.jenkinsUserId = '4308b779-f616-4ada-9ac8-4ddb27bcd749' # srv-jenkins id
-		self.base_url = 'https://www.allmovie.com/genre'
 		self.num_movies_per_page = 20
 		self.page_offset = 1
-		self.wait_time_page = 5
-		self.max_retries_genre = 10
-		self.max_retries_page = 15
-		self.timeout_sec = 45
+		self.wait_time_page = 3
+		self.max_retries_genre = 3
+		self.max_retries_page = 5
+		self.timeout_sec = 30
 		self.genres = [
 			['action-adventure-ag100', 'Action Adventure', '97128c0e-c0e9-4c0c-93bd-fdb5f7bf2c3c'],
 			['animation-ag102', 'Animation', '2d44a66c-29d6-43c8-9f30-371c93073ec9'],
@@ -105,7 +104,7 @@ class ScrapeMovies:
 		page_error_count = 0
 		page_num = 1
 		while page_error_count < self.max_retries_genre:
-			url = f"{self.base_url}/{genre_url_path}/{page_num}"
+			url = f"https://www.allmovie.com/genre/{genre_url_path}/alltime-desc/{page_num}"
 			log.info(f"-------------------- {genre_name} ({page_num}): Errors {page_error_count}/{self.max_retries_genre} --------------------")
 			page_error_count = page_error_count + self.__scrape_page(url, page_num, genre_name, genre_id)
 			page_num = page_num + 1
