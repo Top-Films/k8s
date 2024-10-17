@@ -64,7 +64,7 @@ class ScrapeGenre():
 		self.page_offset = 1
 		self.max_retries_genre = 3
 		self.max_retries_page = 5
-		self.timeout_sec = 60
+		self.timeout_sec = 120
 
 		# selenium driver
 		self.driver = self.__init_driver()
