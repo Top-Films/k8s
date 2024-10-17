@@ -151,7 +151,6 @@ class ScrapeGenre():
 		except Exception:
 			log.warning(f"No year for movie: {title}")
 
-
 		# ensure movie does not already exist
 		cursor = self.conn.cursor()
 		cursor.execute('SELECT * FROM MOVIE WHERE name = %s AND year = %s', (title, year))
@@ -164,7 +163,7 @@ class ScrapeGenre():
 		# create new record
 		timestamp = datetime.datetime.now()
 		id = str(uuid.uuid4())
-		log.info("Inserting movie - {movie_num}: title={title} | director={director} | year={year} | time={timestamp} | id={id}")
+		log.info(f"Inserting movie - {movie_num}: title={title} | director={director} | year={year} | time={timestamp} | id={id}")
 		cursor.execute('INSERT INTO MOVIE (id, created_by, updated_by, created_at, updated_at, name, director, movie_genre_id, year) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)', (id, self.userId, self.userId, timestamp, timestamp, title, director, genre_id, year))
 		self.conn.commit()
 		cursor.close()
