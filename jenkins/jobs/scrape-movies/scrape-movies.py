@@ -92,7 +92,7 @@ class ScrapeMovies:
 
 	def __scrape(self):
 		for genre in self.genres:
-			thread = Thread(target = self.__scrape_genre, args = (genre))
+			thread = Thread(target = self.__scrape_genre, args = (genre,))
 			thread.start()
 			thread.join()
 			
