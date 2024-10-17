@@ -62,6 +62,20 @@ class ScrapeMovies:
 			['western-ag127', 'Western', '918f037f-c91b-4fce-aadd-16b2b10008a5']
 		]
 
+	def __init_driver(self):
+		# init chrome driver for chromium browser arm64 linux
+		options = webdriver.ChromeOptions()
+		options.add_argument('--headless=new')
+		options.add_argument("--no-sandbox")
+		options.add_argument('--disable-gpu')
+		options.add_argument('--disable-dev-shm-usage')
+
+		service = webdriver.ChromeService(executable_path=r"/usr/bin/chromedriver")
+
+		driver = webdriver.Chrome(options=options, service=service)
+		driver.set_page_load_timeout(self.timeout_sec)
+
+		return driver
 
 	def init_genres_table(self):
 		# insert data into genres table
@@ -148,21 +162,6 @@ class ScrapeMovies:
 		# failed to parse max_retries_page times
 		log.warning(f"Maximum attempts reached: url={url} | genre={genre_name} | page_num={page_num}\n")
 		return 1
-	
-	def __init_driver(self):
-		# init chrome driver for chromium browser arm64 linux
-		options = webdriver.ChromeOptions()
-		options.add_argument('--headless=new')
-		options.add_argument("--no-sandbox")
-		options.add_argument('--disable-gpu')
-		options.add_argument('--disable-dev-shm-usage')
-
-		service = webdriver.ChromeService(executable_path=r"/usr/bin/chromedriver")
-
-		driver = webdriver.Chrome(options=options, service=service)
-		driver.set_page_load_timeout(self.timeout_sec)
-
-		return driver
 	
 	def __scrape_movie(self, movie_num, genre_id):
 		# get wrapper element
