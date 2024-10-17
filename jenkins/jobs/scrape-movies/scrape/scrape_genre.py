@@ -148,10 +148,9 @@ class ScrapeGenre():
 		options.add_argument('--disable-gpu')
 		options.add_argument('--disable-dev-shm-usage')
 
-		# service = webdriver.ChromeService(executable_path=r"/usr/bin/chromedriver")
+		service = webdriver.ChromeService(executable_path=r"/usr/bin/chromedriver")
 
-		# driver = webdriver.Chrome(options=options, service=service)
-		driver = webdriver.Chrome()
+		driver = webdriver.Chrome(options=options, service=service)
 		driver.set_page_load_timeout(self.timeout_sec)
 
 		return driver
