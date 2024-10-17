@@ -29,7 +29,8 @@ class ScrapeMovies:
 		self.query = 'alltime-desc'
 		self.num_movies_per_page = 20
 		self.page_offset = 1
-		self.max_retries = 5
+		self.max_retries = 10
+		self.timeout_sec = 30
 		self.genres = [
 			['action-adventure-ag100', 'Action Adventure', '97128c0e-c0e9-4c0c-93bd-fdb5f7bf2c3c'],
 			['animation-ag102', 'Animation', '2d44a66c-29d6-43c8-9f30-371c93073ec9'],
@@ -68,7 +69,7 @@ class ScrapeMovies:
 			# parse genre
 			name = genre[1]
 			id = genre[2]
-			
+
 			timestamp = datetime.datetime.now()
 
 			# log data
@@ -100,7 +101,7 @@ class ScrapeMovies:
 		genre_name = genre[1]
 		genre_id = genre[2]
 
-		# continue until user exceeds 5 attempts to parse a page or end of genre
+		# continue until user exceeds max_retries attempts to parse a page or end of genre
 		continue_genre = True
 		page_num = 1
 		while continue_genre:
@@ -112,7 +113,7 @@ class ScrapeMovies:
 	def __scrape_page(self, url, page_num, genre_name, genre_id) -> bool:
 		start_time = time.time()
 		log.info(f"-------------------- {genre_name}: {page_num} --------------------")
-		# attempt to parse page 5 times
+		# attempt to parse page max_retries times
 		attempt_count = 1
 		while attempt_count <= self.max_retries:
 			log.info(f"Attempt {attempt_count}/{self.max_retries}: {url}")
@@ -149,7 +150,7 @@ class ScrapeMovies:
 				driver.quit()
 				driver = self.__init_driver()
 
-		# failed to parse 5 times
+		# failed to parse max_retries times
 		log.warning(f"Maximum attempts reached: url={url} | genre={genre_name} | page_num={page_num}\n")
 		return False
 	
@@ -162,7 +163,7 @@ class ScrapeMovies:
 		service = webdriver.ChromeService(executable_path=r"/usr/bin/chromedriver")
 
 		driver = webdriver.Chrome(options=options, service=service)
-		driver.set_page_load_timeout(20)
+		driver.set_page_load_timeout(self.timeout_sec)
 
 		return driver
 	
