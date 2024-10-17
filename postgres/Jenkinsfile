@@ -23,7 +23,7 @@ spec:
 		APP_NAME = 'db'
 		POSTGRES_NAME = 'postgres'
 		GITHUB_URL = 'https://github.com/Top-Films/k8s'
-		POSTGRES_VERSION = "16.0.3"
+		POSTGRES_VERSION = "15.5.38"
 	}
 
 	stages {
