@@ -122,8 +122,7 @@ class ScrapeMovies:
 
 				# self.conn.commit()
 
-				# completed_scrape = True
-				completed_scrape = False
+				completed_scrape = True
 
 				end_time = time.time()
 				log.info(f"Successfully scraped {genre_name} ({page_num}): {round(end_time-start_time, 2)}s\n")
