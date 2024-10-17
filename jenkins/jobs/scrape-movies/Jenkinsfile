@@ -11,6 +11,13 @@ spec:
     imagePullPolicy: Always
     securityContext:
       privileged: true
+    resources:
+      requests:
+        memory: "512Mi"
+        cpu: 1
+      limits:
+        memory: "1024Mi"
+        cpu: 2
 '''
 		}
 	}

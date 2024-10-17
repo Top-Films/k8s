@@ -14,7 +14,17 @@ primary:
     type: NodePort
     nodePorts:
       postgresql: 30543
+
   nodeSelector:
     kubernetes.io/hostname: max-worker
+
   persistence:
     size: 1024Gi
+
+  resources:
+    requests:
+      cpu: 1
+      memory: 512Mi
+    limits:
+      cpu: 2
+      memory: 1024Mi
