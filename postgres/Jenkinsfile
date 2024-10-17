@@ -100,7 +100,7 @@ spec:
 
 							kubectl apply --filename storage.yaml
 
-							helm upgrade $APP_NAME oci://registry-1.docker.io/bitnamicharts/postgresql --values values.yaml --install --atomic --debug --history-max=3 --namespace $POSTGRES_NAME
+							helm upgrade $APP_NAME oci://registry-1.docker.io/bitnamicharts/postgresql:16.0.3 --values values.yaml --install --atomic --debug --history-max=3 --namespace $POSTGRES_NAME
 						"""
 					}
 				}
