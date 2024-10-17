@@ -70,7 +70,7 @@ spec:
 							chromium --version
 							chromedriver --version
 
-							python3 scrape-movies.py
+							python3 main.py
 						"""
 					}
 				}
