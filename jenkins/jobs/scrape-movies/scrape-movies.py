@@ -122,6 +122,7 @@ class ScrapeMovies:
 				driver = self.__init_driver()
 				driver.get(url)
 				driver.implicitly_wait(self.wait_time_page)
+				driver.maximize_window()
 
 				# attempt to parse all 20 movies on a page
 				for movie_num in range(self.page_offset, self.num_movies_per_page + self.page_offset):
@@ -154,6 +155,8 @@ class ScrapeMovies:
 		options = webdriver.ChromeOptions()
 		options.add_argument('--headless=new')
 		options.add_argument("--no-sandbox")
+		options.add_argument('--disable-gpu')
+		options.add_argument('--disable-dev-shm-usage')
 
 		service = webdriver.ChromeService(executable_path=r"/usr/bin/chromedriver")
 
