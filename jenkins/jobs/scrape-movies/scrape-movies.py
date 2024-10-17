@@ -26,10 +26,10 @@ class ScrapeMovies:
 		self.jenkinsUserId = '4308b779-f616-4ada-9ac8-4ddb27bcd749' # srv-jenkins id
 		self.num_movies_per_page = 20
 		self.page_offset = 1
-		self.wait_time_page = 3
+		self.wait_time_page = 2
 		self.max_retries_genre = 3
 		self.max_retries_page = 5
-		self.timeout_sec = 30
+		self.timeout_sec = 60
 		self.genres = [
 			['action-adventure-ag100', 'Action Adventure', '97128c0e-c0e9-4c0c-93bd-fdb5f7bf2c3c'],
 			['animation-ag102', 'Animation', '2d44a66c-29d6-43c8-9f30-371c93073ec9'],
@@ -114,11 +114,11 @@ class ScrapeMovies:
 		start_time = time.time()
 		# attempt to parse page max_retries_page times
 		attempt_count = 1
+		driver = self.__init_driver()
 		while attempt_count <= self.max_retries_page:
 			log.info(f"Attempt {attempt_count}/{self.max_retries_page}: {url}")
 			try:
 				# get driver and url
-				driver = self.__init_driver()
 				driver.get(url)
 				driver.implicitly_wait(self.wait_time_page)
 				driver.maximize_window()
@@ -128,7 +128,7 @@ class ScrapeMovies:
 					self.__scrape_movie(driver, movie_num, genre_id)
 
 				# page complete with more movies within the genre
-				driver.quit()
+				driver.close()
 				end_time = time.time()
 				log.info(f"Successfully scraped {genre_name} ({page_num}): {round(end_time-start_time, 2)}s\n")
 				return 0
@@ -143,6 +143,7 @@ class ScrapeMovies:
 
 				# re init driver fully
 				driver.quit()
+				driver = self.__init_driver()
 
 		# failed to parse max_retries_page times
 		log.warning(f"Maximum attempts reached: url={url} | genre={genre_name} | page_num={page_num}\n")
