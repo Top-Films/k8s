@@ -18,6 +18,9 @@ class ScrapeMovies:
 									 user=db_username,
 									 password=db_password,
 									 port=db_port)
+
+		# selenium driver
+		self.driver = self.__init_driver()
 		
 		# jenkins flag to init genres table
 		self.init_genres_table_flag = init_genres_table
@@ -94,9 +97,6 @@ class ScrapeMovies:
 			self.__scrape_genre(genre)
 			
 	def __scrape_genre(self, genre):
-		# create selenium driver
-		driver = self.__init_driver()
-
 		# parse values from genre
 		genre_url_path = genre[0]
 		genre_name = genre[1]
@@ -108,11 +108,11 @@ class ScrapeMovies:
 		while page_error_count < self.max_retries_genre:
 			url = f"https://www.allmovie.com/genre/{genre_url_path}/alltime-desc/{page_num}"
 			log.info(f"-------------------- {genre_name} ({page_num}): Errors {page_error_count}/{self.max_retries_genre} --------------------")
-			page_error_count = page_error_count + self.__scrape_page(driver, url, page_num, genre_name, genre_id)
+			page_error_count = page_error_count + self.__scrape_page(url, page_num, genre_name, genre_id)
 			page_num = page_num + 1
 
 					
-	def __scrape_page(self, driver, url, page_num, genre_name, genre_id):
+	def __scrape_page(self, url, page_num, genre_name, genre_id):
 		start_time = time.time()
 
 		# attempt to parse page max_retries_page times
@@ -121,12 +121,12 @@ class ScrapeMovies:
 			log.info(f"Attempt {attempt_count}/{self.max_retries_page}: {url}")
 			try:
 				# get driver and url
-				driver.get(url)
-				driver.maximize_window()
+				self.driver.get(url)
+				self.driver.maximize_window()
 
 				# attempt to parse all 20 movies on a page
 				for movie_num in range(self.page_offset, self.num_movies_per_page + self.page_offset):
-					self.__scrape_movie(driver, movie_num, genre_id)
+					self.__scrape_movie(movie_num, genre_id)
 
 				# page complete with more movies within the genre
 				end_time = time.time()
@@ -142,8 +142,8 @@ class ScrapeMovies:
 				attempt_count = attempt_count + 1
 
 				# re init driver fully
-				driver.quit()
-				driver = self.__init_driver()
+				self.driver.quit()
+				self.driver = self.__init_driver()
 
 		# failed to parse max_retries_page times
 		log.warning(f"Maximum attempts reached: url={url} | genre={genre_name} | page_num={page_num}\n")
@@ -164,10 +164,10 @@ class ScrapeMovies:
 
 		return driver
 	
-	def __scrape_movie(self, driver, movie_num, genre_id):
+	def __scrape_movie(self, movie_num, genre_id):
 		# get wrapper element
 		movie_wrapper_elem = None
-		movie_wrapper_elem = driver.find_element(By.CLASS_NAME, f"num-{movie_num}") 
+		movie_wrapper_elem = self.driver.find_element(By.CLASS_NAME, f"num-{movie_num}") 
 		
 		# parse title
 		title_wrapper_elem = movie_wrapper_elem.find_element(By.CLASS_NAME, 'title')
