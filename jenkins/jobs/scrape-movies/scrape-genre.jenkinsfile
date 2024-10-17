@@ -13,8 +13,8 @@ spec:
       privileged: true
     resources:
       limits:
-        memory: "256Mi"
-        cpu: "400m"
+        memory: "512Mi"
+        cpu: "500m"
 '''
 		}
 	}
