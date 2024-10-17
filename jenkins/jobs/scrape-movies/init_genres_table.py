@@ -52,16 +52,21 @@ def init_genres_table(db_name, db_host, db_username, db_password, db_port):
 									 password=db_password,
 									 port=db_port)
 	
+	cursor = conn.cursor()
 	for genre in genres:
 		# genre data
 		name = genre[1]
 		id = genre[2]
 		timestamp = datetime.datetime.now()
-		log.info(f"created_by={jenkinsUserId} updated_by={jenkinsUserId} created_at={timestamp} updated_at={timestamp} id={id} name={name}")
+		
+		# ignore duplicate record
+		cursor.execute('SELECT * FROM MOVIE_GENRE WHERE name = %s', (name))
+		if len(cursor.fetchall()) > 0:
+			log.info(f"Genre already exists - name={name}")
+			continue
 		
 		# execute insert
-		cursor = conn.cursor()
-		
+		log.info(f"Inserting genre - created_by={jenkinsUserId} updated_by={jenkinsUserId} created_at={timestamp} updated_at={timestamp} id={id} name={name}")
 		cursor.execute('INSERT INTO MOVIE_GENRE (id, created_by, updated_by, created_at, updated_at, name) VALUES (%s, %s, %s, %s, %s, %s)', (id, jenkinsUserId, jenkinsUserId, timestamp, timestamp, name))
 	
 	# finish transaction after all inserts
