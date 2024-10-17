@@ -48,7 +48,7 @@ spec:
 			}
 		}
 
-		stage('Scrape Movies') {
+		stage('Scrape Genre') {
 			steps {
 				script {
 					withCredentials([
@@ -67,7 +67,7 @@ spec:
 							chromium --version
 							chromedriver --version
 
-							python3 main.py
+							python3 scrape_genre.py
 						"""
 					}
 				}

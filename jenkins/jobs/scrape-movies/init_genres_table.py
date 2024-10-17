@@ -81,7 +81,7 @@ if __name__ == "__main__":
 	log.info(f"db_name={db_name}")
 	log.info(f"db_host={db_host}")
 	log.info(f"db_username={db_username}")
-	log.info(f"db_password={db_password}")
+	log.info(f"db_password={db_password}\n")
 
 	init_genres_table(db_name, db_host, db_username, db_password, db_port)
 

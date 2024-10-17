@@ -82,7 +82,7 @@ spec:
             parallel {
 				stage('Scrape Action Adventure') {
 					steps {
-						build job: 'topfilms/scrape/scrape-genres', parameters: [
+						build job: 'top-films/scrape/scrape-genre', parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
 							string(name: 'GENRE_NAME', value: "Action Adventure")
                 		]
