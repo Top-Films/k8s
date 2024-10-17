@@ -80,16 +80,16 @@ spec:
 					steps {
 						build job: 'top-films/scrape/scrape-genre', parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
-							string(name: 'GENRE_NAME', value: "Action Adventure")
+							string(name: 'GENRE_NAME', value: 'Action Adventure')
                 		]
 					}
        		 	}
 
-				stage('Scrape Action Animation') {
+				stage('Scrape Animation') {
 					steps {
-						build job: 'topfilms/scrape/scrape-genres', parameters: [
+						build job: 'top-films/scrape/scrape-genre', parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
-							string(name: 'GENRE_NAME', value: "Animation")
+							string(name: 'GENRE_NAME', value: 'Animation')
                 		]
 					}
        		 	}
