@@ -11,10 +11,6 @@ spec:
     imagePullPolicy: Always
     securityContext:
       privileged: true
-    resources:
-      limits:
-        memory: "256Mi"
-        cpu: "250m"
 '''
 		}
 	}
@@ -89,14 +85,14 @@ spec:
 					}
        		 	}
 
-				// stage('Scrape Action Adventure') {
-				// 	steps {
-				// 		build job: 'topfilms/scrape/scrape-genres', parameters: [
-				// 			string(name: 'BRANCH', value: "$BRANCH"),
-				// 			string(name: 'GENRE_NAME', value: "Action Adventure")
-                // 		]
-				// 	}
-       		 	// }
+				stage('Scrape Action Animation') {
+					steps {
+						build job: 'topfilms/scrape/scrape-genres', parameters: [
+							string(name: 'BRANCH', value: "$BRANCH"),
+							string(name: 'GENRE_NAME', value: "Animation")
+                		]
+					}
+       		 	}
 			}
 		}
 		
