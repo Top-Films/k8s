@@ -50,7 +50,9 @@ spec:
 
 		stage('Initialize Genres Table') {
 			when {
-				INIT_GENRES_TABLE = true
+        		expression {
+            		INIT_GENRES_TABLE = true
+        		}	
 			}
 			steps {
 				script {
