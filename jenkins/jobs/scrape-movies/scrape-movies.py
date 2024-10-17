@@ -120,6 +120,7 @@ class ScrapeMovies:
 				# get driver and url
 				driver = self.__init_driver()
 				driver.get(url)
+				driver.implicitly_wait(10)
 
 				# attempt to parse all 20 movies on a page
 				for movie_num in range(self.page_offset, self.num_movies_per_page + self.page_offset):
