@@ -104,8 +104,6 @@ class ScrapeMovies:
 		genre_name = genre[1]
 		genre_id = genre[2]
 
-		
-
 		# continue until user exceeds 5 attempts to parse a page or end of genre
 		continue_genre = True
 		# page_num = 1
@@ -192,7 +190,7 @@ class ScrapeMovies:
 
 		# ensure movie does not already exist
 		cursor = self.conn.cursor()
-		cursor.execute('SELECT * FROM MOVIE WHERE name = %s AND year = %d', (title, year))
+		cursor.execute('SELECT * FROM MOVIE WHERE name = %s AND year = %s', (title, year))
 		if len(cursor.fetchall()) > 0:
 			# ignore duplicate record
 			log.info(f"Movie already exists - {movie_num}: title={title} | director={director}")
@@ -202,7 +200,7 @@ class ScrapeMovies:
 		# create new record
 		timestamp = datetime.datetime.now()
 		id = str(uuid.uuid4())
-		log.info(f"{movie_num}: title={title} | director={director} | year={year} | time={timestamp} | id={id}")
+		log.info(f"Inserting movie - {movie_num}: title={title} | director={director} | year={year} | time={timestamp} | id={id}")
 		cursor.execute('INSERT INTO MOVIE (id, created_by, updated_by, created_at, updated_at, name, director, movie_genre_id, year) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)', (id, self.jenkinsUserId, self.jenkinsUserId, timestamp, timestamp, title, director, genre_id, year))
 		self.conn.commit()
 		cursor.close()
