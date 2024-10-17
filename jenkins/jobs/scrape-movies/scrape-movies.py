@@ -24,7 +24,7 @@ class ScrapeMovies:
 
 		# constants
 		self.jenkinsUserId = '4308b779-f616-4ada-9ac8-4ddb27bcd749' # srv-jenkins id
-		self.base_url = r'https://www.allmovie.com/genre'
+		self.base_url = 'https://www.allmovie.com/genre'
 		self.num_movies_per_page = 20
 		self.page_offset = 1
 		self.wait_time_page = 5
@@ -144,7 +144,6 @@ class ScrapeMovies:
 
 				# re init driver fully
 				driver.quit()
-				driver = self.__init_driver()
 
 		# failed to parse max_retries_page times
 		log.warning(f"Maximum attempts reached: url={url} | genre={genre_name} | page_num={page_num}\n")
