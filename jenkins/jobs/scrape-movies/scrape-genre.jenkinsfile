@@ -49,6 +49,7 @@ spec:
 				script {
 					withCredentials([
 						usernamePassword(credentialsId: 'postgres-topfilms', usernameVariable: 'DB_USERNAME', passwordVariable: 'DB_PASSWORD'),
+						usernamePassword(credentialsId: 'no-reply-topfilms', usernameVariable: 'EMAIL_USERNAME', passwordVariable: 'EMAIL_PASSWORD')
 						string(credentialsId: 'postgres-host', variable: 'DB_HOST'),
 						string(credentialsId: 'postgres-port', variable: 'DB_PORT'),
 						string(credentialsId: 'postgres-topfilms-db', variable: 'DB_NAME')

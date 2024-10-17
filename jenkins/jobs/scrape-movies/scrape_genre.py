@@ -1,5 +1,7 @@
 from selenium import webdriver  
 from selenium.webdriver.common.by import By
+from smtplib import SMTP_SSL
+from email.message import EmailMessage
 import psycopg2
 import logging
 import uuid
@@ -47,7 +49,7 @@ genres = [
 ]
 
 class ScrapeGenre():
-	def __init__(self, db_name, db_host, db_username, db_password, db_port, userId, genre):
+	def __init__(self, db_name, db_host, db_username, db_password, db_port, email_username, email_password, userId, genre):
 		# db conn
 		self.conn = psycopg2.connect(database=db_name,
 									 host=db_host,
@@ -59,12 +61,21 @@ class ScrapeGenre():
 		self.userId = userId
 		self.genre = genre
 
+		self.email_username = email_username
+		self.email_password = email_password
+
+		self.page_num = 1
+		self.movies_inserted = 0
+		self.movies_ignored = 0
+
 		# constants
 		self.num_movies_per_page = 20
 		self.page_offset = 1
 		self.max_retries_genre = 3
 		self.max_retries_page = 5
 		self.timeout_sec = 120
+		self.smtp_server = 'smtp.zoho.com'
+		self.email_recipients = ['maxmorhardt13@gmail.com', 'caseypaulhus1@gmail.com']
 
 		# selenium driver
 		self.driver = self.__init_driver()
@@ -77,17 +88,22 @@ class ScrapeGenre():
 
 		# continue until max_retries_genre exceeded
 		page_error_count = 0
-		page_num = 1
 		while page_error_count < self.max_retries_genre:
-			log.info(f"-------------------- {genre_name} ({page_num}): Errors {page_error_count}/{self.max_retries_genre} --------------------")
-			url = f"https://www.allmovie.com/genre/{genre_url_path}/alltime-desc/{page_num}"
-			page_error_count = page_error_count + self.__scrape_page(url, page_num, genre_name, genre_id)
-			page_num = page_num + 1
+			log.info(f"-------------------- {genre_name} ({self.page_num}): Errors {page_error_count}/{self.max_retries_genre} --------------------")
 
+			url = f"https://www.allmovie.com/genre/{genre_url_path}/alltime-desc/{self.page_num}"
+			page_error_count = page_error_count + self.__scrape_page(url, genre_name, genre_id)
+
+			# dont increment if done for accurate numbers in email
+			if page_error_count < self.max_retries_genre:
+				self.page_num = self.page_num + 1
+
+		# finishing actions
+		self.__send_completion_email()
 		self.conn.close()
 		self.driver.quit()
 					
-	def __scrape_page(self, url, page_num, genre_name, genre_id):
+	def __scrape_page(self, url, genre_name, genre_id):
 		start_time = time.time()
 
 		# attempt to parse page max_retries_page times
@@ -105,7 +121,7 @@ class ScrapeGenre():
 
 				# page complete with more movies within the genre
 				end_time = time.time()
-				log.info(f"Successfully scraped {genre_name} ({page_num}): {round(end_time-start_time, 2)}s\n")
+				log.info(f"Successfully scraped {genre_name} ({self.page_num}): {round(end_time-start_time, 2)}s\n")
 				return 0
 
 			except Exception as e:
@@ -121,7 +137,7 @@ class ScrapeGenre():
 				self.driver = self.__init_driver()
 
 		# failed to parse max_retries_page times
-		log.error(f"Maximum attempts reached: url={url} | genre={genre_name} | page_num={page_num}\n")
+		log.error(f"Maximum attempts reached: url={url} | genre={genre_name} | page_num={self.page_num}\n")
 		return 1
 	
 	def __parse_movie(self, movie_num, genre_id):
@@ -156,11 +172,13 @@ class ScrapeGenre():
 		cursor.execute('SELECT * FROM MOVIE WHERE name = %s AND year = %s', (title, year))
 		if len(cursor.fetchall()) > 0:
 			# ignore duplicate record
+			self.movies_ignored = self.movies_ignored + 1
 			log.info(f"Movie already exists - {movie_num}: title={title} | director={director}")
 			cursor.close()
 			return
 
 		# create new record
+		self.movies_inserted = self.movies_inserted + 1
 		timestamp = datetime.datetime.now()
 		id = str(uuid.uuid4())
 		log.info(f"Inserting movie - {movie_num}: title={title} | director={director} | year={year} | time={timestamp} | id={id}")
@@ -182,6 +200,26 @@ class ScrapeGenre():
 		driver.set_page_load_timeout(self.timeout_sec)
 
 		return driver
+	
+	def __send_completion_email(self):
+		genre_name = self.genre[1]
+		
+		subject = f"Top Films Scrape Results: {genre_name}"
+		body = f"Top Films completed scrape of genre: {genre_name}\n\n" + \
+		f"Final Page Number: {self.page_num}\n" + \
+		f"Movies Inserted: {self.movies_inserted}\n" + \
+		f"Movies Ignored: {self.movies_ignored}"
+
+		msg = EmailMessage()
+		msg['Subject'] = subject
+		msg['From'] = self.email_username
+		msg['To'] = self.email_recipients
+		msg.set_content(body)
+
+		smtp = SMTP_SSL(self.smtp_server)
+		smtp.login(self.email_username, self.email_password)
+		smtp.send_message(msg)
+		smtp.quit()
 
 if __name__ == "__main__":
 	db_name = os.environ.get('DB_NAME')
@@ -189,6 +227,8 @@ if __name__ == "__main__":
 	db_username = os.environ.get('DB_USERNAME')
 	db_password = os.environ.get('DB_PASSWORD')
 	db_port = os.environ.get('DB_PORT')
+	email_username = os.environ.get('EMAIL_USERNAME')
+	email_password = os.environ.get('EMAIL_PASSWORD')
 	genre_name = os.environ.get('GENRE_NAME')	
 
 	log.info('Picked up environment variables:')
@@ -196,14 +236,16 @@ if __name__ == "__main__":
 	log.info(f"db_host={db_host}")
 	log.info(f"db_username={db_username}")
 	log.info(f"db_password={db_password}")
+	log.info(f"email_username={email_username}")
+	log.info(f"email_password={email_password}")
 	log.info(f"genre_name={genre_name}\n")
 
 	found = False
 	for genre in genres:
 		if genre_name == genre[1]:
 			log.info(f"Scraping genre: {genre_name}\n")
-			ScrapeGenre(db_name, db_host, db_username, db_password, db_port, jenkinsUserId, genre).scrape()
 			found = True
+			ScrapeGenre(db_name, db_host, db_username, db_password, db_port, email_username, email_password, jenkinsUserId, genre).scrape()
 			break
 	
 	if not found:
