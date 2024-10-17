@@ -1,6 +1,5 @@
 from selenium import webdriver  
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import NoSuchElementException
 import psycopg2
 import logging
 import os
@@ -101,15 +100,15 @@ class ScrapeMovies:
 		genre_id = genre[2]
 
 		# continue until user exceeds max_retries attempts to parse a page or end of genre
-		continue_genre = True
+		page_error_count = 0
 		page_num = 1
-		while continue_genre:
+		while page_error_count < self.max_retries:
 			url = f"{self.base_url}/{genre_url_path}/{page_num}"
-			continue_genre = self.__scrape_page(url, page_num, genre_name, genre_id)
+			page_error_count = page_error_count + self.__scrape_page(url, page_num, genre_name, genre_id)
 			page_num = page_num + 1
 
 					
-	def __scrape_page(self, url, page_num, genre_name, genre_id) -> bool:
+	def __scrape_page(self, url, page_num, genre_name, genre_id):
 		start_time = time.time()
 		log.info(f"-------------------- {genre_name}: {page_num} --------------------")
 		# attempt to parse page max_retries times
@@ -120,7 +119,7 @@ class ScrapeMovies:
 				# get driver and url
 				driver = self.__init_driver()
 				driver.get(url)
-				driver.implicitly_wait(10)
+				driver.implicitly_wait(5)
 
 				# attempt to parse all 20 movies on a page
 				for movie_num in range(self.page_offset, self.num_movies_per_page + self.page_offset):
@@ -130,13 +129,7 @@ class ScrapeMovies:
 				driver.close()
 				end_time = time.time()
 				log.info(f"Successfully scraped {genre_name} ({page_num}): {round(end_time-start_time, 2)}s\n")
-				return True
-
-			except NoSuchElementException:
-				# genre is complete
-				driver.quit()
-				log.info(f"Successfully reached end of genre {genre_name} ({page_num}): {url}\n")
-				return False
+				return 0
 
 			except Exception as e:
 				# failed to parse page for unknown reason
@@ -152,7 +145,7 @@ class ScrapeMovies:
 
 		# failed to parse max_retries times
 		log.warning(f"Maximum attempts reached: url={url} | genre={genre_name} | page_num={page_num}\n")
-		return False
+		return 1
 	
 	def __init_driver(self):
 		# init chrome driver for chromium browser arm64 linux
@@ -183,7 +176,7 @@ class ScrapeMovies:
 			directors_wrapper_elem = movie_wrapper_elem.find_element(By.CLASS_NAME, 'directors')
 			directors_elem = directors_wrapper_elem.find_element(By.TAG_NAME, 'a')
 			director = directors_elem.text
-		except NoSuchElementException:
+		except Exception:
 			log.warning(f"No director for movie: {title}")
 
 		# parse year
@@ -191,7 +184,7 @@ class ScrapeMovies:
 		try:
 			year_elem = movie_wrapper_elem.find_element(By.CLASS_NAME, 'movie-year')
 			year = year_elem.text
-		except NoSuchElementException:
+		except Exception:
 			log.warning(f"No year for movie: {title}")
 
 
