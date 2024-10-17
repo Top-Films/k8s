@@ -27,7 +27,9 @@ class ScrapeMovies:
 		self.base_url = r'https://www.allmovie.com/genre'
 		self.num_movies_per_page = 20
 		self.page_offset = 1
-		self.max_retries = 15
+		self.wait_time_page = 5
+		self.max_retries_genre = 10
+		self.max_retries_page = 15
 		self.timeout_sec = 45
 		self.genres = [
 			['action-adventure-ag100', 'Action Adventure', '97128c0e-c0e9-4c0c-93bd-fdb5f7bf2c3c'],
@@ -99,10 +101,10 @@ class ScrapeMovies:
 		genre_name = genre[1]
 		genre_id = genre[2]
 
-		# continue until user exceeds max_retries attempts to parse a page or end of genre
+		# continue until max_retries_genre exceeded
 		page_error_count = 0
 		page_num = 1
-		while page_error_count < self.max_retries:
+		while page_error_count < self.max_retries_genre:
 			url = f"{self.base_url}/{genre_url_path}/{page_num}"
 			page_error_count = page_error_count + self.__scrape_page(url, page_num, genre_name, genre_id)
 			page_num = page_num + 1
@@ -111,15 +113,15 @@ class ScrapeMovies:
 	def __scrape_page(self, url, page_num, genre_name, genre_id):
 		start_time = time.time()
 		log.info(f"-------------------- {genre_name}: {page_num} --------------------")
-		# attempt to parse page max_retries times
+		# attempt to parse page max_retries_page times
 		attempt_count = 1
-		while attempt_count <= self.max_retries:
+		while attempt_count <= self.max_retries_page:
 			log.info(f"Attempt {attempt_count}/{self.max_retries}: {url}")
 			try:
 				# get driver and url
 				driver = self.__init_driver()
 				driver.get(url)
-				driver.implicitly_wait(5)
+				driver.implicitly_wait(self.wait_time_page)
 
 				# attempt to parse all 20 movies on a page
 				for movie_num in range(self.page_offset, self.num_movies_per_page + self.page_offset):
@@ -143,7 +145,7 @@ class ScrapeMovies:
 				driver.quit()
 				driver = self.__init_driver()
 
-		# failed to parse max_retries times
+		# failed to parse max_retries_page times
 		log.warning(f"Maximum attempts reached: url={url} | genre={genre_name} | page_num={page_num}\n")
 		return 1
 	
