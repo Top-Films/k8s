@@ -202,6 +202,7 @@ if __name__ == "__main__":
 	found = False
 	for genre in genres:
 		if genre_name == genre[1]:
+			log.info(f"Scraping genre {genre_name}\n")
 			ScrapeGenre(db_name, db_host, db_username, db_password, db_port, jenkinsUserId, genre).scrape()
 			found = True
 			break
