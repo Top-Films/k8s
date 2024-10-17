@@ -129,7 +129,7 @@ class ScrapeMovies:
 					self.__scrape_movie(driver, movie_num, genre_id)
 
 				# page complete with more movies within the genre
-				driver.close()
+				driver.quit()
 				end_time = time.time()
 				log.info(f"Successfully scraped {genre_name} ({page_num}): {round(end_time-start_time, 2)}s\n")
 				return 0
