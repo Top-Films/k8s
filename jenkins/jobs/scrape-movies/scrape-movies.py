@@ -106,17 +106,17 @@ class ScrapeMovies:
 		page_num = 1
 		while page_error_count < self.max_retries_genre:
 			url = f"{self.base_url}/{genre_url_path}/{page_num}"
+			log.info(f"-------------------- {genre_name} ({page_num}): Errors {page_error_count}/{self.max_retries_genre} --------------------")
 			page_error_count = page_error_count + self.__scrape_page(url, page_num, genre_name, genre_id)
 			page_num = page_num + 1
 
 					
 	def __scrape_page(self, url, page_num, genre_name, genre_id):
 		start_time = time.time()
-		log.info(f"-------------------- {genre_name}: {page_num} --------------------")
 		# attempt to parse page max_retries_page times
 		attempt_count = 1
 		while attempt_count <= self.max_retries_page:
-			log.info(f"Attempt {attempt_count}/{self.max_retries}: {url}")
+			log.info(f"Attempt {attempt_count}/{self.max_retries_page}: {url}")
 			try:
 				# get driver and url
 				driver = self.__init_driver()
