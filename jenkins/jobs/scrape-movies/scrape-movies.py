@@ -95,6 +95,9 @@ class ScrapeMovies:
 			self.__scrape_genre(genre)
 			
 	def __scrape_genre(self, genre):
+		# create selenium driver
+		driver = self.__init_driver()
+
 		# parse values from genre
 		genre_url_path = genre[0]
 		genre_name = genre[1]
@@ -106,15 +109,15 @@ class ScrapeMovies:
 		while page_error_count < self.max_retries_genre:
 			url = f"https://www.allmovie.com/genre/{genre_url_path}/alltime-desc/{page_num}"
 			log.info(f"-------------------- {genre_name} ({page_num}): Errors {page_error_count}/{self.max_retries_genre} --------------------")
-			page_error_count = page_error_count + self.__scrape_page(url, page_num, genre_name, genre_id)
+			page_error_count = page_error_count + self.__scrape_page(driver, url, page_num, genre_name, genre_id)
 			page_num = page_num + 1
 
 					
-	def __scrape_page(self, url, page_num, genre_name, genre_id):
+	def __scrape_page(self, driver, url, page_num, genre_name, genre_id):
 		start_time = time.time()
+
 		# attempt to parse page max_retries_page times
 		attempt_count = 1
-		driver = self.__init_driver()
 		while attempt_count <= self.max_retries_page:
 			log.info(f"Attempt {attempt_count}/{self.max_retries_page}: {url}")
 			try:
