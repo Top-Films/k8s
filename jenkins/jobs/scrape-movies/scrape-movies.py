@@ -18,9 +18,6 @@ class ScrapeMovies:
 									 user=db_username,
 									 password=db_password,
 									 port=db_port)
-
-		# selenium driver
-		self.driver = self.__init_driver()
 		
 		# jenkins flag to init genres table
 		self.init_genres_table_flag = init_genres_table
@@ -61,6 +58,9 @@ class ScrapeMovies:
 			['war-ag126', 'War', 'a12da96c-068a-4388-ab4a-57dd7132d0a3'],
 			['western-ag127', 'Western', '918f037f-c91b-4fce-aadd-16b2b10008a5']
 		]
+
+		# selenium driver
+		self.driver = self.__init_driver()
 
 	def __init_driver(self):
 		# init chrome driver for chromium browser arm64 linux
