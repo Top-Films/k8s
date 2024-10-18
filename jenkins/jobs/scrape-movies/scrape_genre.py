@@ -75,7 +75,7 @@ class ScrapeGenre():
 		self.max_retries_page = 5
 		self.timeout_sec = 120
 		self.smtp_server = 'smtp.zoho.com'
-		self.email_recipients = ['maxmorhardt13@gmail.com', 'caseypaulhus1@gmail.com']
+		self.email_recipients = ['maxmorhardt13@gmail.com']
 
 		# selenium driver
 		self.driver = self.__init_driver()
