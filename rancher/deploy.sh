@@ -16,9 +16,10 @@ cp $CA_CERT_PRIVATE_KEY_PATH .
 kubectl delete secret rancher.topfilms.io-tls --namespace cattle-system
 kubectl create secret tls rancher.topfilms.io-tls --cert=cert.pem --key=key.pem --namespace cattle-system
 
+rm cert.pem
+rm key.pem
+
 helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
 helm repo update
-
-set -e
 
 helm upgrade rancher rancher-latest/rancher --values values.yaml --install --atomic --debug --history-max=3 --namespace cattle-system
