@@ -67,6 +67,7 @@ class ScrapeGenre():
 		self.page_num = 1
 		self.movies_inserted = 0
 		self.movies_ignored = 0
+		self.total_time_min = 0
 
 		# constants
 		self.num_movies_per_page = 20
@@ -87,6 +88,7 @@ class ScrapeGenre():
 		genre_id = self.genre[2]
 
 		# continue until max_retries_genre exceeded
+		total_time_start = time.time()
 		page_error_count = 0
 		while page_error_count < self.max_retries_genre:
 			log.info(f"-------------------- {genre_name} ({self.page_num}): Errors {page_error_count}/{self.max_retries_genre} --------------------")
@@ -99,6 +101,9 @@ class ScrapeGenre():
 				self.page_num = self.page_num + 1
 
 		# finishing actions
+		total_time_end = time.time()
+		self.total_time_min = round((total_time_end - total_time_start)/60, 2)
+
 		self.__send_completion_email()
 		self.conn.close()
 		self.driver.quit()
@@ -208,8 +213,9 @@ class ScrapeGenre():
 		body = f"Top Films completed scrape of genre: {genre_name}\n\n" + \
 		f"Final Page Number: {self.page_num}\n" + \
 		f"Movies Inserted: {self.movies_inserted}\n" + \
-		f"Movies Ignored: {self.movies_ignored}"
-
+		f"Movies Ignored: {self.movies_ignored}\n" + \
+		f"Total Time: {self.total_time_min} min"
+		
 		msg = EmailMessage()
 		msg['Subject'] = subject
 		msg['From'] = self.email_username
