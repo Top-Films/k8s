@@ -13,7 +13,6 @@ set -x
 cp $CA_CERT_PATH .
 cp $CA_CERT_PRIVATE_KEY_PATH .
 
-kubectl delete secret rancher.topfilms.io-tls --namespace cattle-system
 kubectl create secret tls rancher.topfilms.io-tls --cert=cert.pem --key=key.pem --namespace cattle-system
 
 rm cert.pem

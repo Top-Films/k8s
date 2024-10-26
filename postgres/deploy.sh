@@ -15,14 +15,9 @@ sed -i "s/<POSTGRES_USER_PASSWORD>/$POSTGRES_USER_PASSWORD_B64/g" secret.yaml
 
 cat secret.yaml
 
-helm uninstall postgres --namespace postgres
-
-kubectl delete storageclass postgres
-kubectl delete pv postgres
-
 kubectl apply --filename storage.yaml --namespace postgres
 kubectl apply --filename secret.yaml --namespace postgres
 
-helm upgrade postgres oci://registry-1.docker.io/bitnamicharts/postgresql --version 1.0.0 --values values.yaml --install --atomic --debug --history-max=3 --namespace postgres
+helm install db oci://registry-1.docker.io/bitnamicharts/postgresql --version 15.5.38 --values values.yaml --namespace postgres
 
 git restore secret.yaml
