@@ -26,6 +26,7 @@ spec:
 
 	environment { 
 		GITHUB_URL = 'https://github.com/Top-Films/k8s'
+		SCRAPE_GENRE_PATH = 'top-films/chron/scrape-genre'
 	}
 
 	stages {
@@ -78,245 +79,298 @@ spec:
 			}
 		}
 
-		stage('Scrape Movies') {
+		// TODO: group by scrape time
+		stage('Scrape Movies 1-5') {
             parallel {
+
+				// 1
 				stage('Scrape Action Adventure') {
 					steps {
-						build job: 'top-films/scrape/scrape-genre', parameters: [
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
 							string(name: 'GENRE_NAME', value: 'Action Adventure')
                 		]
 					}
        		 	}
 
+				// 2
 				stage('Scrape Animation') {
 					steps {
-						build job: 'top-films/scrape/scrape-genre', parameters: [
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
 							string(name: 'GENRE_NAME', value: 'Animation')
                 		]
 					}
        		 	}
 
+				// 3
 				stage('Scrape Anime') {
 					steps {
-						build job: 'top-films/scrape/scrape-genre', parameters: [
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
 							string(name: 'GENRE_NAME', value: 'Anime')
                 		]
 					}
        		 	}
 
+				// 4
 				stage('Scrape Avant Garde Experimental') {
 					steps {
-						build job: 'top-films/scrape/scrape-genre', parameters: [
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
 							string(name: 'GENRE_NAME', value: 'Avant Garde Experimental')
                 		]
 					}
        		 	}
 
+				// 5
 				stage('Scrape Biography') {
 					steps {
-						build job: 'top-films/scrape/scrape-genre', parameters: [
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
 							string(name: 'GENRE_NAME', value: 'Biography')
                 		]
 					}
        		 	}
 
+			}
+		}
+
+		stage('Scrape Movies 6-10') {
+            parallel {
+
+				// 6
 				stage('Scrape Childrens') {
 					steps {
-						build job: 'top-films/scrape/scrape-genre', parameters: [
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
 							string(name: 'GENRE_NAME', value: 'Childrens')
                 		]
 					}
        		 	}
 
+				// 7
 				stage('Scrape Comedy') {
 					steps {
-						build job: 'top-films/scrape/scrape-genre', parameters: [
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
 							string(name: 'GENRE_NAME', value: 'Comedy')
                 		]
 					}
        		 	}
 
+				// 8
 				stage('Scrape Comedy Drama') {
 					steps {
-						build job: 'top-films/scrape/scrape-genre', parameters: [
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
 							string(name: 'GENRE_NAME', value: 'Comedy Drama')
                 		]
 					}
        		 	}
 
+				// 9
 				stage('Scrape Crime') {
 					steps {
-						build job: 'top-films/scrape/scrape-genre', parameters: [
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
 							string(name: 'GENRE_NAME', value: 'Crime')
                 		]
 					}
        		 	}
 
+				// 10
 				stage('Scrape Documentary') {
 					steps {
-						build job: 'top-films/scrape/scrape-genre', parameters: [
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
 							string(name: 'GENRE_NAME', value: 'Documentary')
                 		]
 					}
        		 	}
 
+			}
+		}
+
+
+		stage('Scrape Movies 11-16') {
+            parallel {
+
+				// 11
 				stage('Scrape Drama') {
 					steps {
-						build job: 'top-films/scrape/scrape-genre', parameters: [
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
 							string(name: 'GENRE_NAME', value: 'Drama')
                 		]
 					}
        		 	}
 
+				// 12
 				stage('Scrape Epic') {
 					steps {
-						build job: 'top-films/scrape/scrape-genre', parameters: [
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
 							string(name: 'GENRE_NAME', value: 'Epic')
                 		]
 					}
        		 	}
 
+
+				// 13
 				stage('Scrape Family') {
 					steps {
-						build job: 'top-films/scrape/scrape-genre', parameters: [
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
 							string(name: 'GENRE_NAME', value: 'Family')
                 		]
 					}
        		 	}
 
+				// 14
 				stage('Scrape Fantasy') {
 					steps {
-						build job: 'top-films/scrape/scrape-genre', parameters: [
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
 							string(name: 'GENRE_NAME', value: 'Fantasy')
                 		]
 					}
        		 	}
 
+				// 15
 				stage('Scrape History') {
 					steps {
-						build job: 'top-films/scrape/scrape-genre', parameters: [
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
 							string(name: 'GENRE_NAME', value: 'History')
                 		]
 					}
        		 	}
 
+				// 16
 				stage('Scrape Horror') {
 					steps {
-						build job: 'top-films/scrape/scrape-genre', parameters: [
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
 							string(name: 'GENRE_NAME', value: 'Horror')
                 		]
 					}
        		 	}
+			}
+		}
 
+		stage('Scrape Movies 17-21') {
+            parallel {
+
+				// 17
 				stage('Scrape Mature') {
 					steps {
-						build job: 'top-films/scrape/scrape-genre', parameters: [
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
 							string(name: 'GENRE_NAME', value: 'Mature')
                 		]
 					}
        		 	}
 
+				// 18
 				stage('Scrape Music') {
 					steps {
-						build job: 'top-films/scrape/scrape-genre', parameters: [
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
 							string(name: 'GENRE_NAME', value: 'Music')
                 		]
 					}
        		 	}
 
+				// 19
 				stage('Scrape Mystery Suspense') {
 					steps {
-						build job: 'top-films/scrape/scrape-genre', parameters: [
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
 							string(name: 'GENRE_NAME', value: 'Mystery Suspense')
                 		]
 					}
        		 	}
 
+				// 20
 				stage('Scrape Romance') {
 					steps {
-						build job: 'top-films/scrape/scrape-genre', parameters: [
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
 							string(name: 'GENRE_NAME', value: 'Romance')
                 		]
 					}
        		 	}
 
+				// 21
 				stage('Scrape Science Fiction') {
 					steps {
-						build job: 'top-films/scrape/scrape-genre', parameters: [
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
 							string(name: 'GENRE_NAME', value: 'Science Fiction')
                 		]
 					}
        		 	}
+			}
+		}
 
+		stage('Scrape Movies 22-27') {
+            parallel {
+				
+				// 22
 				stage('Scrape Silent Film') {
 					steps {
-						build job: 'top-films/scrape/scrape-genre', parameters: [
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
 							string(name: 'GENRE_NAME', value: 'Silent Film')
                 		]
 					}
        		 	}
 
+				// 23
 				stage('Scrape Sports') {
 					steps {
-						build job: 'top-films/scrape/scrape-genre', parameters: [
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
 							string(name: 'GENRE_NAME', value: 'Sports')
                 		]
 					}
        		 	}
 
+				// 24
 				stage('Scrape Spy Film') {
 					steps {
-						build job: 'top-films/scrape/scrape-genre', parameters: [
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
 							string(name: 'GENRE_NAME', value: 'Spy Film')
                 		]
 					}
        		 	}
 
+				// 25
 				stage('Scrape Thriller') {
 					steps {
-						build job: 'top-films/scrape/scrape-genre', parameters: [
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
 							string(name: 'GENRE_NAME', value: 'Thriller')
                 		]
 					}
        		 	}
 
+				// 26
 				stage('Scrape War') {
 					steps {
-						build job: 'top-films/scrape/scrape-genre', parameters: [
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
 							string(name: 'GENRE_NAME', value: 'War')
                 		]
 					}
        		 	}
 
+				// 27
 				stage('Scrape Western') {
 					steps {
-						build job: 'top-films/scrape/scrape-genre', parameters: [
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
 							string(name: 'BRANCH', value: "$BRANCH"),
 							string(name: 'GENRE_NAME', value: 'Western')
                 		]
