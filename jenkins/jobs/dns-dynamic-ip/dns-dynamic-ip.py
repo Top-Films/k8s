@@ -108,6 +108,8 @@ class DnsDynamicIp():
 			for error_message in error_messages:
 				body = body + f"{error_message}\n\n"
 
+			log.info('Sending error message email')
+			log.info(body)
 			self.__send_email(subject, body)
 			return
 
@@ -117,6 +119,8 @@ class DnsDynamicIp():
 		for invalid_record_name in invalid_record_names:
 			body = body + f"{invalid_record_name}\n\n"
 
+		log.info('Sending update success email')
+		log.info(body)
 		self.__send_email(subject, body)
 
 	def __send_email(self, subject, body): 
