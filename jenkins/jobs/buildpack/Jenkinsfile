@@ -22,7 +22,6 @@ spec:
 	environment { 
 		APP_NAME = 'topfilms-jenkins-buildpack'
 		GITHUB_URL = 'https://github.com/Top-Films/k8s'
-		TAG_VERSION 
 	}
 
 	stages {
