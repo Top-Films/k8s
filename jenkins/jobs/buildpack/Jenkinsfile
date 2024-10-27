@@ -16,7 +16,7 @@ spec:
 	}
 
 	parameters {
-		string(name: 'TAG', defaultValue: params.TAG ?: '0.0.1', description: 'Git tag version', trim: true)
+		string(name: 'TAG', defaultValue: params.TAG ?: 'buildpack/1.0.0', description: 'Git tag version', trim: true)
 	}
 
 	environment { 
