@@ -16,7 +16,7 @@ spec:
 	}
 
 	parameters {
-		string(name: 'BRANCH', defaultValue: params.BRANCH ?: 'main', description: 'Branch to checkout', trim: true)
+		string(name: 'TAG', defaultValue: params.TAG ?: 'dns-dynamic-ip/1.0.0', description: 'Git tag version', trim: true)
 	}
 
 	environment { 
@@ -30,7 +30,7 @@ spec:
 				script {
 					checkout scmGit(
 						branches: [[
-							name: "$BRANCH"
+							name: "$TAG"
 						]],
 						userRemoteConfigs: [[
 							credentialsId: 'github',
