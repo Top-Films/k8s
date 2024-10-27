@@ -39,7 +39,7 @@ class DnsDynamicIp():
 		log.info('Getting all dns records for Top Films')
 		req = requests.get(self.cloudflare_base_path, headers=self.headers)
 		records = req.json()['result']
-		log.info (f"{records}\n")
+		log.info(f"{records}\n")
 		return records
 	
 	def __get_current_ip(self):
