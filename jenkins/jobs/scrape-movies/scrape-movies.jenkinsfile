@@ -20,7 +20,7 @@ spec:
 	}
 
 	parameters {
-		string(name: 'BRANCH', defaultValue: params.BRANCH ?: 'main', description: 'Branch to checkout', trim: true)
+		string(name: 'TAG', defaultValue: params.TAG ?: 'scrape-movies/1.0.0', description: 'Git tag version', trim: true)
 		booleanParam(name: 'INIT_GENRES_TABLE', defaultValue: false, description: 'Initialize genres table with data')
 	}
 
@@ -36,7 +36,7 @@ spec:
 				script {
 					checkout scmGit(
 						branches: [[
-							name: "$BRANCH"
+							name: "$TAG"
 						]],
 						userRemoteConfigs: [[
 							credentialsId: 'github',
@@ -87,7 +87,7 @@ spec:
 				stage('Scrape Action Adventure') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$BRANCH"),
+							string(name: 'BRANCH', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'Action Adventure')
                 		]
 					}
@@ -97,7 +97,7 @@ spec:
 				stage('Scrape Animation') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$BRANCH"),
+							string(name: 'BRANCH', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'Animation')
                 		]
 					}
@@ -107,7 +107,7 @@ spec:
 				stage('Scrape Anime') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$BRANCH"),
+							string(name: 'BRANCH', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'Anime')
                 		]
 					}
@@ -117,7 +117,7 @@ spec:
 				stage('Scrape Avant Garde Experimental') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$BRANCH"),
+							string(name: 'BRANCH', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'Avant Garde Experimental')
                 		]
 					}
@@ -127,7 +127,7 @@ spec:
 				stage('Scrape Biography') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$BRANCH"),
+							string(name: 'BRANCH', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'Biography')
                 		]
 					}
@@ -143,7 +143,7 @@ spec:
 				stage('Scrape Childrens') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$BRANCH"),
+							string(name: 'BRANCH', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'Childrens')
                 		]
 					}
@@ -153,7 +153,7 @@ spec:
 				stage('Scrape Comedy') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$BRANCH"),
+							string(name: 'BRANCH', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'Comedy')
                 		]
 					}
@@ -163,7 +163,7 @@ spec:
 				stage('Scrape Comedy Drama') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$BRANCH"),
+							string(name: 'BRANCH', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'Comedy Drama')
                 		]
 					}
@@ -173,7 +173,7 @@ spec:
 				stage('Scrape Crime') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$BRANCH"),
+							string(name: 'BRANCH', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'Crime')
                 		]
 					}
@@ -183,7 +183,7 @@ spec:
 				stage('Scrape Documentary') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$BRANCH"),
+							string(name: 'BRANCH', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'Documentary')
                 		]
 					}
@@ -200,7 +200,7 @@ spec:
 				stage('Scrape Drama') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$BRANCH"),
+							string(name: 'BRANCH', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'Drama')
                 		]
 					}
@@ -210,7 +210,7 @@ spec:
 				stage('Scrape Epic') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$BRANCH"),
+							string(name: 'BRANCH', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'Epic')
                 		]
 					}
@@ -221,7 +221,7 @@ spec:
 				stage('Scrape Family') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$BRANCH"),
+							string(name: 'BRANCH', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'Family')
                 		]
 					}
@@ -231,7 +231,7 @@ spec:
 				stage('Scrape Fantasy') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$BRANCH"),
+							string(name: 'BRANCH', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'Fantasy')
                 		]
 					}
@@ -241,7 +241,7 @@ spec:
 				stage('Scrape History') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$BRANCH"),
+							string(name: 'BRANCH', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'History')
                 		]
 					}
@@ -251,7 +251,7 @@ spec:
 				stage('Scrape Horror') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$BRANCH"),
+							string(name: 'BRANCH', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'Horror')
                 		]
 					}
@@ -266,7 +266,7 @@ spec:
 				stage('Scrape Mature') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$BRANCH"),
+							string(name: 'BRANCH', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'Mature')
                 		]
 					}
@@ -276,7 +276,7 @@ spec:
 				stage('Scrape Music') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$BRANCH"),
+							string(name: 'BRANCH', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'Music')
                 		]
 					}
@@ -286,7 +286,7 @@ spec:
 				stage('Scrape Mystery Suspense') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$BRANCH"),
+							string(name: 'BRANCH', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'Mystery Suspense')
                 		]
 					}
@@ -296,7 +296,7 @@ spec:
 				stage('Scrape Romance') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$BRANCH"),
+							string(name: 'BRANCH', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'Romance')
                 		]
 					}
@@ -306,7 +306,7 @@ spec:
 				stage('Scrape Science Fiction') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$BRANCH"),
+							string(name: 'BRANCH', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'Science Fiction')
                 		]
 					}
@@ -321,7 +321,7 @@ spec:
 				stage('Scrape Silent Film') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$BRANCH"),
+							string(name: 'BRANCH', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'Silent Film')
                 		]
 					}
@@ -331,7 +331,7 @@ spec:
 				stage('Scrape Sports') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$BRANCH"),
+							string(name: 'BRANCH', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'Sports')
                 		]
 					}
@@ -341,7 +341,7 @@ spec:
 				stage('Scrape Spy Film') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$BRANCH"),
+							string(name: 'BRANCH', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'Spy Film')
                 		]
 					}
@@ -351,7 +351,7 @@ spec:
 				stage('Scrape Thriller') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$BRANCH"),
+							string(name: 'BRANCH', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'Thriller')
                 		]
 					}
@@ -361,7 +361,7 @@ spec:
 				stage('Scrape War') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$BRANCH"),
+							string(name: 'BRANCH', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'War')
                 		]
 					}
@@ -371,7 +371,7 @@ spec:
 				stage('Scrape Western') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$BRANCH"),
+							string(name: 'BRANCH', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'Western')
                 		]
 					}

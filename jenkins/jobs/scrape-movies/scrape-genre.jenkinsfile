@@ -20,7 +20,7 @@ spec:
 	}
 
 	parameters {
-		string(name: 'BRANCH', defaultValue: params.BRANCH ?: 'main', description: 'Branch to checkout', trim: true)
+		string(name: 'TAG', defaultValue: params.TAG ?: 'scrape-movies/1.0.0', description: 'Git tag version', trim: true)
 		string(name: 'GENRE_NAME', defaultValue: 'Action Adventure', description: 'Name of genre to scrape', trim: true)
 	}
 
@@ -35,7 +35,7 @@ spec:
 				script {
 					checkout scmGit(
 						branches: [[
-							name: "$BRANCH"
+							name: "$TAG"
 						]],
 						userRemoteConfigs: [[
 							credentialsId: 'github',
@@ -67,8 +67,6 @@ spec:
 
 							chromium --version
 							chromedriver --version
-
-							set +e
 
 							python3 scrape_genre.py
 						"""
