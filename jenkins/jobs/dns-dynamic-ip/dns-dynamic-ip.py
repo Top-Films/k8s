@@ -112,7 +112,7 @@ class DnsDynamicIp():
 			return
 
 		subject = f"Top Films Update DNS Results"
-		body = "The following records were updated in in Cloudflare\n\n"
+		body = "The following records were updated in Cloudflare\n\n"
 
 		for invalid_record_name in invalid_record_names:
 			body = body + f"{invalid_record_name}\n\n"
