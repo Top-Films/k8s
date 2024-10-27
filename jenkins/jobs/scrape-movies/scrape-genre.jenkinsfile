@@ -68,6 +68,8 @@ spec:
 							chromium --version
 							chromedriver --version
 
+							set +e
+
 							python3 scrape_genre.py
 						"""
 					}
