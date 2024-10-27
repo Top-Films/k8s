@@ -48,7 +48,7 @@ spec:
 				script {
 					withCredentials([
 						usernamePassword(credentialsId: 'no-reply-topfilms', usernameVariable: 'EMAIL_USERNAME', passwordVariable: 'EMAIL_PASSWORD'),
-						string(credentialsId: 'pcloudflare-api-key', variable: 'CLOUDFLARE_API_KEY')
+						string(credentialsId: 'cloudflare-api-key', variable: 'CLOUDFLARE_API_KEY')
 					]) {
 						sh """
 							cd jenkins/jobs/dns-dynamic-ip
