@@ -90,8 +90,6 @@ class DnsDynamicIp():
 
 			log.info(f"Successfully patched record {record_dns} to have ip {ip}\n")
 			return True
-			
-
 	
 	def __send_completion_email(self, error_messages, invalid_record_names):
 		if len(error_messages) <= 0 and len(invalid_record_names) <= 0:
