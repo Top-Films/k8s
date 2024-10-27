@@ -43,7 +43,7 @@ spec:
 			}
 		}
 
-		stage('Scrape Genre') {
+		stage('Update Cloudflare DNS Records') {
 			steps {
 				script {
 					withCredentials([
