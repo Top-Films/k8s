@@ -27,8 +27,6 @@ RUN rm get_helm.sh
 # install java
 RUN apt-get install openjdk-21-jdk -y
 
-ENV JAVA_HOME="/usr/lib/jvm/java-21-openjdk-amd64"
-
 # install maven
 RUN curl -fsSL https://dlcdn.apache.org/maven/maven-3/3.9.8/binaries/apache-maven-3.9.8-bin.tar.gz -o apache-maven-3.9.8-bin.tar.gz
 RUN tar -xvf apache-maven-3.9.8-bin.tar.gz
