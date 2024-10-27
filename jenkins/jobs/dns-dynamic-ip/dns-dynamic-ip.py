@@ -95,6 +95,7 @@ class DnsDynamicIp():
 	
 	def __send_completion_email(self, error_messages, invalid_record_names):
 		if len(error_messages) <= 0 and len(invalid_record_names) <= 0:
+			log.info('No records updated - not sending email')
 			return
 
 		subject = ''
