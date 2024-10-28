@@ -5,3 +5,4 @@ kubectl create namespace cattle-system
 kubectl create namespace keycloak
 kubectl create namespace postgres
 kubectl create namespace jenkins
+kubectl create namespace observability

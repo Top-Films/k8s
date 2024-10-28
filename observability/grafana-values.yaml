@@ -1,0 +1,129 @@
+replicas: 1
+
+deploymentStrategy:
+  type: RollingUpdate
+
+readinessProbe:
+  httpGet:
+    path: /api/health
+    port: 3000
+
+livenessProbe:
+  httpGet:
+    path: /api/health
+    port: 3000
+  initialDelaySeconds: 60
+  timeoutSeconds: 30
+  failureThreshold: 10
+
+image:
+  registry: docker.io
+  repository: grafana/grafana
+  pullPolicy: IfNotPresent
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 472
+  runAsGroup: 472
+  fsGroup: 472
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  seccompProfile:
+    type: RuntimeDefault
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 80
+  portName: service
+
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  annotations: {}
+  labels: {}
+  path: /
+  pathType: Prefix
+  hosts:
+    - grafana.topfilms.io
+  tls: 
+   - secretName: grafana.topfilms.io-tls
+     hosts:
+       - grafana.topfilms.io
+
+resources:
+ limits:
+   cpu: 200m
+   memory: 256Mi
+ requests:
+   cpu: 100m
+   memory: 128Mi
+
+persistence:
+  type: pvc
+  enabled: true
+  accessModes:
+    - ReadWriteOnce
+  size: 8Gi
+  finalizers:
+    - kubernetes.io/pvc-protection
+  extraPvcLabels: {}
+  disableWarning: false
+
+initChownData:
+  enabled: true
+  image:
+    registry: docker.io
+    repository: library/busybox
+    tag: "1.31.1"
+    pullPolicy: IfNotPresent
+
+  securityContext:
+    runAsNonRoot: false
+    runAsUser: 0
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      add:
+        - CHOWN
+
+adminUser: admin
+# adminPassword: strongpassword
+
+admin:
+  existingSecret: ""
+  userKey: admin-user
+  passwordKey: admin-password
+
+grafana.ini:
+  paths:
+    data: /var/lib/grafana/
+    logs: /var/log/grafana
+    plugins: /var/lib/grafana/plugins
+    provisioning: /etc/grafana/provisioning
+  analytics:
+    check_for_updates: true
+  log:
+    mode: console
+  grafana_net:
+    url: https://grafana.net
+  server:
+    domain: "{{ if (and .Values.ingress.enabled .Values.ingress.hosts) }}{{ tpl (.Values.ingress.hosts | first) . }}{{ else }}''{{ end }}"
+  auth.generic_oauth:
+    enabled: true
+    name: Keycloak-OAuth
+    allow_sign_up: false
+    client_id: <GRAFANA_CLIENT_ID>
+    client_secret: <GRAFANA_CLIENT_SECRET>
+    scopes: openid email profile offline_access roles
+    email_attribute_path: email
+    login_attribute_path: username
+    name_attribute_path: full_name
+    auth_url: https://auth.topfilms.io/realms/dev/protocol/openid-connect/auth
+    token_url: https://auth.topfilms.io/realms/dev/protocol/openid-connect/token
+    api_url: https://auth.topfilms.io/realms/dev/protocol/openid-connect/userinfo
+    role_attribute_path: contains(groups[*], '/grafana') && 'Admin'
