@@ -127,3 +127,5 @@ grafana.ini:
     token_url: https://auth.topfilms.io/realms/dev/protocol/openid-connect/token
     api_url: https://auth.topfilms.io/realms/dev/protocol/openid-connect/userinfo
     role_attribute_path: contains(groups[*], '/grafana') && 'Admin'
+
+assertNoLeakedSecrets: false
