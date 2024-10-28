@@ -79,56 +79,60 @@ spec:
 			}
 		}
 
-		// TODO: group by scrape time
+		// Grouped by similar number of pages
 		stage('Scrape Movies 1-5') {
             parallel {
 
-				// 1
-				stage('Scrape Action Adventure') {
+				stage('Scrape Childrens') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$TAG"),
-							string(name: 'GENRE_NAME', value: 'Action Adventure')
+							string(name: 'TAG', value: "$TAG"),
+							string(name: 'GENRE_NAME', value: 'Childrens')
                 		]
 					}
        		 	}
 
-				// 2
-				stage('Scrape Animation') {
+				stage('Scrape Epic') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$TAG"),
-							string(name: 'GENRE_NAME', value: 'Animation')
+							string(name: 'TAG', value: "$TAG"),
+							string(name: 'GENRE_NAME', value: 'Epic')
                 		]
 					}
        		 	}
 
-				// 3
-				stage('Scrape Anime') {
-					steps {
-						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$TAG"),
-							string(name: 'GENRE_NAME', value: 'Anime')
-                		]
-					}
-       		 	}
-
-				// 4
 				stage('Scrape Avant Garde Experimental') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$TAG"),
+							string(name: 'TAG', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'Avant Garde Experimental')
                 		]
 					}
        		 	}
 
-				// 5
-				stage('Scrape Biography') {
+				stage('Scrape Spy Film') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$TAG"),
-							string(name: 'GENRE_NAME', value: 'Biography')
+							string(name: 'TAG', value: "$TAG"),
+							string(name: 'GENRE_NAME', value: 'Spy Film')
+                		]
+					}
+       		 	}
+
+				stage('Scrape Anime') {
+					steps {
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
+							string(name: 'TAG', value: "$TAG"),
+							string(name: 'GENRE_NAME', value: 'Anime')
+                		]
+					}
+       		 	}
+
+				stage('Scrape Sports') {
+					steps {
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
+							string(name: 'TAG', value: "$TAG"),
+							string(name: 'GENRE_NAME', value: 'Sports')
                 		]
 					}
        		 	}
@@ -139,52 +143,56 @@ spec:
 		stage('Scrape Movies 6-10') {
             parallel {
 
-				// 6
-				stage('Scrape Childrens') {
+				stage('Scrape Mature') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$TAG"),
-							string(name: 'GENRE_NAME', value: 'Childrens')
+							string(name: 'TAG', value: "$TAG"),
+							string(name: 'GENRE_NAME', value: 'Mature')
                 		]
 					}
        		 	}
 
-				// 7
-				stage('Scrape Comedy') {
+				stage('Scrape Western') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$TAG"),
-							string(name: 'GENRE_NAME', value: 'Comedy')
+							string(name: 'TAG', value: "$TAG"),
+							string(name: 'GENRE_NAME', value: 'Western')
                 		]
 					}
        		 	}
 
-				// 8
 				stage('Scrape Comedy Drama') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$TAG"),
+							string(name: 'TAG', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'Comedy Drama')
                 		]
 					}
        		 	}
 
-				// 9
-				stage('Scrape Crime') {
+				stage('Scrape War') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$TAG"),
-							string(name: 'GENRE_NAME', value: 'Crime')
+							string(name: 'TAG', value: "$TAG"),
+							string(name: 'GENRE_NAME', value: 'War')
                 		]
 					}
        		 	}
 
-				// 10
-				stage('Scrape Documentary') {
+				stage('Scrape Biography') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$TAG"),
-							string(name: 'GENRE_NAME', value: 'Documentary')
+							string(name: 'TAG', value: "$TAG"),
+							string(name: 'GENRE_NAME', value: 'Biography')
+                		]
+					}
+       		 	}
+
+				stage('Scrape Silent Film') {
+					steps {
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
+							string(name: 'TAG', value: "$TAG"),
+							string(name: 'GENRE_NAME', value: 'Silent Film')
                 		]
 					}
        		 	}
@@ -196,186 +204,153 @@ spec:
 		stage('Scrape Movies 11-16') {
             parallel {
 
-				// 11
-				stage('Scrape Drama') {
+				stage('Scrape Science Fiction') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$TAG"),
-							string(name: 'GENRE_NAME', value: 'Drama')
+							string(name: 'TAG', value: "$TAG"),
+							string(name: 'GENRE_NAME', value: 'Science Fiction')
                 		]
 					}
        		 	}
 
-				// 12
-				stage('Scrape Epic') {
-					steps {
-						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$TAG"),
-							string(name: 'GENRE_NAME', value: 'Epic')
-                		]
-					}
-       		 	}
-
-
-				// 13
-				stage('Scrape Family') {
-					steps {
-						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$TAG"),
-							string(name: 'GENRE_NAME', value: 'Family')
-                		]
-					}
-       		 	}
-
-				// 14
-				stage('Scrape Fantasy') {
-					steps {
-						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$TAG"),
-							string(name: 'GENRE_NAME', value: 'Fantasy')
-                		]
-					}
-       		 	}
-
-				// 15
 				stage('Scrape History') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$TAG"),
+							string(name: 'TAG', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'History')
                 		]
 					}
        		 	}
 
-				// 16
-				stage('Scrape Horror') {
+				stage('Scrape Fantasy') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$TAG"),
-							string(name: 'GENRE_NAME', value: 'Horror')
+							string(name: 'TAG', value: "$TAG"),
+							string(name: 'GENRE_NAME', value: 'Fantasy')
                 		]
 					}
        		 	}
+
+				stage('Scrape Animation') {
+					steps {
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
+							string(name: 'TAG', value: "$TAG"),
+							string(name: 'GENRE_NAME', value: 'Animation')
+                		]
+					}
+       		 	}
+
+				stage('Scrape Mystery Suspense') {
+					steps {
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
+							string(name: 'TAG', value: "$TAG"),
+							string(name: 'GENRE_NAME', value: 'Mystery Suspense')
+                		]
+					}
+       		 	}
+
 			}
 		}
 
 		stage('Scrape Movies 17-21') {
             parallel {
 
-				// 17
-				stage('Scrape Mature') {
-					steps {
-						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$TAG"),
-							string(name: 'GENRE_NAME', value: 'Mature')
-                		]
-					}
-       		 	}
-
-				// 18
 				stage('Scrape Music') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$TAG"),
+							string(name: 'TAG', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'Music')
                 		]
 					}
        		 	}
 
-				// 19
-				stage('Scrape Mystery Suspense') {
+				stage('Scrape Family') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$TAG"),
-							string(name: 'GENRE_NAME', value: 'Mystery Suspense')
+							string(name: 'TAG', value: "$TAG"),
+							string(name: 'GENRE_NAME', value: 'Family')
                 		]
 					}
        		 	}
 
-				// 20
-				stage('Scrape Romance') {
+				stage('Scrape Horror') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$TAG"),
-							string(name: 'GENRE_NAME', value: 'Romance')
+							string(name: 'TAG', value: "$TAG"),
+							string(name: 'GENRE_NAME', value: 'Horror')
                 		]
 					}
        		 	}
 
-				// 21
-				stage('Scrape Science Fiction') {
+				stage('Scrape Crime') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$TAG"),
-							string(name: 'GENRE_NAME', value: 'Science Fiction')
-                		]
-					}
-       		 	}
-			}
-		}
-
-		stage('Scrape Movies 22-27') {
-            parallel {
-				
-				// 22
-				stage('Scrape Silent Film') {
-					steps {
-						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$TAG"),
-							string(name: 'GENRE_NAME', value: 'Silent Film')
+							string(name: 'TAG', value: "$TAG"),
+							string(name: 'GENRE_NAME', value: 'Crime')
                 		]
 					}
        		 	}
 
-				// 23
-				stage('Scrape Sports') {
-					steps {
-						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$TAG"),
-							string(name: 'GENRE_NAME', value: 'Sports')
-                		]
-					}
-       		 	}
-
-				// 24
-				stage('Scrape Spy Film') {
-					steps {
-						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$TAG"),
-							string(name: 'GENRE_NAME', value: 'Spy Film')
-                		]
-					}
-       		 	}
-
-				// 25
 				stage('Scrape Thriller') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$TAG"),
+							string(name: 'TAG', value: "$TAG"),
 							string(name: 'GENRE_NAME', value: 'Thriller')
                 		]
 					}
        		 	}
 
-				// 26
-				stage('Scrape War') {
+			}
+		}
+
+		stage('Scrape Movies 22-27') {
+            parallel {
+
+				stage('Scrape Romance') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$TAG"),
-							string(name: 'GENRE_NAME', value: 'War')
+							string(name: 'TAG', value: "$TAG"),
+							string(name: 'GENRE_NAME', value: 'Romance')
                 		]
 					}
        		 	}
 
-				// 27
-				stage('Scrape Western') {
+				stage('Scrape Action Adventure') {
 					steps {
 						build job: "$SCRAPE_GENRE_PATH", parameters: [
-							string(name: 'BRANCH', value: "$TAG"),
-							string(name: 'GENRE_NAME', value: 'Western')
+							string(name: 'TAG', value: "$TAG"),
+							string(name: 'GENRE_NAME', value: 'Action Adventure')
                 		]
 					}
        		 	}
+
+				stage('Scrape Documentary') {
+					steps {
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
+							string(name: 'TAG', value: "$TAG"),
+							string(name: 'GENRE_NAME', value: 'Documentary')
+                		]
+					}
+       		 	}
+
+				stage('Scrape Comedy') {
+					steps {
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
+							string(name: 'TAG', value: "$TAG"),
+							string(name: 'GENRE_NAME', value: 'Comedy')
+                		]
+					}
+       		 	}
+
+				stage('Scrape Drama') {
+					steps {
+						build job: "$SCRAPE_GENRE_PATH", parameters: [
+							string(name: 'TAG', value: "$TAG"),
+							string(name: 'GENRE_NAME', value: 'Drama')
+                		]
+					}
+       		 	}
+
 			}
 		}
 		
