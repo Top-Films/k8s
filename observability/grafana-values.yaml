@@ -112,7 +112,8 @@ grafana.ini:
   grafana_net:
     url: https://grafana.net
   server:
-    domain: grafana.topfilms.io
+    domain: "{{ if (and .Values.ingress.enabled .Values.ingress.hosts) }}{{ tpl (.Values.ingress.hosts | first) . }}{{ else }}''{{ end }}"
+    root_url: https://grafana.topfilms.io
   auth.generic_oauth:
     enabled: true
     name: Keycloak
