@@ -61,15 +61,16 @@ controller:
       timeoutSeconds: 5
   
   installPlugins:
-    - kubernetes:4292.v11898cf8fa_66
+    - kubernetes:4295.v7fa_01b_309c95
     - workflow-aggregator:600.vb_57cdd26fdd7
     - git:5.5.2
     - docker-workflow:580.vc0c340686b_54
     - configuration-as-code:1850.va_a_8c31d3158b_
-    - oic-auth:4.411.v990b_9d36e74e
+    - oic-auth:4.418.vccc7061f5b_6d
     - role-strategy:743.v142ea_b_d5f1d3
     - pipeline-stage-view:2.34
     - ssh-agent:376.v8933585c69d3
+    - email-ext:1844.v3ea_a_b_842374a_
   installLatestPlugins: true
   installLatestSpecifiedPlugins: false
   additionalPlugins: []
