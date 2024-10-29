@@ -49,7 +49,7 @@ spec:
 		stage('Deploy CA Cert') {
 			when {
 				expression { 
-					DEPLOY_CA_CERT == true
+					DEPLOY_CA_CERT == "true"
 				}
 			}
 			steps {
@@ -85,7 +85,7 @@ spec:
 		stage('Prometheus CD') {
 			when {
 				expression { 
-					SKIP_PROMETHEUS == false
+					SKIP_PROMETHEUS == "false"
 				}
 			} 
 			steps {
@@ -108,7 +108,7 @@ spec:
 		stage('Grafana CD') {
 			when {
 				expression { 
-					SKIP_GRAFANA == false
+					SKIP_GRAFANA == "false"
 				}
 			} 
 			steps {
