@@ -399,7 +399,7 @@ serverFiles:
             target_label: node
 
       - job_name: 'topfilms-api'
-        metrics_path: '/monitor/prometheus'
+        metrics_path: '/actuator/prometheus'
         scrape_interval: 30s
         static_configs:
           - targets: ['api.topfilms.io']
