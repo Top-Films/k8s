@@ -33,11 +33,11 @@ configmapReload:
 
     resources:
       limits:
-        cpu: 200m
-        memory: 256Mi
+        cpu: 300m
+        memory: 1Gi
       requests:
         cpu: 100m
-        memory: 128Mi
+        memory: 512Mi
 
 server:
   name: server
@@ -63,7 +63,7 @@ server:
       - secretName: prometheus.topfilms.io-tls
         hosts:
           - prometheus.topfilms.io
-          
+
   persistentVolume:
     enabled: true
     statefulSetNameOverride: ""
