@@ -13,8 +13,8 @@ spec:
       privileged: true
     resources:
       limits:
-        memory: "256Mi"
-        cpu: "200m"
+        memory: "128Mi"
+        cpu: "100m"
 '''
 		}
 	}
@@ -80,7 +80,7 @@ spec:
 		}
 
 		// Grouped by similar number of pages
-		stage('Scrape Movies 1-4') {
+		stage('Scrape Movies 1-3') {
             parallel {
 
 				// 1
@@ -131,6 +131,12 @@ spec:
 					}
        		 	}
 
+			}
+		}
+
+		stage('Scrape Movies 4-6') {
+            parallel {
+
 				// 4
 				stage('Scrape Spy Film') {
 					steps {
@@ -147,11 +153,6 @@ spec:
 					}
        		 	}
 
-			}
-		}
-
-		stage('Scrape Movies 5-8') {
-            parallel {
 
 				// 5
 				stage('Scrape Anime') {
@@ -185,6 +186,13 @@ spec:
 					}
        		 	}
 
+			}
+		}
+
+
+		stage('Scrape Movies 7-9') {
+            parallel {
+
 				// 7
 				stage('Scrape Mature') {
 					steps {
@@ -216,13 +224,6 @@ spec:
 						}
 					}
        		 	}
-
-			}
-		}
-
-
-		stage('Scrape Movies 9-12') {
-            parallel {
 				
 				// 9
 				stage('Scrape Comedy Drama') {
@@ -239,6 +240,12 @@ spec:
 						}
 					}
        		 	}
+
+			}
+		}
+
+		stage('Scrape Movies 10-12') {
+            parallel {
 
 				// 10
 				stage('Scrape War') {
@@ -289,9 +296,11 @@ spec:
        		 	}
 
 			}
+
 		}
 
-		stage('Scrape Movies 13-16') {
+
+		stage('Scrape Movies 13-15') {
             parallel {
 
 				// 13
@@ -342,6 +351,12 @@ spec:
 					}
        		 	}
 
+			}
+		}
+
+		stage('Scrape Movies 16-18') {
+            parallel {
+
 				// 16
 				stage('Scrape Animation') {
 					steps {
@@ -357,12 +372,6 @@ spec:
 						}
 					}
        		 	}
-
-			}
-		}
-
-		stage('Scrape Movies 17-20') {
-            parallel {
 
 				// 17
 				stage('Scrape Mystery Suspense') {
@@ -396,6 +405,12 @@ spec:
 					}
        		 	}
 
+			}
+		}
+
+		stage('Scrape Movies 19-21') {
+            parallel {
+
 				// 19
 				stage('Scrape Family') {
 					steps {
@@ -428,12 +443,6 @@ spec:
 					}
        		 	}
 
-			}
-		}
-
-		stage('Scrape Movies 21-24') {
-            parallel {
-
 				// 21
 				stage('Scrape Crime') {
 					steps {
@@ -449,6 +458,12 @@ spec:
 						}
 					}
        		 	}
+
+			}
+		}
+
+		stage('Scrape Movies 22-24') {
+            parallel {
 
 				// 22
 				stage('Scrape Thriller') {
