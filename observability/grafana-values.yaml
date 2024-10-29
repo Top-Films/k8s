@@ -71,25 +71,7 @@ persistence:
   size: 8Gi
   finalizers:
     - kubernetes.io/pvc-protection
-  extraPvcLabels: {}
   disableWarning: false
-
-initChownData:
-  enabled: true
-  image:
-    registry: docker.io
-    repository: library/busybox
-    tag: "1.31.1"
-    pullPolicy: IfNotPresent
-
-  securityContext:
-    runAsNonRoot: false
-    runAsUser: 0
-    seccompProfile:
-      type: RuntimeDefault
-    capabilities:
-      add:
-        - CHOWN
 
 adminUser: admin
 # adminPassword: strongpassword
