@@ -20,6 +20,7 @@ spec:
 		booleanParam(name: 'DEPLOY_CA_CERT', defaultValue: false, description: 'Deploy ca cert as secret to k8s')
 		booleanParam(name: 'SKIP_PROMETHEUS', defaultValue: false, description: 'Skips prometheus cd')
 		booleanParam(name: 'SKIP_GRAFANA', defaultValue: false, description: 'Skips grafana cd')
+		booleanParam(name: 'SKIP_LOKI', defaultValue: false, description: 'Skips loki cd')
 	}
 
 	environment { 
@@ -122,6 +123,29 @@ spec:
 							helm repo add grafana https://grafana.github.io/helm-charts 
 							helm repo update
 							helm upgrade grafana grafana/grafana --values grafana-values.yaml --install --atomic --debug --history-max=3 --namespace observability
+						"""
+					}
+				}
+			}
+		}
+
+		stage('Loki CD') {
+			when {
+				expression { 
+					SKIP_LOKI == "false"
+				}
+			} 
+			steps {
+				script {
+					withCredentials([file(credentialsId: 'kube-config', variable: 'KUBE_CONFIG')]) {
+						sh 'mkdir -p $WORKSPACE/.kube && cp $KUBE_CONFIG $WORKSPACE/.kube/config'
+
+						sh """
+							cd observability
+
+							helm repo add grafana https://grafana.github.io/helm-charts 
+							helm repo update
+							helm upgrade loki grafana/loki --values values.yaml --install --atomic --debug --history-max=3 --namespace observability
 						"""
 					}
 				}

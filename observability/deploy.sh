@@ -17,9 +17,6 @@ cp $CA_CERT_PRIVATE_KEY_PATH .
 kubectl delete secret grafana.topfilms.io-tls --namespace observability
 kubectl create secret tls grafana.topfilms.io-tls --cert=cert.pem --key=key.pem --namespace observability
 
-kubectl delete secret prometheus.topfilms.io-tls --namespace observability
-kubectl create secret tls prometheus.topfilms.io-tls --cert=cert.pem --key=key.pem --namespace observability
-
 rm cert.pem
 rm key.pem
 
@@ -30,5 +27,6 @@ helm upgrade prometheus prometheus-community/prometheus --values prometheus-valu
 helm repo add grafana https://grafana.github.io/helm-charts 
 helm repo update
 helm upgrade grafana grafana/grafana --values grafana-values.yaml --install --atomic --debug --history-max=3 --namespace observability
+helm upgrade loki grafana/loki --values values.yaml --install --atomic --debug --history-max=3 --namespace observability
 
 git restore grafana-values.yaml
