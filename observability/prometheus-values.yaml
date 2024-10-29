@@ -4,7 +4,6 @@ configmapReload:
       repository: quay.io/prometheus-operator/prometheus-config-reloader
       tag: v0.77.2
       pullPolicy: IfNotPresent
-
     containerPort: 8080
     containerPortName: metrics
 
@@ -52,11 +51,10 @@ server:
     evaluation_interval: 1m
 
   ingress:
-    enabled: true
+    enabled: false
     ingressClassName: nginx
     hosts:
       - prometheus.topfilms.io
-
     path: /
     pathType: Prefix
     tls:
@@ -113,6 +111,7 @@ server:
     servicePort: 80
     sessionAffinity: None
     type: ClusterIP
+    clusterIP: 10.43.11.51
 
   terminationGracePeriodSeconds: 300
   retention: "15d"
@@ -404,5 +403,6 @@ serverFiles:
         scrape_interval: 30s
         static_configs:
           - targets: ['api.topfilms.io']
+
 
 
