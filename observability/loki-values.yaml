@@ -46,15 +46,6 @@ test:
 lokiCanary:
   enabled: false
 
-write:
-  replicas: 1
-
-read:
-  replicas: 1
-
-backend:
-  replicas: 1
-
 resultsCache:
   enabled: false
 
