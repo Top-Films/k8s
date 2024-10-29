@@ -18,10 +18,11 @@ spec:
 	parameters {
 		string(name: 'BRANCH', defaultValue: params.BRANCH ?: 'main', description: 'Branch to checkout in k8s repo', trim: true)
 		booleanParam(name: 'DEPLOY_CA_CERT', defaultValue: false, description: 'Deploy ca cert as secret to k8s')
+		booleanParam(name: 'SKIP_PROMETHEUS', defaultValue: false, description: 'Skips prometheus cd')
+		booleanParam(name: 'SKIP_GRAFANA', defaultValue: false, description: 'Skips grafana cd')
 	}
 
 	environment { 
-		APP_NAME = 'rancher'
 		GITHUB_URL = 'https://github.com/Top-Films/k8s'
 	}
 
@@ -48,7 +49,7 @@ spec:
 		stage('Deploy CA Cert') {
 			when {
 				expression { 
-					DEPLOY_CA_CERT == "true"
+					DEPLOY_CA_CERT == true
 				}
 			}
 			steps {
@@ -68,8 +69,11 @@ spec:
 
 							set +e
 
-							kubectl delete secret rancher.topfilms.io-tls --namespace cattle-system
-							kubectl create secret tls rancher.topfilms.io-tls --cert=cert.pem --key=key.pem --namespace cattle-system
+							kubectl delete secret prometheus.topfilms.io-tls --namespace observability
+							kubectl create secret tls prometheus.topfilms.io-tls --cert=cert.pem --key=key.pem --namespace observability
+
+							kubectl delete secret grafana.topfilms.io-tls --namespace observability
+							kubectl create secret tls grafana.topfilms.io-tls --cert=cert.pem --key=key.pem --namespace observability
 
 							set -e
 						'''
@@ -78,19 +82,46 @@ spec:
 			}
 		}
 
-		stage('CD') {
+		stage('Prometheus CD') {
+			when {
+				expression { 
+					SKIP_PROMETHEUS == false
+				}
+			} 
 			steps {
 				script {
 					withCredentials([file(credentialsId: 'kube-config', variable: 'KUBE_CONFIG')]) {
 						sh 'mkdir -p $WORKSPACE/.kube && cp $KUBE_CONFIG $WORKSPACE/.kube/config'
 
 						sh """
-							cd $APP_NAME
+							cd observability
 							
-							helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
+							helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 							helm repo update
+							helm upgrade prometheus prometheus-community/prometheus --values prometheus-values.yaml --install --atomic --debug --history-max=3 --namespace observability
+						"""
+					}
+				}
+			}
+		}
 
-							helm upgrade $APP_NAME rancher-latest/$APP_NAME --values values.yaml --install --atomic --debug --history-max=3 --namespace cattle-system
+		stage('Grafana CD') {
+			when {
+				expression { 
+					SKIP_GRAFANA == false
+				}
+			} 
+			steps {
+				script {
+					withCredentials([file(credentialsId: 'kube-config', variable: 'KUBE_CONFIG')]) {
+						sh 'mkdir -p $WORKSPACE/.kube && cp $KUBE_CONFIG $WORKSPACE/.kube/config'
+
+						sh """
+							cd observability
+
+							helm repo add grafana https://grafana.github.io/helm-charts 
+							helm repo update
+							helm upgrade grafana grafana/grafana --values grafana-values.yaml --install --atomic --debug --history-max=3 --namespace observability
 						"""
 					}
 				}

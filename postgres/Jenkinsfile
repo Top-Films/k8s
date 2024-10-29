@@ -46,7 +46,7 @@ spec:
 			}
 		}
 
-		stage('Prepare Postgres Deployment') {
+		stage('Deploy Secret') {
 			steps {
 				script {
 					withCredentials([
@@ -75,7 +75,7 @@ spec:
 			}
 		}
 
-		stage('Deploy Postgres') {
+		stage('CD') {
 			steps {
 				script {
 					withCredentials([file(credentialsId: 'kube-config', variable: 'KUBE_CONFIG')]) {
