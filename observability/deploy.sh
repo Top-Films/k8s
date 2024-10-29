@@ -27,6 +27,6 @@ helm upgrade prometheus prometheus-community/prometheus --values prometheus-valu
 helm repo add grafana https://grafana.github.io/helm-charts 
 helm repo update
 helm upgrade grafana grafana/grafana --values grafana-values.yaml --install --atomic --debug --history-max=3 --namespace observability
-helm upgrade loki grafana/loki --values values.yaml --install --atomic --debug --history-max=3 --namespace observability
+helm upgrade loki grafana/loki --values loki-values.yaml --install --atomic --debug --history-max=3 --namespace observability
 
 git restore grafana-values.yaml
