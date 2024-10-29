@@ -33,11 +33,11 @@ configmapReload:
 
     resources:
       limits:
-        cpu: 300m
-        memory: 1Gi
+        cpu: 200m
+        memory: 256Gi
       requests:
         cpu: 100m
-        memory: 512Mi
+        memory: 128Mi
 
 server:
   name: server
@@ -96,11 +96,11 @@ server:
 
   resources:
     limits:
-      cpu: 200m
-      memory: 512Mi
+      cpu: 500m
+      memory: 1Gi
     requests:
-      cpu: 100m
-      memory: 256Mi
+      cpu: 300m
+      memory: 512Mi
 
   securityContext:
     runAsUser: 65534
