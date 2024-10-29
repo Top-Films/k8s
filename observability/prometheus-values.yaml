@@ -98,7 +98,7 @@ server:
     failureThreshold: 30
     timeoutSeconds: 10
 
-  resources: {}
+  resources:
     limits:
       cpu: 200m
       memory: 512Mi
