@@ -63,11 +63,7 @@ server:
       - secretName: prometheus.topfilms.io-tls
         hosts:
           - prometheus.topfilms.io
-
-  podDisruptionBudget:
-    enabled: true
-    minAvailable: 1
-
+          
   persistentVolume:
     enabled: true
     statefulSetNameOverride: ""
