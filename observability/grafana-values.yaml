@@ -108,6 +108,7 @@ grafana.ini:
   analytics:
     check_for_updates: true
   log:
+    level: debug
     mode: console
   grafana_net:
     url: https://grafana.net
