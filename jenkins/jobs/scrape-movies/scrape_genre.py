@@ -74,7 +74,7 @@ class ScrapeGenre():
 		self.page_offset = 1
 		self.max_retries_genre = 3
 		self.max_retries_page = 5
-		self.timeout_sec = 120
+		self.timeout_sec = 180
 		self.smtp_server = 'smtp.zoho.com'
 		self.email_recipients = ['maxmorhardt13@gmail.com']
 
@@ -207,6 +207,7 @@ class ScrapeGenre():
 		return driver
 	
 	def __send_completion_email(self):
+		log.info(f"Sending completion email to {self.email_recipients}")
 		genre_name = self.genre[1]
 		
 		subject = f"Top Films Scrape Results: {genre_name}"
@@ -226,6 +227,8 @@ class ScrapeGenre():
 		smtp.login(self.email_username, self.email_password)
 		smtp.send_message(msg)
 		smtp.quit()
+
+		log.info(f"Successfully sent email to {self.email_recipients}")
 
 if __name__ == "__main__":
 	db_name = os.environ.get('DB_NAME')
