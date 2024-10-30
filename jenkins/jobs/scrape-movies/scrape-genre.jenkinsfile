@@ -31,6 +31,10 @@ spec:
 		GITHUB_URL = 'https://github.com/Top-Films/k8s'
 	}
 
+	options {
+        retry(5)
+    }
+
 	stages {
 
 		stage('Git Clone') {
