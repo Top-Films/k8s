@@ -32,7 +32,7 @@ spec:
 	}
 
 	options {
-        retry(5)
+        retry(3)
     }
 
 	stages {
