@@ -402,11 +402,8 @@ serverFiles:
         static_configs:
           - targets: ['api.topfilms.io']
 
-	  - job_name: 'topfilms-ui'
+      - job_name: 'topfilms-ui'
         metrics_path: '/nginx_status'
         scrape_interval: 30s
         static_configs:
           - targets: ['topfilms.io']
-
-
-
