@@ -120,6 +120,9 @@ server:
 prometheus-pushgateway:
   enabled: false
 
+alertmanager:
+  enabled: false
+
 kube-state-metrics:
   enabled: false
 
@@ -398,6 +401,12 @@ serverFiles:
         scrape_interval: 30s
         static_configs:
           - targets: ['api.topfilms.io']
+
+	  - job_name: 'topfilms-ui'
+        metrics_path: '/nginx_status'
+        scrape_interval: 30s
+        static_configs:
+          - targets: ['topfilms.io']
 
 
 
