@@ -33,7 +33,7 @@ class DnsDynamicIp():
 			except Exception as e:
 				error_messages.append(repr(e))
 
-		self.__send_completion_email(error_messages, invalid_record_names)
+		self.__send_completion_email(error_messages, invalid_record_names, ip)
 					
 	def __get_all_records(self):
 		log.info('Getting all dns records for Top Films')
@@ -68,12 +68,14 @@ class DnsDynamicIp():
 		else: 
 			log.info(f"Record {record_dns} has ip mismatch current: {ip} - record: {record_ip}")
 
+			is_proxed = record_dns != 'no-proxy.topfilms.io'
+
 			req = {
 				"content": f"{ip}",
 				"data": {},
 				"name": f"{record_dns}",
 				"proxiable": True,
-				"proxied": True,
+				"proxied": is_proxed,
 				"ttl": 1,
 				"type": "A",
 				"zone_id": "9e72c59b01cf0700a76760983c6855a1",
@@ -91,7 +93,7 @@ class DnsDynamicIp():
 			log.info(f"Successfully patched record {record_dns} to have ip {ip}\n")
 			return True
 	
-	def __send_completion_email(self, error_messages, invalid_record_names):
+	def __send_completion_email(self, error_messages, invalid_record_names, ip):
 		if len(error_messages) <= 0 and len(invalid_record_names) <= 0:
 			log.info('No records updated - not sending email')
 			return
@@ -112,10 +114,12 @@ class DnsDynamicIp():
 			return
 
 		subject = f"Top Films Update DNS Results"
-		body = "The following records were updated in Cloudflare\n\n"
+		body = "The following records were updated in Cloudflare:\n\n"
 
 		for invalid_record_name in invalid_record_names:
-			body = body + f"{invalid_record_name}\n\n"
+			body = body + f"{invalid_record_name}\n"
+
+		body = body + f"\nNew IP: {ip}"
 
 		log.info('Sending update success email')
 		log.info(body)
