@@ -1,0 +1,72 @@
+pipeline {
+	agent {
+		kubernetes {
+			defaultContainer 'buildpack'
+			yaml '''
+kind: Pod
+spec:
+  containers:
+  - name: buildpack
+    image: maxmorhardt/topfilms-jenkins-buildpack:latest
+    imagePullPolicy: Always
+    securityContext:
+      privileged: true
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "100m"
+'''
+		}
+	}
+
+	parameters {
+		string(name: 'TAG', defaultValue: params.TAG ?: 'dns-dynamic-ip/1.0.0', description: 'Git tag version', trim: true)
+	}
+
+	environment { 
+		GITHUB_URL = 'https://github.com/Top-Films/k8s'
+	}
+
+	stages {
+
+		stage('Git Clone') {
+			steps {
+				script {
+					checkout scmGit(
+						branches: [[
+							name: "$TAG"
+						]],
+						userRemoteConfigs: [[
+							credentialsId: 'github',
+							url: "$GITHUB_URL"
+						]]
+					)
+
+					sh 'ls -lah'
+				}
+			}
+		}
+
+		// stage('Update Cloudflare DNS Records') {
+		// 	steps {
+		// 		script {
+		// 			withCredentials([
+		// 				usernamePassword(credentialsId: 'no-reply-topfilms', usernameVariable: 'EMAIL_USERNAME', passwordVariable: 'EMAIL_PASSWORD'),
+		// 				string(credentialsId: 'cloudflare-api-key', variable: 'CLOUDFLARE_API_KEY')
+		// 			]) {
+		// 				sh """
+		// 					cd jenkins/jobs/dns-dynamic-ip
+
+		// 					python3 -m venv .venv
+		// 					. .venv/bin/activate
+		// 					pip3 install -r requirements.txt
+
+		// 					python3 dns-dynamic-ip.py
+		// 				"""
+		// 			}
+		// 		}
+		// 	}
+		// }
+
+	}
+}
