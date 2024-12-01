@@ -114,11 +114,18 @@ spec:
 			} 
 			steps {
 				script {
-					withCredentials([file(credentialsId: 'kube-config', variable: 'KUBE_CONFIG')]) {
+					withCredentials([
+						file(credentialsId: 'kube-config', variable: 'KUBE_CONFIG'),
+						string(credentialsId: 'grafana-client-id', variable: 'GRAFANA_CLIENT_ID')
+						string(credentialsId: 'grafana-client-secret', variable: 'GRAFANA_CLIENT_SECRET')
+					]) {
 						sh 'mkdir -p $WORKSPACE/.kube && cp $KUBE_CONFIG $WORKSPACE/.kube/config'
 
 						sh """
 							cd observability
+
+							sed -i "s/<GRAFANA_CLIENT_ID>/$GRAFANA_CLIENT_ID/g" grafana-values.yaml
+							sed -i "s/<GRAFANA_CLIENT_SECRET>/$GRAFANA_CLIENT_SECRET/g" grafana-values.yaml
 
 							helm repo add grafana https://grafana.github.io/helm-charts 
 							helm repo update
