@@ -116,7 +116,7 @@ spec:
 				script {
 					withCredentials([
 						file(credentialsId: 'kube-config', variable: 'KUBE_CONFIG'),
-						string(credentialsId: 'grafana-client-id', variable: 'GRAFANA_CLIENT_ID')
+						string(credentialsId: 'grafana-client-id', variable: 'GRAFANA_CLIENT_ID'),
 						string(credentialsId: 'grafana-client-secret', variable: 'GRAFANA_CLIENT_SECRET')
 					]) {
 						sh 'mkdir -p $WORKSPACE/.kube && cp $KUBE_CONFIG $WORKSPACE/.kube/config'
